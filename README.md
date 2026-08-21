@@ -159,6 +159,60 @@ Validation compares representations only within the correct provenance family.
 
 This matters because the shared library is linked from separately compiled PIC objects and may legitimately differ from the normal compilation, especially under optimization.
 
+## Run one full dataset split
+
+The benchmark runners process an entire dataset split, rather than one standalone assembly file.
+
+### HumanEval
+
+```bash
+python scripts/run_cfg_humaneval_v14.py \
+    --split O0 \
+    --out validation/v14/humaneval_O0
+```
+
+Use `--split O2` and a corresponding output directory for the optimized split:
+
+```bash
+python scripts/run_cfg_humaneval_v14.py \
+    --split O2 \
+    --out validation/v14/humaneval_O2
+```
+
+### MC-Eval
+
+```bash
+python scripts/run_cfg_mceval_v14.py \
+    --split O0 \
+    --out validation/v14/mceval_O0
+```
+
+or:
+
+```bash
+python scripts/run_cfg_mceval_v14.py \
+    --split O2 \
+    --out validation/v14/mceval_O2
+```
+
+### Bringup-Bench
+
+```bash
+python scripts/run_cfg_bringup_v14.py \
+    --split O0 \
+    --out validation/v14/bringup_O0
+```
+
+or:
+
+```bash
+python scripts/run_cfg_bringup_v14.py \
+    --split O2 \
+    --out validation/v14/bringup_O2
+```
+
+These runners load the corresponding benchmark data from Hugging Face, generate CFGs for all four target platforms and all six representations in the selected split, and write the validation outputs under the requested `--out` directory.
+
 ## Full validation
 
 Run all six benchmark/split validations with:
