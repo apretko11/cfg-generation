@@ -1,0 +1,1024 @@
+CFG GENERATION V14: DESIGN RATIONALE, DEVELOPMENT HISTORY, AND MAJOR FIXES
+================================================================================
+
+PURPOSE
+-------
+This document explains how the CFG extractor and validation methodology evolved
+into the final V14 design.
+
+It is intentionally different from:
+
+    docs/cfg_validation_methodology.txt
+
+The methodology document describes WHAT the final V14 system does.
+
+This document explains:
+
+    - why the design changed;
+    - which concrete failures exposed weaknesses;
+    - which fixes were generation-time fixes versus validation-time fixes;
+    - why some tempting fixes were rejected;
+    - how the final standalone requirement shaped V14;
+    - what evidence supports the final design.
+
+The central principle of V14 is:
+
+    A production CFG must be generated from the current assembly/disassembly
+    artifact alone.
+
+Cross-representation information may be used only after independent CFG
+generation, for validation.
+
+
+==============================================================================
+1. ORIGINAL GOAL
+==============================================================================
+
+The project began with a practical goal:
+
+    Given assembly or disassembly for x86-64 Linux, AArch64 Linux,
+    AArch64 macOS, or RISC-V Linux, generate an intraprocedural CFG that can be
+    supplied to a downstream agent.
+
+The intended inputs include:
+
+    - compiler-emitted assembly (.s);
+    - relocatable object disassembly;
+    - shared-library disassembly;
+    - linked executable disassembly.
+
+The production tool must therefore tolerate the representation differences
+introduced by:
+
+    - compiler assembly syntax;
+    - object formats;
+    - relocation records;
+    - linking;
+    - symbol naming;
+    - alignment/padding;
+    - assembler branch transformations;
+    - optimized tail calls;
+    - platform-specific disassembler conventions.
+
+
+==============================================================================
+2. FINAL SCOPE DECISION
+==============================================================================
+
+The final extractor is intentionally conservative.
+
+It constructs an intraprocedural direct CFG.
+
+It does NOT attempt to provide:
+
+    - a complete interprocedural call graph;
+    - symbolic execution;
+    - general jump-table recovery;
+    - arbitrary indirect-branch recovery;
+    - whole-program control-flow reconstruction;
+    - proof of runtime path feasibility.
+
+The main edge policy is:
+
+    direct in-function branch
+        -> internal CFG edge
+
+    direct out-of-function branch
+        -> EXTERNAL_*
+
+    unresolved indirect jump
+        -> UNKNOWN
+
+    return/sink
+        -> no outgoing edge
+
+Calls are conservatively treated as returning and do not normally terminate a
+basic block.
+
+This scope was chosen because it is reliable across all six assembly/binary
+representations and does not require inventing missing information.
+
+
+==============================================================================
+3. BASIC BLOCK MODEL
+==============================================================================
+
+The extractor uses the standard leader method.
+
+Leaders include:
+
+    - the first instruction;
+    - direct in-function branch targets;
+    - the instruction after a branch;
+    - the instruction after a sink/return if present.
+
+Each basic block stores:
+
+    - its instructions;
+    - optional NO_JUMP fallthrough edge;
+    - optional JUMP taken edge.
+
+Compiler assembly uses synthetic instruction IDs such as:
+
+    I0
+    I1
+    I2
+
+Objdump-style inputs retain actual instruction addresses.
+
+
+==============================================================================
+4. EARLY PARSER AND REPRESENTATION ISSUES
+==============================================================================
+
+The first validation work exposed several differences that were not actual CFG
+semantic differences but still had to be handled correctly.
+
+Examples included:
+
+    - GNU AArch64 branch spelling such as beq versus LLVM-style b.eq;
+    - RISC-V pseudo-instructions and branch aliases;
+    - Mach-O leading underscores on C symbols;
+    - Mach-O temporary symbols such as ltmpN;
+    - Apple compiler labels such as Lfunc_beginN;
+    - numeric labels that could be misclassified as function/symbol boundaries;
+    - alignment NOPs;
+    - relocation placeholders in relocatable objects;
+    - optimized direct tail calls.
+
+The guiding rule became:
+
+    normalize presentation differences only when the control-flow meaning is
+    unambiguous.
+
+
+==============================================================================
+5. NOP HANDLING: WHY "DELETE ALL NOPS" WAS WRONG
+==============================================================================
+
+At optimized levels, linked/object disassembly often contains alignment NOPs that
+do not correspond to meaningful source-level basic blocks.
+
+An early fix removed such NOPs too aggressively.
+
+That fixed some O2 mismatches but broke O0 cases because some NOPs were genuine
+branch targets representing labeled empty blocks.
+
+The final rule is target-aware:
+
+    untargeted representation-only NOP
+        -> may be removed
+
+    direct branch-targeted NOP
+        -> preserve
+
+This became the V8-style rule and remained part of the final design.
+
+The important lesson was that instruction filtering must preserve CFG semantics,
+not merely make representations look similar.
+
+
+==============================================================================
+6. RELOCATION-AWARE CONTROL FLOW
+==============================================================================
+
+Relocatable objects introduced another important issue.
+
+A direct branch instruction in a .o file may contain a placeholder encoded
+immediate while the true symbolic destination is represented in a relocation
+record.
+
+Without relocation-aware parsing, the extractor could:
+
+    - misclassify a direct branch as internal;
+    - lose an external/tail-call target;
+    - produce a topology mismatch even though the real control flow is known.
+
+Control-flow relocation support was therefore added for the relevant families,
+including:
+
+    x86-64 ELF
+        R_X86_64_PLT32
+        R_X86_64_PC32
+
+    AArch64 ELF
+        R_AARCH64_CALL26
+        R_AARCH64_JUMP26
+
+    AArch64 Mach-O
+        ARM64_RELOC_BRANCH26
+
+    RISC-V ELF
+        R_RISCV_CALL
+        R_RISCV_CALL_PLT
+
+The exact list is intentionally narrow: relocation handling is used only where
+the artifact itself contains enough information to recover direct control flow.
+
+This is compatible with the final standalone requirement because the relocation
+record is part of the current artifact.
+
+
+==============================================================================
+7. RISC-V LONG-BRANCH TRANSFORMATION
+==============================================================================
+
+Bringup-Bench exposed one of the most important distinctions between:
+
+    a real CFG difference in the binary
+
+and
+
+    a validation mismatch caused by a known assembler transformation.
+
+A source compiler assembly may contain:
+
+    ble a4, a5, .Ltarget
+
+but if the target is too far away for the RISC-V conditional-branch encoding,
+the assembler can emit an equivalent sequence such as:
+
+    blt a5, a4, .Lskip
+    j   .Ltarget
+.Lskip:
+
+The binary therefore genuinely contains an extra basic block.
+
+It would be wrong to delete that block from the emitted binary CFG merely to
+make it resemble compiler assembly.
+
+The final design therefore keeps the binary CFG unchanged.
+
+For validation only, the comparison layer recognizes this strict pattern and
+constructs a normalized comparison topology.
+
+The recognizer requires, among other things:
+
+    - a conditional branch;
+    - fallthrough to the immediately following trampoline;
+    - a one-instruction unconditional jump trampoline;
+    - exactly one incoming edge to that trampoline;
+    - the conditional branch skipping the trampoline;
+    - an internal trampoline destination;
+    - a target distance beyond the normal conditional-branch range.
+
+This became:
+
+    MATCH_LONG_BRANCH_NORMALIZED
+
+The key methodological principle is:
+
+    generated CFG
+        remains faithful to the artifact
+
+    validation
+        may recognize a known representation-level transformation
+
+
+==============================================================================
+8. BRINGUP-BENCH FORCED MULTI-FUNCTION SUPPORT
+==============================================================================
+
+HumanEval and MC-Eval primarily exercise one target function per row.
+
+Bringup-Bench contains complete translation units and therefore forced the CFG
+pipeline to handle multiple source-defined functions robustly.
+
+This required:
+
+    - multi-function CFG bundles;
+    - better function discovery;
+    - Apple Lfunc_beginN handling;
+    - stricter Mach-O symbol fallback;
+    - correct Linux underscore preservation;
+    - distinction between returns and unresolved indirect register jumps;
+    - function mapping across representations.
+
+A particularly important RISC-V correction was:
+
+    jr ra
+        -> return/sink
+
+    jr a5
+        -> unresolved indirect jump -> UNKNOWN
+
+The parser must not infer that every jr is a return.
+
+
+==============================================================================
+9. THE FIRST AARCH64 LINUX SHARED-OBJECT BOUNDARY FIX
+==============================================================================
+
+Bringup O0 exposed AArch64 Linux shared-object cases where objdump's apparent
+function chunk included trailing unnamed instructions after the source-function
+logic.
+
+The V12/V13-era solution used the corresponding compiler function ending as a
+boundary anchor.
+
+Once the PIC provenance model was understood, that anchor was corrected to use:
+
+    compiler_pic_asm
+
+rather than:
+
+    compiler_asm
+
+because shared_asm is linked from PIC objects.
+
+This approach produced clean validation results and was useful diagnostically.
+
+However, it contained a deeper methodological problem:
+
+    shared_asm CFG extraction depended on compiler_pic_asm.
+
+That means the generated CFG was no longer a function of the standalone shared
+artifact alone.
+
+This was acceptable as an intermediate validation technique, but it did NOT
+satisfy the intended deployment use case.
+
+
+==============================================================================
+10. DATASET PROVENANCE DISCOVERY
+==============================================================================
+
+A separate but critical issue was discovered while validating optimized Bringup
+representations.
+
+The six columns do not form one single compilation lineage.
+
+There are two independent compilation-provenance families:
+
+    NORMAL
+        compiler_asm
+        object_asm
+        program_asm
+
+    PIC
+        compiler_pic_asm
+        pic_object_asm
+        shared_asm
+
+The shared library is built from separately compiled -fPIC objects.
+
+Therefore:
+
+    shared_asm must NOT be compared against compiler_asm.
+
+This distinction was especially visible at O2, where normal and PIC compilation
+can legitimately produce different optimized helper functions.
+
+For example, Bringup O2 V14 contains:
+
+    9 task/ISA pairs with normal-vs-PIC function-set differences
+    9 functions present only in normal compiler references
+    0 functions present only in PIC compiler references
+
+This led to the provenance-aware V13 validation model:
+
+    compiler_asm
+        -> object_asm
+        -> program_asm
+
+    compiler_pic_asm
+        -> pic_object_asm
+        -> shared_asm
+
+This provenance correction was retained unchanged in V14.
+
+
+==============================================================================
+11. WHY V13 WAS NOT THE FINAL METHODOLOGY
+==============================================================================
+
+V13 produced strong empirical validation:
+
+    - HumanEval O0/O2 passed;
+    - MC-Eval O0/O2 passed;
+    - Bringup O0/O2 passed;
+    - zero unexplained topology differences.
+
+But V13 still violated the production deployment requirement in one place:
+
+    AArch64 Linux shared-object function-boundary trimming used information from
+    compiler_pic_asm before CFG construction.
+
+The problematic conceptual flow was:
+
+    shared_asm
+        + compiler_pic_asm boundary
+        -> trim instructions
+        -> build shared_asm CFG
+
+That is cross-representation generation.
+
+The intended production flow is instead:
+
+    shared_asm
+        -> use only shared_asm
+        -> build shared_asm CFG
+
+and only afterward:
+
+    shared CFG
+        vs independently generated compiler PIC CFG
+        -> validation comparison
+
+That distinction is the primary reason V14 exists.
+
+
+==============================================================================
+12. V14 STANDALONE GENERATION RULE
+==============================================================================
+
+V14 makes standalone generation explicit.
+
+The production extractor may use only:
+
+    - instruction text/addresses from the current artifact;
+    - symbol information from the current artifact;
+    - relocation information from the current artifact;
+    - platform/ISA semantics selected for the current artifact.
+
+It may NOT use:
+
+    - another representation's function end;
+    - another representation's branch structure;
+    - another representation's function set;
+    - another representation's output CFG.
+
+Cross-representation data belongs only in validation.
+
+This rule matches the real target use case:
+
+    arbitrary assembly/disassembly found in the wild
+        -> CFG
+
+with no assumption that source, object, shared library, and executable versions
+all coexist.
+
+
+==============================================================================
+13. V14 PLATFORM-AWARE INTERFACE
+==============================================================================
+
+V13's standalone CLI exposed architecture classes but did not cleanly encode the
+platform distinction required for AArch64 Linux versus AArch64 macOS.
+
+V14 therefore uses explicit targets such as:
+
+    x86_linux
+    arm_linux
+    arm_mac
+    riscv_linux
+
+AArch64 Linux and macOS share instruction semantics, but platform-aware target
+selection controls format-specific behavior such as symbol normalization.
+
+In particular:
+
+    leading underscore stripping
+        is allowed for ARM macOS C-symbol matching
+
+    leading underscore stripping
+        is NOT applied globally on Linux
+
+
+==============================================================================
+14. V14 STANDALONE AARCH64 BOUNDARY RECOVERY
+==============================================================================
+
+The V13 compiler-assisted shared-object trim was replaced by a conservative
+artifact-local reachability rule.
+
+For objdump-style input:
+
+    1. parse the current function chunk;
+
+    2. build a tentative CFG;
+
+    3. compute reachability from the function entry using direct CFG edges;
+
+    4. identify a trailing suffix of unreachable blocks;
+
+    5. remove that suffix only if it is proven unreachable;
+
+    6. if a reachable UNKNOWN indirect jump exists, refuse to trim because the
+       unresolved jump might target the apparent suffix.
+
+This rule is deliberately conservative.
+
+It is applied to objdump input, where symbol/boundary ambiguity can occur.
+
+It is not applied to compiler .s merely to make the output resemble a binary,
+because compiler assembly already contains explicit file-local function
+structure such as function metadata and end markers.
+
+Final Bringup O0 V14 result:
+
+    11 trailing AArch64 shared-object instructions trimmed by standalone
+    reachability recovery.
+
+Bringup O2 required none.
+
+This fix satisfies the standalone requirement because the trimming decision uses
+only the current shared-object instruction sequence.
+
+
+==============================================================================
+15. THE TWO REMAINING AARCH64 TERMINAL-SUCCESS CASES
+==============================================================================
+
+After standalone boundary recovery, Bringup O0 still contained two AArch64 Linux
+shared-object topology mismatches:
+
+    pi-calc
+    spelt2num
+
+The linked shared disassembly contained a final pattern:
+
+    bl  libmin_success@plt
+    b   libtarg_success
+
+The same-provenance compiler PIC assembly and PIC relocatable object ended after
+the libmin_success call.
+
+Inspection of the raw linked disassembly established several important facts:
+
+    - the b libtarg_success instruction is a real AArch64 instruction;
+    - the linked artifact does not provide a clean symbol boundary proving that
+      the branch should be removed from the current function;
+    - libmin_success itself exists elsewhere as a separately named function;
+    - libtarg_success is the Bringup-Bench success/termination interface.
+
+Therefore the branch could not honestly be deleted by the standalone generator.
+
+Under the calls-return policy, it is locally reachable.
+
+V14 therefore conservatively keeps:
+
+    JUMP -> EXTERNAL_libtarg_success
+
+in the real generated shared CFG.
+
+The validation harness then applies a narrow comparison-only rule for the exact
+Bringup linked-only terminal-success pattern.
+
+The rule is restricted to:
+
+    - AArch64 Linux;
+    - shared_asm;
+    - final block;
+    - call to libmin_success immediately before;
+    - final unconditional direct branch to libtarg_success;
+    - external jump edge;
+    - no fallthrough.
+
+Only for comparison, that final linked-only edge is suppressed in an alternate
+topology signature.
+
+The real CFG file is unchanged.
+
+This became:
+
+    MATCH_ARM_SHARED_TERMINAL_SUCCESS_BRANCH
+
+Final Bringup O0 result:
+
+    2 such validation-only matches.
+
+The two EXTERNAL_libtarg_success edges remain in the actual generated CFGs.
+
+
+==============================================================================
+16. WHY WE DID NOT ADD A GENERIC "CALL + EXTERNAL BRANCH" RULE
+==============================================================================
+
+It would have been easy to write a generic rule such as:
+
+    if final block is:
+        bl foo
+        b  bar
+    then remove the final branch
+
+That would be unsafe.
+
+A sequence such as:
+
+    bl foo
+    b  bar
+
+can be legitimate program control flow:
+
+    call foo
+    then tail-transfer to bar
+
+There is nothing inherently invalid about it.
+
+The Bringup rule is therefore deliberately benchmark- and pattern-specific in
+the validation layer.
+
+This avoids changing the production CFG based on assumptions that are not
+supported by the standalone artifact.
+
+
+==============================================================================
+17. GENERATION-TIME FIXES VERSUS VALIDATION-TIME NORMALIZATIONS
+==============================================================================
+
+This distinction is central to the final methodology.
+
+GENERATION-TIME / PRODUCTION BEHAVIOR
+-------------------------------------
+
+These affect the CFG that is actually emitted:
+
+    - parsing ISA/platform syntax;
+    - leader/basic-block construction;
+    - direct branch classification;
+    - UNKNOWN for unresolved indirect jumps;
+    - EXTERNAL for known out-of-function branches;
+    - target-aware NOP handling;
+    - artifact-local relocation-assisted direct target recovery;
+    - standalone unreachable trailing-suffix recovery for objdump input;
+    - platform-aware symbol handling.
+
+These are allowed because they use only the current artifact plus target
+semantics.
+
+
+VALIDATION-TIME ONLY
+--------------------
+
+These do NOT mutate the emitted CFG:
+
+    - normal/PIC provenance mapping;
+    - corresponding function-name mapping;
+    - RISC-V long-branch topology normalization;
+    - Bringup AArch64 linked-only terminal-success topology normalization;
+    - cross-representation comparison signatures.
+
+A useful conceptual model is:
+
+    artifact A
+        -> independently generated CFG A
+
+    artifact B
+        -> independently generated CFG B
+
+    CFG A + CFG B
+        -> validation comparison
+
+not:
+
+    artifact A + information from artifact B
+        -> CFG A
+
+
+==============================================================================
+18. HUMAN EVAL AND MC-EVAL V14 RESULTS
+==============================================================================
+
+HumanEval V14:
+
+    O0
+        3936 / 3936 CFGs generated
+        parse/generation failures:      0
+        structural failures:            0
+        raw topology differences:       0
+        final topology differences:     0
+        OVERALL: PASS
+
+    O2
+        3936 / 3936 CFGs generated
+        parse/generation failures:      0
+        structural failures:            0
+        raw topology differences:       0
+        final topology differences:     0
+        direct external edges:          162
+        OVERALL: PASS
+
+
+MC-Eval V14:
+
+    O0
+        1200 / 1200 CFGs generated
+        parse/generation failures:      0
+        structural failures:            0
+        raw topology differences:       0
+        final topology differences:     0
+        OVERALL: PASS
+
+    O2
+        1200 / 1200 CFGs generated
+        parse/generation failures:      0
+        structural failures:            0
+        raw topology differences:       0
+        final topology differences:     0
+        direct external edges:          18
+        OVERALL: PASS
+
+
+==============================================================================
+19. BRINGUP-BENCH V14 RESULTS
+==============================================================================
+
+Bringup O0:
+
+    expected/generated bundles:
+        2592 / 2592
+
+    expected/generated function CFGs:
+        14472 / 14472
+
+    parse/generation failures:
+        0
+
+    structural failures:
+        0
+
+    raw topology differences:
+        10
+
+    unexplained topology differences after validation-only normalizations:
+        0
+
+    recognized RISC-V long-branch trampolines:
+        420
+
+    AArch64 shared trailing instructions trimmed by standalone recovery:
+        11
+
+    AArch64 linked-only terminal success branches recognized in validation:
+        2
+
+    UNKNOWN edges:
+        54
+
+    EXTERNAL edges:
+        2
+
+    OVERALL:
+        PASS
+
+
+Bringup O2:
+
+    expected/generated bundles:
+        2592 / 2592
+
+    expected/generated function CFGs:
+        11931 / 11931
+
+    parse/generation failures:
+        0
+
+    structural failures:
+        0
+
+    raw topology differences:
+        4
+
+    unexplained topology differences after validation-only normalizations:
+        0
+
+    recognized RISC-V long-branch trampolines:
+        64
+
+    AArch64 shared trailing instructions trimmed by standalone recovery:
+        0
+
+    AArch64 linked-only terminal success branches recognized in validation:
+        0
+
+    normal-vs-PIC task/ISA function-set differences:
+        9
+
+    normal-only compiler functions:
+        9
+
+    PIC-only compiler functions:
+        0
+
+    UNKNOWN edges:
+        108
+
+    EXTERNAL edges:
+        2004
+
+    OVERALL:
+        PASS
+
+
+==============================================================================
+20. AGGREGATE V14 EVIDENCE
+==============================================================================
+
+Across all six validation runs:
+
+    representation/bundle outputs:
+        15456
+
+    individual function CFGs:
+        36675
+
+    parse/generation failures:
+        0
+
+    structural validation failures:
+        0
+
+    unexplained topology differences:
+        0
+
+    recognized RISC-V long-branch trampolines:
+        484
+
+    AArch64 trailing instructions removed by standalone recovery:
+        11
+
+    AArch64 linked-only terminal-success cases handled validation-only:
+        2
+
+    UNKNOWN edges:
+        162
+
+    EXTERNAL edges:
+        2186
+
+    full validation runs:
+        6 / 6 PASS
+
+
+==============================================================================
+21. MANUAL AUDIT SUPPORT
+==============================================================================
+
+Two manual-audit artifacts supplement the automated summaries.
+
+Broad spot check:
+
+    validation/v14/CFG_SPOTCHECK_72_V14.txt
+
+Coverage:
+
+    3 datasets
+    x 2 optimization levels
+    x 3 deterministic tasks
+    x 4 platforms
+    = 72 task/ISA checks
+
+Each check shows all six representations.
+
+
+Targeted special cases:
+
+    validation/v14/CFG_TARGETED_SPECIAL_CASES_V14.txt
+
+The targeted report includes:
+
+    1. unresolved indirect jump -> UNKNOWN;
+    2. direct out-of-function jump -> EXTERNAL;
+    3. RISC-V long-branch expansion;
+    4. AArch64 standalone reachability-based boundary recovery;
+    5. AArch64 linked-only terminal-success validation case;
+    6. legitimate normal-vs-PIC function-set difference.
+
+This report exists specifically to make the unusual cases auditable rather than
+hiding them inside aggregate PASS counts.
+
+
+==============================================================================
+22. WHY UNKNOWN AND EXTERNAL ARE FEATURES, NOT FAILURES
+==============================================================================
+
+A static intraprocedural CFG should not invent information it does not know.
+
+Therefore:
+
+    UNKNOWN
+
+is the correct result when a runtime-computed indirect jump target cannot be
+resolved from the current artifact.
+
+Similarly:
+
+    EXTERNAL_target
+
+is the correct result when the destination is statically known but lies outside
+the current function.
+
+The goal is not to force these counters to zero.
+
+The goal is to represent the available control-flow information accurately and
+conservatively.
+
+
+==============================================================================
+23. WHY V14 IS THE VERSION TO CARRY FORWARD
+==============================================================================
+
+V14 is the first version that simultaneously satisfies:
+
+    1. standalone production generation;
+
+    2. four target platforms;
+
+    3. compiler assembly and objdump-style inputs;
+
+    4. normal and PIC provenance separation;
+
+    5. multi-function Bringup support;
+
+    6. artifact-local relocation recovery;
+
+    7. conservative indirect/external handling;
+
+    8. target-aware NOP handling;
+
+    9. standalone boundary recovery;
+
+    10. validation-only handling of known representation transformations;
+
+    11. zero unexplained topology differences across all six full runs.
+
+For that reason, V13 is preserved only as development history and V14 is the
+active implementation.
+
+
+==============================================================================
+24. SUMMARY OF THE MOST IMPORTANT LESSONS
+==============================================================================
+
+The development process exposed several recurring principles.
+
+FIRST:
+    Representation consistency does not mean instruction-text identity.
+
+SECOND:
+    Normal and PIC compiler outputs are separate provenances and must be
+    validated separately.
+
+THIRD:
+    A real binary transformation should remain visible in the emitted binary
+    CFG, even when validation recognizes it as equivalent to compiler assembly.
+
+FOURTH:
+    Cross-representation information must not leak into production CFG
+    generation.
+
+FIFTH:
+    Conservative UNKNOWN/EXTERNAL edges are better than invented precision.
+
+SIXTH:
+    Function-boundary recovery must rely on artifact-local evidence if the tool
+    is intended to work on standalone binaries/disassembly.
+
+SEVENTH:
+    Validation normalizations should be narrow, explicit, auditable, and should
+    never silently rewrite the production CFG.
+
+
+==============================================================================
+25. FINAL DESIGN IN ONE DIAGRAM
+==============================================================================
+
+PRODUCTION:
+
+    one standalone artifact
+            |
+            v
+    target/platform-aware parser
+            |
+            v
+    artifact-local normalization/recovery
+            |
+            v
+    basic blocks + edges
+            |
+            v
+         REAL CFG
+
+
+VALIDATION:
+
+    artifact A -> REAL CFG A
+    artifact B -> REAL CFG B
+                      |
+                      v
+              same-provenance mapping
+                      |
+                      v
+             topology comparison
+                      |
+          +-----------+-----------+
+          |                       |
+          v                       v
+    exact match          narrowly recognized
+                         representation effect
+                                  |
+                                  v
+                               PASS
+
+At no point does artifact B determine the production CFG emitted for artifact A.

@@ -1,0 +1,1329 @@
+Loading split 'O2' from all four repositories...
+  x86_linux    <- adpretko/mceval_x86_linux_reloc
+  arm_linux    <- adpretko/mceval_arm_linux_reloc
+  arm_mac      <- adpretko/mceval_arm_mac_reloc
+  riscv_linux  <- adpretko/mceval_riscv_linux_reloc
+
+Expected CFGs: 50 x 4 ISAs x 6 representations = 1200
+
+=== [1/50] C_1 ===
+  x86_linux    normal compiler_asm     func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='hello_mmcodeeval' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='hello_mmcodeeval' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='hello_mmcodeeval' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [2/50] C_10 ===
+  x86_linux    normal compiler_asm     func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_even_sum' insns= 16 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_even_sum' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_even_sum' insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_even_sum' insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_even_sum' insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_even_sum' insns= 56 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_even_sum' insns= 14 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [3/50] C_11 ===
+  x86_linux    normal compiler_asm     func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='are_intervals_intersecting' insns= 24 blocks= 6 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='are_intervals_intersecting' insns= 20 blocks= 4 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_are_intervals_intersecting' insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_are_intervals_intersecting' insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_are_intervals_intersecting' insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_are_intervals_intersecting' insns= 22 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='are_intervals_intersecting' insns= 15 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [4/50] C_12 ===
+  x86_linux    normal compiler_asm     func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='extraNumber'      insns=  9 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='extraNumber'      insns=  7 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_extraNumber'     insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_extraNumber'     insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_extraNumber'     insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_extraNumber'     insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='extraNumber'      insns=  7 blocks= 5 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [5/50] C_13 ===
+  x86_linux    normal compiler_asm     func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_total_score' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_total_score' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [6/50] C_14 ===
+  x86_linux    normal compiler_asm     func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='decode_numbers'   insns= 35 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='decode_numbers'   insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_decode_numbers'  insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_decode_numbers'  insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_decode_numbers'  insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_decode_numbers'  insns= 82 blocks=12 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='decode_numbers'   insns= 47 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='decode_numbers'   insns= 51 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='decode_numbers'   insns= 49 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='decode_numbers'   insns= 47 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='decode_numbers'   insns= 51 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='decode_numbers'   insns= 49 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [7/50] C_15 ===
+  x86_linux    normal compiler_asm     func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='count_coloring_methods' insns=101 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='count_coloring_methods' insns= 84 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_count_coloring_methods' insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_count_coloring_methods' insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_count_coloring_methods' insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_count_coloring_methods' insns=104 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='count_coloring_methods' insns= 79 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='count_coloring_methods' insns= 81 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='count_coloring_methods' insns= 80 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='count_coloring_methods' insns= 79 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='count_coloring_methods' insns= 81 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='count_coloring_methods' insns= 80 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [8/50] C_16 ===
+  x86_linux    normal compiler_asm     func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='count_valid_coin_toss_sequences' insns= 34 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='count_valid_coin_toss_sequences' insns= 44 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_count_valid_coin_toss_sequences' insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_count_valid_coin_toss_sequences' insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_count_valid_coin_toss_sequences' insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_count_valid_coin_toss_sequences' insns= 41 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='count_valid_coin_toss_sequences' insns= 41 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='count_valid_coin_toss_sequences' insns= 43 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='count_valid_coin_toss_sequences' insns= 42 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='count_valid_coin_toss_sequences' insns= 41 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='count_valid_coin_toss_sequences' insns= 43 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='count_valid_coin_toss_sequences' insns= 42 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [9/50] C_17 ===
+  x86_linux    normal compiler_asm     func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='find_longest_consecutive_ones_length' insns= 21 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='find_longest_consecutive_ones_length' insns= 16 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_find_longest_consecutive_ones_length' insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_find_longest_consecutive_ones_length' insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_find_longest_consecutive_ones_length' insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_find_longest_consecutive_ones_length' insns= 18 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='find_longest_consecutive_ones_length' insns= 23 blocks=11 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [10/50] C_18 ===
+  x86_linux    normal compiler_asm     func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='create_id'        insns= 36 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_create_id'       insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_create_id'       insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_create_id'       insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_create_id'       insns= 36 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='create_id'        insns= 50 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='create_id'        insns= 50 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='create_id'        insns= 47 blocks= 6 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [11/50] C_19 ===
+  x86_linux    normal compiler_asm     func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='count_permutations_of_binary_string' insns= 60 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='count_permutations_of_binary_string' insns= 56 blocks=16 jump=11 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_count_permutations_of_binary_string' insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_count_permutations_of_binary_string' insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_count_permutations_of_binary_string' insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_count_permutations_of_binary_string' insns= 48 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='count_permutations_of_binary_string' insns= 49 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='count_permutations_of_binary_string' insns= 52 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='count_permutations_of_binary_string' insns= 52 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='count_permutations_of_binary_string' insns= 49 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='count_permutations_of_binary_string' insns= 52 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='count_permutations_of_binary_string' insns= 52 blocks=14 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [12/50] C_2 ===
+  x86_linux    normal compiler_asm     func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_triangle_area' insns= 32 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_triangle_area' insns= 29 blocks=10 jump= 7 fall= 5 unknown= 0 external= 1 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_triangle_area' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_triangle_area' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_triangle_area' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_triangle_area' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_triangle_area' insns= 28 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_triangle_area' insns= 31 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_triangle_area' insns= 30 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_triangle_area' insns= 28 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_triangle_area' insns= 31 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_triangle_area' insns= 30 blocks= 7 jump= 5 fall= 4 unknown= 0 external= 1 valid=OK    topology=MATCH
+
+=== [13/50] C_20 ===
+  x86_linux    normal compiler_asm     func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='answer_questions' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='answer_questions' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='answer_questions' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [14/50] C_21 ===
+  x86_linux    normal compiler_asm     func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='Is_Square'        insns= 30 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_Is_Square'       insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_Is_Square'       insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_Is_Square'       insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_Is_Square'       insns= 57 blocks=10 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='Is_Square'        insns= 34 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='Is_Square'        insns= 35 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='Is_Square'        insns= 34 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='Is_Square'        insns= 34 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='Is_Square'        insns= 35 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='Is_Square'        insns= 34 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [15/50] C_22 ===
+  x86_linux    normal compiler_asm     func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='find_integers'    insns= 22 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_find_integers'   insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_find_integers'   insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_find_integers'   insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_find_integers'   insns= 16 blocks= 6 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='find_integers'    insns= 18 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [16/50] C_23 ===
+  x86_linux    normal compiler_asm     func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='count_acute_triangles' insns=116 blocks=21 jump=14 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='count_acute_triangles' insns=117 blocks=24 jump=15 fall=19 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_count_acute_triangles' insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_count_acute_triangles' insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_count_acute_triangles' insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_count_acute_triangles' insns=140 blocks=19 jump=14 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='count_acute_triangles' insns=104 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='count_acute_triangles' insns=112 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='count_acute_triangles' insns=107 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='count_acute_triangles' insns=104 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='count_acute_triangles' insns=112 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='count_acute_triangles' insns=107 blocks=20 jump=12 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [17/50] C_24 ===
+  x86_linux    normal compiler_asm     func='process_integer_and_char' insns= 31 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='process_integer_and_char' insns= 31 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='process_integer_and_char' insns= 31 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='process_integer_and_char' insns= 39 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='process_integer_and_char' insns= 35 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='process_integer_and_char' insns= 32 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='process_integer_and_char' insns= 39 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='process_integer_and_char' insns= 35 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [18/50] C_25 ===
+  x86_linux    normal compiler_asm     func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='shift_characters' insns= 29 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_shift_characters' insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_shift_characters' insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_shift_characters' insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_shift_characters' insns=230 blocks=71 jump=67 fall=60 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='shift_characters' insns= 31 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='shift_characters' insns= 31 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='shift_characters' insns= 31 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='shift_characters' insns= 32 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='shift_characters' insns= 31 blocks= 8 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [19/50] C_26 ===
+  x86_linux    normal compiler_asm     func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='classify_integer' insns= 40 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='classify_integer' insns= 38 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_classify_integer' insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_classify_integer' insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_classify_integer' insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_classify_integer' insns=154 blocks=21 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='classify_integer' insns= 34 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='classify_integer' insns= 35 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='classify_integer' insns= 34 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='classify_integer' insns= 34 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='classify_integer' insns= 35 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='classify_integer' insns= 34 blocks=10 jump= 5 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [20/50] C_27 ===
+  x86_linux    normal compiler_asm     func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='transform_letter_case' insns= 11 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='transform_letter_case' insns= 15 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_transform_letter_case' insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_transform_letter_case' insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_transform_letter_case' insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_transform_letter_case' insns= 10 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='transform_letter_case' insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [21/50] C_28 ===
+  x86_linux    normal compiler_asm     func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='display_ascii_info' insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='display_ascii_info' insns=  2 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='display_ascii_info' insns=  1 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [22/50] C_29 ===
+  x86_linux    normal compiler_asm     func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='evaluate_integer_grade' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='evaluate_integer_grade' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [23/50] C_3 ===
+  x86_linux    normal compiler_asm     func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_function_value' insns= 37 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_function_value' insns= 60 blocks= 8 jump= 5 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_function_value' insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_function_value' insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_function_value' insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_function_value' insns= 44 blocks= 9 jump= 6 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_function_value' insns= 52 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_function_value' insns= 70 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_function_value' insns= 63 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_function_value' insns= 52 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_function_value' insns= 70 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_function_value' insns= 63 blocks= 8 jump= 5 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [24/50] C_30 ===
+  x86_linux    normal compiler_asm     func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='check_two_equal_digits' insns= 19 blocks= 6 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='check_two_equal_digits' insns= 20 blocks= 3 jump= 1 fall= 1 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_check_two_equal_digits' insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_check_two_equal_digits' insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_check_two_equal_digits' insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_check_two_equal_digits' insns= 16 blocks= 5 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='check_two_equal_digits' insns= 12 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='check_two_equal_digits' insns= 14 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='check_two_equal_digits' insns= 14 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='check_two_equal_digits' insns= 12 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='check_two_equal_digits' insns= 14 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='check_two_equal_digits' insns= 14 blocks= 7 jump= 4 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [25/50] C_31 ===
+  x86_linux    normal compiler_asm     func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='minRoundsToSameChar' insns= 35 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='minRoundsToSameChar' insns= 42 blocks= 7 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_minRoundsToSameChar' insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_minRoundsToSameChar' insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_minRoundsToSameChar' insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_minRoundsToSameChar' insns= 87 blocks= 8 jump= 4 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='minRoundsToSameChar' insns= 49 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='minRoundsToSameChar' insns= 51 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='minRoundsToSameChar' insns= 50 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='minRoundsToSameChar' insns= 49 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='minRoundsToSameChar' insns= 51 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='minRoundsToSameChar' insns= 50 blocks= 9 jump= 5 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [26/50] C_32 ===
+  x86_linux    normal compiler_asm     func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='apocalypseYear'   insns= 17 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='apocalypseYear'   insns= 11 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_apocalypseYear'  insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_apocalypseYear'  insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_apocalypseYear'  insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_apocalypseYear'  insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='apocalypseYear'   insns= 13 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [27/50] C_33 ===
+  x86_linux    normal compiler_asm     func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='newModuloFactorial' insns= 71 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='newModuloFactorial' insns= 68 blocks=12 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_newModuloFactorial' insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_newModuloFactorial' insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_newModuloFactorial' insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_newModuloFactorial' insns= 56 blocks= 8 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='newModuloFactorial' insns= 53 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='newModuloFactorial' insns= 55 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='newModuloFactorial' insns= 54 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='newModuloFactorial' insns= 53 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='newModuloFactorial' insns= 55 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='newModuloFactorial' insns= 54 blocks=10 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [28/50] C_34 ===
+  x86_linux    normal compiler_asm     func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='makeEqualAgain'   insns= 74 blocks=23 jump=18 fall=14 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='makeEqualAgain'   insns= 72 blocks=27 jump=20 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_makeEqualAgain'  insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_makeEqualAgain'  insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_makeEqualAgain'  insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_makeEqualAgain'  insns= 66 blocks=22 jump=15 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='makeEqualAgain'   insns= 59 blocks=20 jump=17 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [29/50] C_35 ===
+  x86_linux    normal compiler_asm     func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='gameWinner'       insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_gameWinner'      insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_gameWinner'      insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_gameWinner'      insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_gameWinner'      insns= 11 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='gameWinner'       insns= 10 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='gameWinner'       insns= 10 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='gameWinner'       insns=  8 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='gameWinner'       insns= 10 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='gameWinner'       insns= 10 blocks= 4 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [30/50] C_36 ===
+  x86_linux    normal compiler_asm     func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='minTotalCost'     insns=  9 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='minTotalCost'     insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_minTotalCost'    insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_minTotalCost'    insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_minTotalCost'    insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_minTotalCost'    insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='minTotalCost'     insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [31/50] C_37 ===
+  x86_linux    normal compiler_asm     func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='countHandshakes'  insns= 58 blocks=14 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='countHandshakes'  insns= 64 blocks=12 jump= 8 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_countHandshakes' insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_countHandshakes' insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_countHandshakes' insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_countHandshakes' insns= 64 blocks=13 jump= 9 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='countHandshakes'  insns= 75 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='countHandshakes'  insns= 78 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='countHandshakes'  insns= 76 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='countHandshakes'  insns= 75 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='countHandshakes'  insns= 78 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='countHandshakes'  insns= 76 blocks=11 jump= 8 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [32/50] C_38 ===
+  x86_linux    normal compiler_asm     func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='maxModeSum'       insns= 61 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='maxModeSum'       insns= 71 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_maxModeSum'      insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_maxModeSum'      insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_maxModeSum'      insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_maxModeSum'      insns= 96 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='maxModeSum'       insns= 83 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='maxModeSum'       insns= 86 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='maxModeSum'       insns= 84 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='maxModeSum'       insns= 83 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='maxModeSum'       insns= 86 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='maxModeSum'       insns= 84 blocks=12 jump= 7 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [33/50] C_39 ===
+  x86_linux    normal compiler_asm     func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='sumOfXorSubarrays' insns= 75 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='sumOfXorSubarrays' insns= 89 blocks=16 jump= 9 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_sumOfXorSubarrays' insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_sumOfXorSubarrays' insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_sumOfXorSubarrays' insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_sumOfXorSubarrays' insns=238 blocks=11 jump= 6 fall= 8 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='sumOfXorSubarrays' insns=117 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='sumOfXorSubarrays' insns=121 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='sumOfXorSubarrays' insns=118 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='sumOfXorSubarrays' insns=117 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='sumOfXorSubarrays' insns=121 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='sumOfXorSubarrays' insns=118 blocks=14 jump= 8 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [34/50] C_4 ===
+  x86_linux    normal compiler_asm     func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='find_max_min'     insns= 24 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='find_max_min'     insns= 23 blocks= 7 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_find_max_min'    insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_find_max_min'    insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_find_max_min'    insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_find_max_min'    insns= 22 blocks= 7 jump= 3 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='find_max_min'     insns= 29 blocks=12 jump= 7 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [35/50] C_40 ===
+  x86_linux    normal compiler_asm     func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='countPowerNumbers' insns=129 blocks=19 jump=13 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='countPowerNumbers' insns=108 blocks=20 jump=14 fall=16 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_countPowerNumbers' insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_countPowerNumbers' insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_countPowerNumbers' insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_countPowerNumbers' insns= 75 blocks=17 jump=13 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='countPowerNumbers' insns=124 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='countPowerNumbers' insns=131 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='countPowerNumbers' insns=125 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='countPowerNumbers' insns=124 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='countPowerNumbers' insns=131 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='countPowerNumbers' insns=125 blocks=23 jump=15 fall=18 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [36/50] C_41 ===
+  x86_linux    normal compiler_asm     func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='countBalancedSubsequences' insns= 79 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='countBalancedSubsequences' insns= 78 blocks=10 jump= 5 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_countBalancedSubsequences' insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_countBalancedSubsequences' insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_countBalancedSubsequences' insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_countBalancedSubsequences' insns=138 blocks=17 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='countBalancedSubsequences' insns= 67 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='countBalancedSubsequences' insns= 70 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='countBalancedSubsequences' insns= 70 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='countBalancedSubsequences' insns= 67 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='countBalancedSubsequences' insns= 70 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='countBalancedSubsequences' insns= 70 blocks=11 jump= 6 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [37/50] C_42 ===
+  x86_linux    normal compiler_asm     func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='expectedCuts'     insns=138 blocks=15 jump=10 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='expectedCuts'     insns=125 blocks=15 jump= 9 fall=12 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_expectedCuts'    insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_expectedCuts'    insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_expectedCuts'    insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_expectedCuts'    insns=114 blocks=15 jump= 9 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='expectedCuts'     insns=102 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='expectedCuts'     insns=104 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='expectedCuts'     insns=103 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='expectedCuts'     insns=102 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='expectedCuts'     insns=104 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='expectedCuts'     insns=103 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [38/50] C_43 ===
+  x86_linux    normal compiler_asm     func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='countPermutations' insns=385 blocks=45 jump=33 fall=39 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='countPermutations' insns=295 blocks=38 jump=26 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_countPermutations' insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_countPermutations' insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_countPermutations' insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_countPermutations' insns=383 blocks=45 jump=35 fall=33 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='countPermutations' insns=254 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='countPermutations' insns=261 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='countPermutations' insns=255 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='countPermutations' insns=254 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='countPermutations' insns=261 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='countPermutations' insns=255 blocks=36 jump=24 fall=31 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [39/50] C_44 ===
+  x86_linux    normal compiler_asm     func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='countTriplets'    insns= 71 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='countTriplets'    insns= 54 blocks=18 jump=11 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_countTriplets'   insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_countTriplets'   insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_countTriplets'   insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_countTriplets'   insns= 55 blocks=15 jump=12 fall= 9 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='countTriplets'    insns= 61 blocks=25 jump=17 fall=21 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [40/50] C_45 ===
+  x86_linux    normal compiler_asm     func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='minOperations'    insns=200 blocks=35 jump=24 fall=28 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='minOperations'    insns=177 blocks=33 jump=24 fall=26 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_minOperations'   insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_minOperations'   insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_minOperations'   insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_minOperations'   insns=147 blocks=23 jump=18 fall=15 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='minOperations'    insns=160 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='minOperations'    insns=164 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='minOperations'    insns=161 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='minOperations'    insns=160 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='minOperations'    insns=164 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='minOperations'    insns=161 blocks=22 jump=16 fall=17 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [41/50] C_46 ===
+  x86_linux    normal compiler_asm     func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='sumOfMultiples'   insns= 21 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='sumOfMultiples'   insns= 24 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_sumOfMultiples'  insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_sumOfMultiples'  insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_sumOfMultiples'  insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_sumOfMultiples'  insns=114 blocks=10 jump= 6 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='sumOfMultiples'   insns= 16 blocks= 8 jump= 4 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [42/50] C_47 ===
+  x86_linux    normal compiler_asm     func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='isPalindrome'     insns= 67 blocks=14 jump=10 fall=11 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='isPalindrome'     insns= 68 blocks=13 jump= 8 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_isPalindrome'    insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_isPalindrome'    insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_isPalindrome'    insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_isPalindrome'    insns= 71 blocks=18 jump=12 fall=13 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='isPalindrome'     insns= 71 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='isPalindrome'     insns= 74 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='isPalindrome'     insns= 71 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='isPalindrome'     insns= 71 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='isPalindrome'     insns= 74 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='isPalindrome'     insns= 71 blocks=15 jump=12 fall=10 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [43/50] C_48 ===
+  x86_linux    normal compiler_asm     func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='addDigits'        insns= 20 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='addDigits'        insns= 16 blocks= 5 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_addDigits'       insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_addDigits'       insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_addDigits'       insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_addDigits'       insns= 23 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='addDigits'        insns= 13 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [44/50] C_49 ===
+  x86_linux    normal compiler_asm     func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='canWinNim'        insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_canWinNim'       insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_canWinNim'       insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_canWinNim'       insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_canWinNim'       insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='canWinNim'        insns=  3 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [45/50] C_5 ===
+  x86_linux    normal compiler_asm     func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_distance' insns=  8 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_distance' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [46/50] C_50 ===
+  x86_linux    normal compiler_asm     func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='evenSumOrOddProduct' insns=  7 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_evenSumOrOddProduct' insns=  5 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='evenSumOrOddProduct' insns=  6 blocks= 3 jump= 1 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [47/50] C_6 ===
+  x86_linux    normal compiler_asm     func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='process_request'  insns= 38 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='process_request'  insns= 44 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_process_request' insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_process_request' insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_process_request' insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_process_request' insns= 46 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='process_request'  insns= 60 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='process_request'  insns= 62 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='process_request'  insns= 61 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='process_request'  insns= 60 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='process_request'  insns= 62 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='process_request'  insns= 61 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [48/50] C_7 ===
+  x86_linux    normal compiler_asm     func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_calculate_triangle_area' insns=  4 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='calculate_triangle_area' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='calculate_triangle_area' insns=  6 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='calculate_triangle_area' insns=  7 blocks= 1 jump= 0 fall= 0 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [49/50] C_8 ===
+  x86_linux    normal compiler_asm     func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='hamming_distance' insns= 14 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='hamming_distance' insns=  9 blocks= 3 jump= 2 fall= 2 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_hamming_distance' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_hamming_distance' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_hamming_distance' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_hamming_distance' insns= 14 blocks= 5 jump= 2 fall= 3 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='hamming_distance' insns= 11 blocks= 7 jump= 3 fall= 5 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+=== [50/50] C_9 ===
+  x86_linux    normal compiler_asm     func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal object_asm       func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    normal program_asm      func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    compiler_pic_asm func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    pic_object_asm   func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  x86_linux    pic    shared_asm       func='count_odd_numbers' insns= 47 blocks=10 jump= 6 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal compiler_asm     func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal object_asm       func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    normal program_asm      func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    compiler_pic_asm func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    pic_object_asm   func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_linux    pic    shared_asm       func='count_odd_numbers' insns= 55 blocks=12 jump= 8 fall= 7 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal compiler_asm     func='_count_odd_numbers' insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal object_asm       func='ltmp0'            insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      normal program_asm      func='_count_odd_numbers' insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    compiler_pic_asm func='_count_odd_numbers' insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    pic_object_asm   func='ltmp0'            insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  arm_mac      pic    shared_asm       func='_count_odd_numbers' insns= 19 blocks= 6 jump= 3 fall= 4 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal compiler_asm     func='count_odd_numbers' insns= 37 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal object_asm       func='count_odd_numbers' insns= 39 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  normal program_asm      func='count_odd_numbers' insns= 38 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    compiler_pic_asm func='count_odd_numbers' insns= 37 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    pic_object_asm   func='count_odd_numbers' insns= 39 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+  riscv_linux  pic    shared_asm       func='count_odd_numbers' insns= 38 blocks= 9 jump= 5 fall= 6 unknown= 0 external= 0 valid=OK    topology=MATCH
+
+========================================================================
+CFG MC-EVAL PROVENANCE-AWARE VALIDATION SUMMARY
+===============================================
+Split: O2
+Tasks: 50
+Provenance families: normal[compiler_asm -> object_asm, program_asm]; pic[compiler_pic_asm -> pic_object_asm, shared_asm]
+Expected CFGs: 1200
+Generated CFGs: 1200
+Normal-family expected/generated CFGs: 600/600
+PIC-family expected/generated CFGs: 600/600
+Parse/generation failures: 0
+Structural validation failures: 0
+Raw topology differences vs same-provenance compiler reference: 0
+Topology differences vs same-provenance compiler reference after recognized RISC-V long-branch normalization: 0
+Recognized RISC-V long-branch expansion trampolines: 0
+Informational normal-vs-PIC selected-reference name differences: 0
+Unresolved indirect jump edges: 0
+Direct external jump edges: 18
+OVERALL: PASS
+
+Outputs: cfg_validation_v13_all/mceval_O2

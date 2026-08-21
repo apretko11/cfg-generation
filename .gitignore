@@ -1,0 +1,25 @@
+# Python cache / local generated state
+__pycache__/
+*.py[cod]
+*.pyo
+
+# OS/editor noise
+.DS_Store
+*.swp
+*.swo
+*~
+
+# This directory belongs to the separate dataset-generation workflow.
+github/
+
+# Validation policy:
+# Ignore everything directly inside each validation version directory,
+# then keep only that version's top-level .txt reports and .log files.
+#
+# This deliberately excludes generated directories such as:
+#   validation/v14/bringup_O0/
+#   validation/v14/humaneval_O2/
+# even though those directories contain many *.cfg.txt files.
+validation/*/*
+!validation/*/*.txt
+!validation/*/*.log

@@ -1,0 +1,10245 @@
+CFG V14 TARGETED SPECIAL-CASE MANUAL AUDIT
+==============================================================================
+
+Purpose: supplement the broad 72-check / 432-representation manual spot check with cases that deliberately exercise unusual CFG behavior.
+
+V14 design rule: production CFG extraction is standalone. Each CFG is constructed from the current assembly/disassembly artifact alone. Cross-representation information is used only by this validation/audit layer after CFG generation.
+
+Cases included:
+  1. unresolved indirect jump -> UNKNOWN
+  2. known direct out-of-function jump -> EXTERNAL
+  3. RISC-V assembler long-branch expansion
+  4. AArch64 Linux standalone reachability-based trailing-suffix recovery
+  5. AArch64 Linux linked-only terminal success branch retained in the real CFG and recognized only during validation
+  6. legitimate normal-vs-PIC compiler function-set difference
+
+
+##############################################################################
+TARGETED CASE 1: UNRESOLVED INDIRECT JUMP (UNKNOWN)
+##############################################################################
+An indirect jump uses a runtime-computed destination, for example a register
+value. If the target cannot be determined statically from the current artifact,
+the intraprocedural CFG must not invent a destination. V14 records the taken
+edge as UNKNOWN.
+
+Split:          O0
+Task:           dhrystone
+Architecture:   riscv_linux
+Family:         normal
+Function:       PProc_6
+Reference:      compiler_asm
+Representation: object_asm
+UNKNOWN count:  1
+EXTERNAL count: 0
+Topology:       MATCH
+
+------------------------------------------------------------------------------
+SAME-PROVENANCE REFERENCE: compiler_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/dhrystone/riscv_linux/compiler_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: PProc_6
+Basic blocks: 11
+
+====
+BLOCK I0
+- Instructions:
+  addi	sp,sp,-32
+  sd	ra,24(sp)
+  sd	s0,16(sp)
+  addi	s0,sp,32
+  mv	a5,a0
+  sd	a1,-32(s0)
+  sw	a5,-20(s0)
+  ld	a5,-32(s0)
+  lw	a4,-20(s0)
+  sw	a4,0(a5)
+  lw	a5,-20(s0)
+  mv	a0,a5
+  call	PFunc_3
+  mv	a5,a0
+  bne	a5,zero,.L26
+
+- Edges:
+  NO_JUMP -> I15
+  JUMP -> I18
+
+====
+BLOCK I15
+- Instructions:
+  ld	a5,-32(s0)
+  li	a4,3
+  sw	a4,0(a5)
+
+- Edges:
+  NO_JUMP -> I18
+
+====
+BLOCK I18
+- Instructions:
+  lw	a5,-20(s0)
+  sext.w	a4,a5
+  li	a5,4
+  bgtu	a4,a5,.L27
+
+- Edges:
+  NO_JUMP -> I22
+  JUMP -> I55
+
+====
+BLOCK I22
+- Instructions:
+  lwu	a5,-20(s0)
+  slli	a4,a5,2
+  lla	a5,.L29
+  add	a5,a4,a5
+  lw	a5,0(a5)
+  sext.w	a4,a5
+  lla	a5,.L29
+  add	a5,a4,a5
+  jr	a5
+
+- Edges:
+  JUMP -> UNKNOWN
+
+====
+BLOCK I31
+- Instructions:
+  ld	a5,-32(s0)
+  sw	zero,0(a5)
+  j	.L27
+
+- Edges:
+  JUMP -> I55
+
+====
+BLOCK I34
+- Instructions:
+  lla	a5,Int_Glob
+  lw	a5,0(a5)
+  mv	a4,a5
+  li	a5,100
+  ble	a4,a5,.L34
+
+- Edges:
+  NO_JUMP -> I39
+  JUMP -> I42
+
+====
+BLOCK I39
+- Instructions:
+  ld	a5,-32(s0)
+  sw	zero,0(a5)
+  j	.L27
+
+- Edges:
+  JUMP -> I55
+
+====
+BLOCK I42
+- Instructions:
+  ld	a5,-32(s0)
+  li	a4,3
+  sw	a4,0(a5)
+  j	.L27
+
+- Edges:
+  JUMP -> I55
+
+====
+BLOCK I46
+- Instructions:
+  ld	a5,-32(s0)
+  li	a4,1
+  sw	a4,0(a5)
+  j	.L27
+
+- Edges:
+  JUMP -> I55
+
+====
+BLOCK I50
+- Instructions:
+  ld	a5,-32(s0)
+  li	a4,2
+  sw	a4,0(a5)
+  j	.L27
+
+- Edges:
+  JUMP -> I55
+
+====
+BLOCK I55
+- Instructions:
+  li	a5,0
+  mv	a0,a5
+  ld	ra,24(sp)
+  ld	s0,16(sp)
+  addi	sp,sp,32
+  jr	ra
+
+- Edges: (none)
+
+------------------------------------------------------------------------------
+REPRESENTATION: object_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/dhrystone/riscv_linux/object_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: PProc_6
+Basic blocks: 11
+
+====
+BLOCK 0x9a0
+- Instructions:
+  0x9a0: addi sp,sp,-32
+  0x9a2: sd ra,24(sp)
+  0x9a4: sd s0,16(sp)
+  0x9a6: addi s0,sp,32
+  0x9a8: mv a5,a0
+  0x9aa: sd a1,-32(s0)
+  0x9ae: sw a5,-20(s0)
+  0x9b2: ld a5,-32(s0)
+  0x9b6: lw a4,-20(s0)
+  0x9ba: sw a4,0(a5)
+  0x9bc: lw a5,-20(s0)
+  0x9c0: mv a0,a5
+  0x9c2: auipc ra,0x0
+  0x9c6: jalr ra
+  0x9ca: mv a5,a0
+  0x9cc: bnez a5,9d6 <.L26>
+
+- Edges:
+  NO_JUMP -> 0x9ce
+  JUMP -> 0x9d6
+
+====
+BLOCK 0x9ce
+- Instructions:
+  0x9ce: ld a5,-32(s0)
+  0x9d2: li a4,3
+  0x9d4: sw a4,0(a5)
+
+- Edges:
+  NO_JUMP -> 0x9d6
+
+====
+BLOCK 0x9d6
+- Instructions:
+  0x9d6: lw a5,-20(s0)
+  0x9da: sext.w a4,a5
+  0x9de: li a5,4
+  0x9e0: bltu a5,a4,a50 <.L27>
+
+- Edges:
+  NO_JUMP -> 0x9e4
+  JUMP -> 0xa50
+
+====
+BLOCK 0x9e4
+- Instructions:
+  0x9e4: lwu a5,-20(s0)
+  0x9e8: slli a4,a5,0x2
+  0x9ec: auipc a5,0x0
+  0x9f0: mv a5,a5
+  0x9f4: add a5,a5,a4
+  0x9f6: lw a5,0(a5)
+  0x9f8: sext.w a4,a5
+  0x9fc: auipc a5,0x0
+  0xa00: mv a5,a5
+  0xa04: add a5,a5,a4
+  0xa06: jr a5
+
+- Edges:
+  JUMP -> UNKNOWN
+
+====
+BLOCK 0xa08
+- Instructions:
+  0xa08: ld a5,-32(s0)
+  0xa0c: sw zero,0(a5)
+  0xa10: j a50 <.L27>
+
+- Edges:
+  JUMP -> 0xa50
+
+====
+BLOCK 0xa12
+- Instructions:
+  0xa12: auipc a5,0x0
+  0xa16: mv a5,a5
+  0xa1a: lw a5,0(a5)
+  0xa1c: mv a4,a5
+  0xa1e: li a5,100
+  0xa22: bge a5,a4,a30 <.L34>
+
+- Edges:
+  NO_JUMP -> 0xa26
+  JUMP -> 0xa30
+
+====
+BLOCK 0xa26
+- Instructions:
+  0xa26: ld a5,-32(s0)
+  0xa2a: sw zero,0(a5)
+  0xa2e: j a50 <.L27>
+
+- Edges:
+  JUMP -> 0xa50
+
+====
+BLOCK 0xa30
+- Instructions:
+  0xa30: ld a5,-32(s0)
+  0xa34: li a4,3
+  0xa36: sw a4,0(a5)
+  0xa38: j a50 <.L27>
+
+- Edges:
+  JUMP -> 0xa50
+
+====
+BLOCK 0xa3a
+- Instructions:
+  0xa3a: ld a5,-32(s0)
+  0xa3e: li a4,1
+  0xa40: sw a4,0(a5)
+  0xa42: j a50 <.L27>
+
+- Edges:
+  JUMP -> 0xa50
+
+====
+BLOCK 0xa44
+- Instructions:
+  0xa44: ld a5,-32(s0)
+  0xa48: li a4,2
+  0xa4a: sw a4,0(a5)
+  0xa4c: j a50 <.L27>
+
+- Edges:
+  JUMP -> 0xa50
+
+====
+BLOCK 0xa50
+- Instructions:
+  0xa50: li a5,0
+  0xa52: mv a0,a5
+  0xa54: ld ra,24(sp)
+  0xa56: ld s0,16(sp)
+  0xa58: addi sp,sp,32
+  0xa5a: ret
+
+- Edges: (none)
+
+
+##############################################################################
+TARGETED CASE 2: DIRECT OUT-OF-FUNCTION CONTROL FLOW (EXTERNAL)
+##############################################################################
+A direct branch/tail transfer may have a statically known target that lies
+outside the current function. Because V14 is intraprocedural, the target is
+represented as EXTERNAL_* rather than as an internal basic block. This case
+deliberately excludes the Bringup-specific linked-only terminal-success case
+shown separately below.
+
+Split:          O2
+Task:           aes
+Architecture:   x86_linux
+Family:         normal
+Function:       inv_mix_columns
+Reference:      compiler_asm
+Representation: object_asm
+UNKNOWN count:  0
+EXTERNAL count: 1
+Topology:       MATCH
+
+------------------------------------------------------------------------------
+SAME-PROVENANCE REFERENCE: compiler_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O2/aes/x86_linux/compiler_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: inv_mix_columns
+Basic blocks: 3
+
+====
+BLOCK I0
+- Instructions:
+  endbr64
+  movq	%rdi, %rcx
+  leaq	16(%rdi), %r8
+
+- Edges:
+  NO_JUMP -> I3
+
+====
+BLOCK I3
+- Instructions:
+  movzbl	2(%rcx), %eax
+  xorb	(%rcx), %al
+  leal	(%rax,%rax), %edx
+  movl	%edx, %esi
+  xorl	$27, %esi
+  testb	%al, %al
+  cmovs	%esi, %edx
+  leal	(%rdx,%rdx), %eax
+  movl	%eax, %esi
+  xorl	$27, %esi
+  testb	%dl, %dl
+  cmovs	%esi, %eax
+  movzbl	3(%rcx), %esi
+  xorb	1(%rcx), %sil
+  leal	(%rsi,%rsi), %edx
+  movl	%edx, %r9d
+  xorl	$27, %r9d
+  testb	%sil, %sil
+  cmovs	%r9d, %edx
+  movzbl	1(%rcx), %r9d
+  leal	(%rdx,%rdx), %r10d
+  movl	%r10d, %esi
+  xorl	$27, %esi
+  testb	%dl, %dl
+  cmovs	%esi, %r10d
+  movzbl	(%rcx), %esi
+  addq	$4, %rcx
+  xorl	%eax, %esi
+  xorb	-2(%rcx), %al
+  xorl	%r10d, %r9d
+  movzbl	%al, %edx
+  movzbl	-1(%rcx), %eax
+  movzbl	%sil, %esi
+  xorl	%r10d, %eax
+  movzbl	%al, %eax
+  sall	$8, %eax
+  orl	%edx, %eax
+  movzbl	%r9b, %edx
+  sall	$8, %eax
+  orl	%edx, %eax
+  sall	$8, %eax
+  orl	%esi, %eax
+  movl	%eax, -4(%rcx)
+  cmpq	%rcx, %r8
+  jne	.L27
+
+- Edges:
+  NO_JUMP -> I48
+  JUMP -> I3
+
+====
+BLOCK I48
+- Instructions:
+  jmp	mix_columns
+
+- Edges:
+  JUMP -> EXTERNAL_mix_columns
+
+------------------------------------------------------------------------------
+REPRESENTATION: object_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O2/aes/x86_linux/object_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: inv_mix_columns
+Basic blocks: 3
+
+====
+BLOCK 0x2d0
+- Instructions:
+  0x2d0: endbr64
+  0x2d4: mov %rdi,%rcx
+  0x2d7: lea 0x10(%rdi),%r8
+
+- Edges:
+  NO_JUMP -> 0x2db
+
+====
+BLOCK 0x2db
+- Instructions:
+  0x2db: movzbl 0x2(%rcx),%eax
+  0x2df: xor (%rcx),%al
+  0x2e1: lea (%rax,%rax,1),%edx
+  0x2e4: mov %edx,%esi
+  0x2e6: xor $0x1b,%esi
+  0x2e9: test %al,%al
+  0x2eb: cmovs %esi,%edx
+  0x2ee: lea (%rdx,%rdx,1),%eax
+  0x2f1: mov %eax,%esi
+  0x2f3: xor $0x1b,%esi
+  0x2f6: test %dl,%dl
+  0x2f8: cmovs %esi,%eax
+  0x2fb: movzbl 0x3(%rcx),%esi
+  0x2ff: xor 0x1(%rcx),%sil
+  0x303: lea (%rsi,%rsi,1),%edx
+  0x306: mov %edx,%r9d
+  0x309: xor $0x1b,%r9d
+  0x30d: test %sil,%sil
+  0x310: cmovs %r9d,%edx
+  0x314: movzbl 0x1(%rcx),%r9d
+  0x319: lea (%rdx,%rdx,1),%r10d
+  0x31d: mov %r10d,%esi
+  0x320: xor $0x1b,%esi
+  0x323: test %dl,%dl
+  0x325: cmovs %esi,%r10d
+  0x329: movzbl (%rcx),%esi
+  0x32c: add $0x4,%rcx
+  0x330: xor %eax,%esi
+  0x332: xor -0x2(%rcx),%al
+  0x335: xor %r10d,%r9d
+  0x338: movzbl %al,%edx
+  0x33b: movzbl -0x1(%rcx),%eax
+  0x33f: movzbl %sil,%esi
+  0x343: xor %r10d,%eax
+  0x346: movzbl %al,%eax
+  0x349: shl $0x8,%eax
+  0x34c: or %edx,%eax
+  0x34e: movzbl %r9b,%edx
+  0x352: shl $0x8,%eax
+  0x355: or %edx,%eax
+  0x357: shl $0x8,%eax
+  0x35a: or %esi,%eax
+  0x35c: mov %eax,-0x4(%rcx)
+  0x35f: cmp %rcx,%r8
+  0x362: jne 2db <inv_mix_columns+0xb>
+
+- Edges:
+  NO_JUMP -> 0x368
+  JUMP -> 0x2db
+
+====
+BLOCK 0x368
+- Instructions:
+  0x368: jmp 230 <mix_columns>
+
+- Edges:
+  JUMP -> EXTERNAL_mix_columns
+
+
+##############################################################################
+TARGETED CASE 3: RISC-V LONG-BRANCH ASSEMBLER EXPANSION
+##############################################################################
+A source-level RISC-V conditional branch can be too far away for the encoded
+conditional-branch displacement. The assembler may invert the condition and
+insert a one-instruction unconditional-jump trampoline.
+
+The binary CFG intentionally keeps that real trampoline. Validation alone
+recognizes the strict equivalent pattern, producing
+MATCH_LONG_BRANCH_NORMALIZED. The emitted CFG is never rewritten to match the
+compiler assembly.
+
+Split:          O0
+Task:           c-interp
+Architecture:   riscv_linux
+Family:         normal
+Function:       expression
+Reference:      compiler_asm
+Representation: object_asm
+UNKNOWN count:  0
+EXTERNAL count: 0
+Topology:       MATCH_LONG_BRANCH_NORMALIZED
+
+------------------------------------------------------------------------------
+SAME-PROVENANCE REFERENCE: compiler_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/c-interp/riscv_linux/compiler_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: expression
+Basic blocks: 187
+
+====
+BLOCK I0
+- Instructions:
+  addi	sp,sp,-64
+  sd	ra,56(sp)
+  sd	s0,48(sp)
+  addi	s0,sp,64
+  sd	a0,-56(s0)
+  lla	a5,token
+  ld	a5,0(a5)
+  bne	a5,zero,.L95
+
+- Edges:
+  NO_JUMP -> I8
+  JUMP -> I15
+
+====
+BLOCK I8
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC7
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I15
+
+====
+BLOCK I15
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,128
+  bne	a4,a5,.L96
+
+- Edges:
+  NO_JUMP -> I19
+  JUMP -> I44
+
+====
+BLOCK I19
+- Instructions:
+  li	a0,128
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  lla	a4,token_val
+  ld	a4,0(a4)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I44
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,34
+  bne	a4,a5,.L98
+
+- Edges:
+  NO_JUMP -> I48
+  JUMP -> I87
+
+====
+BLOCK I48
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  lla	a4,token_val
+  ld	a4,0(a4)
+  sd	a4,0(a5)
+  li	a0,34
+  call	match
+  j	.L99
+
+- Edges:
+  JUMP -> I72
+
+====
+BLOCK I70
+- Instructions:
+  li	a0,34
+  call	match
+
+- Edges:
+  NO_JUMP -> I72
+
+====
+BLOCK I72
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,34
+  beq	a4,a5,.L100
+
+- Edges:
+  NO_JUMP -> I76
+  JUMP -> I70
+
+====
+BLOCK I76
+- Instructions:
+  lla	a5,data
+  ld	a5,0(a5)
+  addi	a5,a5,8
+  andi	a5,a5,-8
+  mv	a4,a5
+  lla	a5,data
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,2
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I87
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,140
+  bne	a4,a5,.L101
+
+- Edges:
+  NO_JUMP -> I91
+  JUMP -> I154
+
+====
+BLOCK I91
+- Instructions:
+  li	a0,140
+  call	match
+  li	a0,40
+  call	match
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,138
+  bne	a4,a5,.L102
+
+- Edges:
+  NO_JUMP -> I102
+  JUMP -> I105
+
+====
+BLOCK I102
+- Instructions:
+  li	a0,138
+  call	match
+  j	.L104
+
+- Edges:
+  JUMP -> I121
+
+====
+BLOCK I105
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,134
+  bne	a4,a5,.L104
+
+- Edges:
+  NO_JUMP -> I109
+  JUMP -> I121
+
+====
+BLOCK I109
+- Instructions:
+  li	a0,134
+  call	match
+  lla	a5,expr_type
+  sd	zero,0(a5)
+  j	.L104
+
+- Edges:
+  JUMP -> I121
+
+====
+BLOCK I114
+- Instructions:
+  li	a0,159
+  call	match
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  addi	a4,a5,2
+  lla	a5,expr_type
+  sd	a4,0(a5)
+
+- Edges:
+  NO_JUMP -> I121
+
+====
+BLOCK I121
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,159
+  beq	a4,a5,.L105
+
+- Edges:
+  NO_JUMP -> I125
+  JUMP -> I114
+
+====
+BLOCK I125
+- Instructions:
+  li	a0,41
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L106
+
+- Edges:
+  NO_JUMP -> I139
+  JUMP -> I141
+
+====
+BLOCK I139
+- Instructions:
+  li	a5,1
+  j	.L107
+
+- Edges:
+  JUMP -> I142
+
+====
+BLOCK I141
+- Instructions:
+  li	a5,8
+
+- Edges:
+  NO_JUMP -> I142
+
+====
+BLOCK I142
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I154
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,133
+  bne	a4,a5,.L108
+
+- Edges:
+  NO_JUMP -> I158
+  JUMP -> I377
+
+====
+BLOCK I158
+- Instructions:
+  li	a0,133
+  call	match
+  lla	a5,current_id
+  ld	a5,0(a5)
+  sd	a5,-32(s0)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,40
+  bne	a4,a5,.L109
+
+- Edges:
+  NO_JUMP -> I167
+  JUMP -> I270
+
+====
+BLOCK I167
+- Instructions:
+  li	a0,40
+  call	match
+  sd	zero,-40(s0)
+  j	.L110
+
+- Edges:
+  JUMP -> I191
+
+====
+BLOCK I171
+- Instructions:
+  li	a0,142
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  ld	a5,-40(s0)
+  addi	a5,a5,1
+  sd	a5,-40(s0)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,44
+  bne	a4,a5,.L110
+
+- Edges:
+  NO_JUMP -> I189
+  JUMP -> I191
+
+====
+BLOCK I189
+- Instructions:
+  li	a0,44
+  call	match
+
+- Edges:
+  NO_JUMP -> I191
+
+====
+BLOCK I191
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,41
+  bne	a4,a5,.L112
+
+- Edges:
+  NO_JUMP -> I195
+  JUMP -> I171
+
+====
+BLOCK I195
+- Instructions:
+  li	a0,41
+  call	match
+  ld	a5,-32(s0)
+  addi	a5,a5,32
+  ld	a4,0(a5)
+  li	a5,130
+  bne	a4,a5,.L113
+
+- Edges:
+  NO_JUMP -> I202
+  JUMP -> I213
+
+====
+BLOCK I202
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,-32(s0)
+  ld	a4,40(a4)
+  sd	a4,0(a5)
+  j	.L114
+
+- Edges:
+  JUMP -> I245
+
+====
+BLOCK I213
+- Instructions:
+  ld	a5,-32(s0)
+  addi	a5,a5,32
+  ld	a4,0(a5)
+  li	a5,129
+  bne	a4,a5,.L115
+
+- Edges:
+  NO_JUMP -> I218
+  JUMP -> I238
+
+====
+BLOCK I218
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,3
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,-32(s0)
+  ld	a4,40(a4)
+  sd	a4,0(a5)
+  j	.L114
+
+- Edges:
+  JUMP -> I245
+
+====
+BLOCK I238
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC8
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I245
+
+====
+BLOCK I245
+- Instructions:
+  ld	a5,-40(s0)
+  ble	a5,zero,.L116
+
+- Edges:
+  NO_JUMP -> I247
+  JUMP -> I265
+
+====
+BLOCK I247
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,7
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+
+- Edges:
+  NO_JUMP -> I265
+
+====
+BLOCK I265
+- Instructions:
+  ld	a5,-32(s0)
+  ld	a4,24(a5)
+  lla	a5,expr_type
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I270
+- Instructions:
+  ld	a5,-32(s0)
+  addi	a5,a5,32
+  ld	a4,0(a5)
+  li	a5,128
+  bne	a4,a5,.L117
+
+- Edges:
+  NO_JUMP -> I275
+  JUMP -> I298
+
+====
+BLOCK I275
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,-32(s0)
+  ld	a4,40(a4)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I298
+- Instructions:
+  ld	a5,-32(s0)
+  addi	a5,a5,32
+  ld	a4,0(a5)
+  li	a5,132
+  bne	a4,a5,.L118
+
+- Edges:
+  NO_JUMP -> I303
+  JUMP -> I326
+
+====
+BLOCK I303
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	zero,0(a5)
+  lla	a5,index_of_bp
+  ld	a3,0(a5)
+  ld	a5,-32(s0)
+  addi	a5,a5,40
+  ld	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a2,a5,8
+  lla	a5,text
+  sd	a2,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sub	a4,a3,a4
+  sd	a4,0(a5)
+  j	.L119
+
+- Edges:
+  JUMP -> I358
+
+====
+BLOCK I326
+- Instructions:
+  ld	a5,-32(s0)
+  addi	a5,a5,32
+  ld	a4,0(a5)
+  li	a5,131
+  bne	a4,a5,.L120
+
+- Edges:
+  NO_JUMP -> I331
+  JUMP -> I351
+
+====
+BLOCK I331
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,-32(s0)
+  ld	a4,40(a4)
+  sd	a4,0(a5)
+  j	.L119
+
+- Edges:
+  JUMP -> I358
+
+====
+BLOCK I351
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC9
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I358
+
+====
+BLOCK I358
+- Instructions:
+  ld	a5,-32(s0)
+  ld	a4,24(a5)
+  lla	a5,expr_type
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L121
+
+- Edges:
+  NO_JUMP -> I365
+  JUMP -> I367
+
+====
+BLOCK I365
+- Instructions:
+  li	a5,10
+  j	.L122
+
+- Edges:
+  JUMP -> I368
+
+====
+BLOCK I367
+- Instructions:
+  li	a5,9
+
+- Edges:
+  NO_JUMP -> I368
+
+====
+BLOCK I368
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I377
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,40
+  bne	a4,a5,.L123
+
+- Edges:
+  NO_JUMP -> I381
+  JUMP -> I424
+
+====
+BLOCK I381
+- Instructions:
+  li	a0,40
+  call	match
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,138
+  beq	a4,a5,.L124
+
+- Edges:
+  NO_JUMP -> I387
+  JUMP -> I391
+
+====
+BLOCK I387
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,134
+  bne	a4,a5,.L125
+
+- Edges:
+  NO_JUMP -> I391
+  JUMP -> I419
+
+====
+BLOCK I391
+- Instructions:
+  lla	a5,token
+  ld	a5,0(a5)
+  addi	a5,a5,-134
+  snez	a5,a5
+  andi	a5,a5,0xff
+  sd	a5,-40(s0)
+  lla	a5,token
+  ld	a5,0(a5)
+  mv	a0,a5
+  call	match
+  j	.L126
+
+- Edges:
+  JUMP -> I407
+
+====
+BLOCK I402
+- Instructions:
+  li	a0,159
+  call	match
+  ld	a5,-40(s0)
+  addi	a5,a5,2
+  sd	a5,-40(s0)
+
+- Edges:
+  NO_JUMP -> I407
+
+====
+BLOCK I407
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,159
+  beq	a4,a5,.L127
+
+- Edges:
+  NO_JUMP -> I411
+  JUMP -> I402
+
+====
+BLOCK I411
+- Instructions:
+  li	a0,41
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L97
+
+- Edges:
+  JUMP -> I813
+
+====
+BLOCK I419
+- Instructions:
+  li	a0,142
+  call	expression
+  li	a0,41
+  call	match
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I424
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,159
+  bne	a4,a5,.L129
+
+- Edges:
+  NO_JUMP -> I428
+  JUMP -> I464
+
+====
+BLOCK I428
+- Instructions:
+  li	a0,159
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,expr_type
+  ld	a4,0(a5)
+  li	a5,1
+  ble	a4,a5,.L130
+
+- Edges:
+  NO_JUMP -> I436
+  JUMP -> I445
+
+====
+BLOCK I436
+- Instructions:
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  addi	a4,a5,-2
+  lla	a5,expr_type
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L132
+
+- Edges:
+  NO_JUMP -> I444
+  JUMP -> I454
+
+====
+BLOCK I444
+- Instructions:
+  j	.L208
+
+- Edges:
+  JUMP -> I452
+
+====
+BLOCK I445
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC10
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I452
+
+====
+BLOCK I452
+- Instructions:
+  li	a5,10
+  j	.L133
+
+- Edges:
+  JUMP -> I455
+
+====
+BLOCK I454
+- Instructions:
+  li	a5,9
+
+- Edges:
+  NO_JUMP -> I455
+
+====
+BLOCK I455
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I464
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,148
+  bne	a4,a5,.L134
+
+- Edges:
+  NO_JUMP -> I468
+  JUMP -> I500
+
+====
+BLOCK I468
+- Instructions:
+  li	a0,148
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,10
+  beq	a4,a5,.L135
+
+- Edges:
+  NO_JUMP -> I477
+  JUMP -> I482
+
+====
+BLOCK I477
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,9
+  bne	a4,a5,.L136
+
+- Edges:
+  NO_JUMP -> I482
+  JUMP -> I493
+
+====
+BLOCK I482
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,-8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  addi	a4,a5,2
+  lla	a5,expr_type
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I493
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC11
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I500
+
+====
+BLOCK I500
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,33
+  bne	a4,a5,.L137
+
+- Edges:
+  NO_JUMP -> I504
+  JUMP -> I547
+
+====
+BLOCK I504
+- Instructions:
+  li	a0,33
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	zero,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,17
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I547
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,126
+  bne	a4,a5,.L138
+
+- Edges:
+  NO_JUMP -> I551
+  JUMP -> I595
+
+====
+BLOCK I551
+- Instructions:
+  li	a0,126
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,-1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,15
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I595
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,157
+  bne	a4,a5,.L139
+
+- Edges:
+  NO_JUMP -> I599
+  JUMP -> I607
+
+====
+BLOCK I599
+- Instructions:
+  li	a0,157
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I607
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,158
+  bne	a4,a5,.L140
+
+- Edges:
+  NO_JUMP -> I611
+  JUMP -> I682
+
+====
+BLOCK I611
+- Instructions:
+  li	a0,158
+  call	match
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,128
+  bne	a4,a5,.L141
+
+- Edges:
+  NO_JUMP -> I617
+  JUMP -> I640
+
+====
+BLOCK I617
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,token_val
+  ld	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a3,a5,8
+  lla	a5,text
+  sd	a3,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  neg	a4,a4
+  sd	a4,0(a5)
+  li	a0,128
+  call	match
+  j	.L142
+
+- Edges:
+  JUMP -> I678
+
+====
+BLOCK I640
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,-1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,27
+  sd	a4,0(a5)
+
+- Edges:
+  NO_JUMP -> I678
+
+====
+BLOCK I678
+- Instructions:
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I682
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,162
+  beq	a4,a5,.L143
+
+- Edges:
+  NO_JUMP -> I686
+  JUMP -> I690
+
+====
+BLOCK I686
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,163
+  bne	a4,a5,.L144
+
+- Edges:
+  NO_JUMP -> I690
+  JUMP -> I806
+
+====
+BLOCK I690
+- Instructions:
+  lla	a5,token
+  ld	a5,0(a5)
+  sd	a5,-40(s0)
+  lla	a5,token
+  ld	a5,0(a5)
+  mv	a0,a5
+  call	match
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,10
+  bne	a4,a5,.L145
+
+- Edges:
+  NO_JUMP -> I704
+  JUMP -> I718
+
+====
+BLOCK I704
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,10
+  sd	a4,0(a5)
+  j	.L146
+
+- Edges:
+  JUMP -> I744
+
+====
+BLOCK I718
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,9
+  bne	a4,a5,.L147
+
+- Edges:
+  NO_JUMP -> I723
+  JUMP -> I737
+
+====
+BLOCK I723
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,9
+  sd	a4,0(a5)
+  j	.L146
+
+- Edges:
+  JUMP -> I744
+
+====
+BLOCK I737
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC12
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I744
+
+====
+BLOCK I744
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,0(a5)
+  li	a5,2
+  ble	a4,a5,.L148
+
+- Edges:
+  NO_JUMP -> I766
+  JUMP -> I768
+
+====
+BLOCK I766
+- Instructions:
+  li	a5,8
+  j	.L149
+
+- Edges:
+  JUMP -> I769
+
+====
+BLOCK I768
+- Instructions:
+  li	a5,1
+
+- Edges:
+  NO_JUMP -> I769
+
+====
+BLOCK I769
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  ld	a4,-40(s0)
+  li	a5,162
+  bne	a4,a5,.L150
+
+- Edges:
+  NO_JUMP -> I780
+  JUMP -> I782
+
+====
+BLOCK I780
+- Instructions:
+  li	a5,25
+  j	.L151
+
+- Edges:
+  JUMP -> I783
+
+====
+BLOCK I782
+- Instructions:
+  li	a5,26
+
+- Edges:
+  NO_JUMP -> I783
+
+====
+BLOCK I783
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L152
+
+- Edges:
+  NO_JUMP -> I794
+  JUMP -> I796
+
+====
+BLOCK I794
+- Instructions:
+  li	a5,12
+  j	.L153
+
+- Edges:
+  JUMP -> I797
+
+====
+BLOCK I796
+- Instructions:
+  li	a5,11
+
+- Edges:
+  NO_JUMP -> I797
+
+====
+BLOCK I797
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  j	.L97
+
+- Edges:
+  JUMP -> I813
+
+====
+BLOCK I806
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC13
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I813
+
+====
+BLOCK I813
+- Instructions:
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I814
+- Instructions:
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  sd	a5,-40(s0)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,142
+  bne	a4,a5,.L155
+
+- Edges:
+  NO_JUMP -> I821
+  JUMP -> I865
+
+====
+BLOCK I821
+- Instructions:
+  li	a0,142
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,10
+  beq	a4,a5,.L156
+
+- Edges:
+  NO_JUMP -> I828
+  JUMP -> I833
+
+====
+BLOCK I828
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,9
+  bne	a4,a5,.L157
+
+- Edges:
+  NO_JUMP -> I833
+  JUMP -> I846
+
+====
+BLOCK I833
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,142
+  call	expression
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  beq	a5,zero,.L158
+
+- Edges:
+  NO_JUMP -> I845
+  JUMP -> I853
+
+====
+BLOCK I845
+- Instructions:
+  j	.L209
+
+- Edges:
+  JUMP -> I855
+
+====
+BLOCK I846
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC14
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I853
+
+====
+BLOCK I853
+- Instructions:
+  li	a5,12
+  j	.L160
+
+- Edges:
+  JUMP -> I856
+
+====
+BLOCK I855
+- Instructions:
+  li	a5,11
+
+- Edges:
+  NO_JUMP -> I856
+
+====
+BLOCK I856
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I865
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,143
+  bne	a4,a5,.L162
+
+- Edges:
+  NO_JUMP -> I869
+  JUMP -> I935
+
+====
+BLOCK I869
+- Instructions:
+  li	a0,143
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,4
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	a5,-24(s0)
+  li	a0,142
+  call	expression
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,58
+  bne	a4,a5,.L163
+
+- Edges:
+  NO_JUMP -> I894
+  JUMP -> I928
+
+====
+BLOCK I894
+- Instructions:
+  li	a0,58
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a5,a5,24
+  mv	a4,a5
+  ld	a5,-24(s0)
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,2
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	a5,-24(s0)
+  li	a0,143
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a5,a5,8
+  mv	a4,a5
+  ld	a5,-24(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I928
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC15
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I935
+
+====
+BLOCK I935
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,144
+  bne	a4,a5,.L165
+
+- Edges:
+  NO_JUMP -> I939
+  JUMP -> I970
+
+====
+BLOCK I939
+- Instructions:
+  li	a0,144
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,5
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	a5,-24(s0)
+  li	a0,145
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a5,a5,8
+  mv	a4,a5
+  ld	a5,-24(s0)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I970
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,145
+  bne	a4,a5,.L166
+
+- Edges:
+  NO_JUMP -> I974
+  JUMP -> I1005
+
+====
+BLOCK I974
+- Instructions:
+  li	a0,145
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,4
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  sd	a5,-24(s0)
+  li	a0,146
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a5,a5,8
+  mv	a4,a5
+  ld	a5,-24(s0)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1005
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,146
+  bne	a4,a5,.L167
+
+- Edges:
+  NO_JUMP -> I1009
+  JUMP -> I1035
+
+====
+BLOCK I1009
+- Instructions:
+  li	a0,146
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,147
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,14
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1035
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,147
+  bne	a4,a5,.L168
+
+- Edges:
+  NO_JUMP -> I1039
+  JUMP -> I1065
+
+====
+BLOCK I1039
+- Instructions:
+  li	a0,147
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,148
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,15
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1065
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,148
+  bne	a4,a5,.L169
+
+- Edges:
+  NO_JUMP -> I1069
+  JUMP -> I1095
+
+====
+BLOCK I1069
+- Instructions:
+  li	a0,148
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,149
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,16
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1095
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,149
+  bne	a4,a5,.L170
+
+- Edges:
+  NO_JUMP -> I1099
+  JUMP -> I1125
+
+====
+BLOCK I1099
+- Instructions:
+  li	a0,149
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,150
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,17
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1125
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,150
+  bne	a4,a5,.L171
+
+- Edges:
+  NO_JUMP -> I1129
+  JUMP -> I1155
+
+====
+BLOCK I1129
+- Instructions:
+  li	a0,150
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,151
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,18
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1155
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,151
+  bne	a4,a5,.L172
+
+- Edges:
+  NO_JUMP -> I1159
+  JUMP -> I1185
+
+====
+BLOCK I1159
+- Instructions:
+  li	a0,151
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,155
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,19
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1185
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,152
+  bne	a4,a5,.L173
+
+- Edges:
+  NO_JUMP -> I1189
+  JUMP -> I1215
+
+====
+BLOCK I1189
+- Instructions:
+  li	a0,152
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,155
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,20
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1215
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,153
+  bne	a4,a5,.L174
+
+- Edges:
+  NO_JUMP -> I1219
+  JUMP -> I1245
+
+====
+BLOCK I1219
+- Instructions:
+  li	a0,153
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,155
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,21
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1245
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,154
+  bne	a4,a5,.L175
+
+- Edges:
+  NO_JUMP -> I1249
+  JUMP -> I1275
+
+====
+BLOCK I1249
+- Instructions:
+  li	a0,154
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,155
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,22
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1275
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,155
+  bne	a4,a5,.L176
+
+- Edges:
+  NO_JUMP -> I1279
+  JUMP -> I1305
+
+====
+BLOCK I1279
+- Instructions:
+  li	a0,155
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,157
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,23
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1305
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,156
+  bne	a4,a5,.L177
+
+- Edges:
+  NO_JUMP -> I1309
+  JUMP -> I1335
+
+====
+BLOCK I1309
+- Instructions:
+  li	a0,156
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,157
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,24
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1335
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,157
+  bne	a4,a5,.L178
+
+- Edges:
+  NO_JUMP -> I1339
+  JUMP -> I1405
+
+====
+BLOCK I1339
+- Instructions:
+  li	a0,157
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,159
+  call	expression
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,0(a5)
+  li	a5,2
+  ble	a4,a5,.L179
+
+- Edges:
+  NO_JUMP -> I1359
+  JUMP -> I1395
+
+====
+BLOCK I1359
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,8
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,27
+  sd	a4,0(a5)
+
+- Edges:
+  NO_JUMP -> I1395
+
+====
+BLOCK I1395
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,25
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1405
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,158
+  bne	a4,a5,.L180
+
+- Edges:
+  NO_JUMP -> I1409
+  JUMP -> I1543
+
+====
+BLOCK I1409
+- Instructions:
+  li	a0,158
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,159
+  call	expression
+  ld	a4,-40(s0)
+  li	a5,2
+  ble	a4,a5,.L181
+
+- Edges:
+  NO_JUMP -> I1425
+  JUMP -> I1478
+
+====
+BLOCK I1425
+- Instructions:
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  ld	a4,-40(s0)
+  bne	a4,a5,.L181
+
+- Edges:
+  NO_JUMP -> I1429
+  JUMP -> I1478
+
+====
+BLOCK I1429
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,26
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,8
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,28
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  li	a4,1
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1478
+- Instructions:
+  ld	a4,-40(s0)
+  li	a5,2
+  ble	a4,a5,.L183
+
+- Edges:
+  NO_JUMP -> I1481
+  JUMP -> I1530
+
+====
+BLOCK I1481
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,8
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,27
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,26
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1530
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,26
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1543
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,159
+  bne	a4,a5,.L184
+
+- Edges:
+  NO_JUMP -> I1547
+  JUMP -> I1573
+
+====
+BLOCK I1547
+- Instructions:
+  li	a0,159
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,27
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1573
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,160
+  bne	a4,a5,.L185
+
+- Edges:
+  NO_JUMP -> I1577
+  JUMP -> I1603
+
+====
+BLOCK I1577
+- Instructions:
+  li	a0,160
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,28
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1603
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,161
+  bne	a4,a5,.L186
+
+- Edges:
+  NO_JUMP -> I1607
+  JUMP -> I1633
+
+====
+BLOCK I1607
+- Instructions:
+  li	a0,161
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,162
+  call	expression
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,29
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,-40(s0)
+  sd	a4,0(a5)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1633
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,162
+  beq	a4,a5,.L187
+
+- Edges:
+  NO_JUMP -> I1637
+  JUMP -> I1641
+
+====
+BLOCK I1637
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,163
+  bne	a4,a5,.L188
+
+- Edges:
+  NO_JUMP -> I1641
+  JUMP -> I1801
+
+====
+BLOCK I1641
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,9
+  bne	a4,a5,.L189
+
+- Edges:
+  NO_JUMP -> I1646
+  JUMP -> I1660
+
+====
+BLOCK I1646
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,9
+  sd	a4,0(a5)
+  j	.L190
+
+- Edges:
+  JUMP -> I1686
+
+====
+BLOCK I1660
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  ld	a4,0(a5)
+  li	a5,10
+  bne	a4,a5,.L191
+
+- Edges:
+  NO_JUMP -> I1665
+  JUMP -> I1679
+
+====
+BLOCK I1665
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,10
+  sd	a4,0(a5)
+  j	.L190
+
+- Edges:
+  JUMP -> I1686
+
+====
+BLOCK I1679
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC16
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I1686
+
+====
+BLOCK I1686
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,0(a5)
+  li	a5,2
+  ble	a4,a5,.L192
+
+- Edges:
+  NO_JUMP -> I1708
+  JUMP -> I1710
+
+====
+BLOCK I1708
+- Instructions:
+  li	a5,8
+  j	.L193
+
+- Edges:
+  JUMP -> I1711
+
+====
+BLOCK I1710
+- Instructions:
+  li	a5,1
+
+- Edges:
+  NO_JUMP -> I1711
+
+====
+BLOCK I1711
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,162
+  bne	a4,a5,.L194
+
+- Edges:
+  NO_JUMP -> I1723
+  JUMP -> I1725
+
+====
+BLOCK I1723
+- Instructions:
+  li	a5,25
+  j	.L195
+
+- Edges:
+  JUMP -> I1726
+
+====
+BLOCK I1725
+- Instructions:
+  li	a5,26
+
+- Edges:
+  NO_JUMP -> I1726
+
+====
+BLOCK I1726
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L196
+
+- Edges:
+  NO_JUMP -> I1737
+  JUMP -> I1739
+
+====
+BLOCK I1737
+- Instructions:
+  li	a5,12
+  j	.L197
+
+- Edges:
+  JUMP -> I1740
+
+====
+BLOCK I1739
+- Instructions:
+  li	a5,11
+
+- Edges:
+  NO_JUMP -> I1740
+
+====
+BLOCK I1740
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a4,0(a5)
+  li	a5,2
+  ble	a4,a5,.L198
+
+- Edges:
+  NO_JUMP -> I1770
+  JUMP -> I1772
+
+====
+BLOCK I1770
+- Instructions:
+  li	a5,8
+  j	.L199
+
+- Edges:
+  JUMP -> I1773
+
+====
+BLOCK I1772
+- Instructions:
+  li	a5,1
+
+- Edges:
+  NO_JUMP -> I1773
+
+====
+BLOCK I1773
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,162
+  bne	a4,a5,.L200
+
+- Edges:
+  NO_JUMP -> I1785
+  JUMP -> I1787
+
+====
+BLOCK I1785
+- Instructions:
+  li	a5,26
+  j	.L201
+
+- Edges:
+  JUMP -> I1788
+
+====
+BLOCK I1787
+- Instructions:
+  li	a5,25
+
+- Edges:
+  NO_JUMP -> I1788
+
+====
+BLOCK I1788
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  lla	a5,token
+  ld	a5,0(a5)
+  mv	a0,a5
+  call	match
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1801
+- Instructions:
+  lla	a5,token
+  ld	a4,0(a5)
+  li	a5,164
+  bne	a4,a5,.L202
+
+- Edges:
+  NO_JUMP -> I1805
+  JUMP -> I1898
+
+====
+BLOCK I1805
+- Instructions:
+  li	a0,164
+  call	match
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  li	a0,142
+  call	expression
+  li	a0,93
+  call	match
+  ld	a4,-40(s0)
+  li	a5,2
+  ble	a4,a5,.L203
+
+- Edges:
+  NO_JUMP -> I1823
+  JUMP -> I1860
+
+====
+BLOCK I1823
+- Instructions:
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,13
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,1
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,8
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,27
+  sd	a4,0(a5)
+  j	.L204
+
+- Edges:
+  JUMP -> I1870
+
+====
+BLOCK I1860
+- Instructions:
+  ld	a4,-40(s0)
+  li	a5,1
+  bgt	a4,a5,.L204
+
+- Edges:
+  NO_JUMP -> I1863
+  JUMP -> I1870
+
+====
+BLOCK I1863
+- Instructions:
+  lla	a5,line
+  ld	a5,0(a5)
+  mv	a1,a5
+  lla	a0,.LC17
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I1870
+
+====
+BLOCK I1870
+- Instructions:
+  ld	a5,-40(s0)
+  addi	a4,a5,-2
+  lla	a5,expr_type
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  addi	a4,a5,8
+  lla	a5,text
+  sd	a4,0(a5)
+  lla	a5,text
+  ld	a5,0(a5)
+  li	a4,25
+  sd	a4,0(a5)
+  lla	a5,expr_type
+  ld	a5,0(a5)
+  bne	a5,zero,.L205
+
+- Edges:
+  NO_JUMP -> I1886
+  JUMP -> I1888
+
+====
+BLOCK I1886
+- Instructions:
+  li	a5,10
+  j	.L206
+
+- Edges:
+  JUMP -> I1889
+
+====
+BLOCK I1888
+- Instructions:
+  li	a5,9
+
+- Edges:
+  NO_JUMP -> I1889
+
+====
+BLOCK I1889
+- Instructions:
+  lla	a4,text
+  ld	a4,0(a4)
+  addi	a3,a4,8
+  lla	a4,text
+  sd	a3,0(a4)
+  lla	a4,text
+  ld	a4,0(a4)
+  sd	a5,0(a4)
+  j	.L154
+
+- Edges:
+  JUMP -> I1908
+
+====
+BLOCK I1898
+- Instructions:
+  lla	a5,line
+  ld	a4,0(a5)
+  lla	a5,token
+  ld	a5,0(a5)
+  mv	a2,a5
+  mv	a1,a4
+  lla	a0,.LC18
+  call	libmin_printf@plt
+  li	a0,-1
+  call	libmin_fail@plt
+
+- Edges:
+  NO_JUMP -> I1908
+
+====
+BLOCK I1908
+- Instructions:
+  lla	a5,token
+  ld	a5,0(a5)
+  ld	a4,-56(s0)
+  ble	a4,a5,.L207
+
+- Edges:
+  NO_JUMP -> I1914
+  JUMP -> I814
+
+====
+BLOCK I1914
+- Instructions:
+  ld	ra,56(sp)
+  ld	s0,48(sp)
+  addi	sp,sp,64
+  jr	ra
+
+- Edges: (none)
+
+------------------------------------------------------------------------------
+REPRESENTATION: object_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/c-interp/riscv_linux/object_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: expression
+Basic blocks: 188
+
+====
+BLOCK 0xdcc
+- Instructions:
+  0xdcc: addi sp,sp,-64
+  0xdce: sd ra,56(sp)
+  0xdd0: sd s0,48(sp)
+  0xdd2: addi s0,sp,64
+  0xdd4: sd a0,-56(s0)
+  0xdd8: auipc a5,0x0
+  0xddc: mv a5,a5
+  0xde0: ld a5,0(a5)
+  0xde2: bnez a5,e0a <.L95>
+
+- Edges:
+  NO_JUMP -> 0xde4
+  JUMP -> 0xe0a
+
+====
+BLOCK 0xde4
+- Instructions:
+  0xde4: auipc a5,0x0
+  0xde8: mv a5,a5
+  0xdec: ld a5,0(a5)
+  0xdee: mv a1,a5
+  0xdf0: auipc a0,0x0
+  0xdf4: mv a0,a0
+  0xdf8: auipc ra,0x0
+  0xdfc: jalr ra
+  0xe00: li a0,-1
+  0xe02: auipc ra,0x0
+  0xe06: jalr ra
+
+- Edges:
+  NO_JUMP -> 0xe0a
+
+====
+BLOCK 0xe0a
+- Instructions:
+  0xe0a: auipc a5,0x0
+  0xe0e: mv a5,a5
+  0xe12: ld a4,0(a5)
+  0xe14: li a5,128
+  0xe18: bne a4,a5,e8c <.L96>
+
+- Edges:
+  NO_JUMP -> 0xe1c
+  JUMP -> 0xe8c
+
+====
+BLOCK 0xe1c
+- Instructions:
+  0xe1c: li a0,128
+  0xe20: auipc ra,0x0
+  0xe24: jalr ra
+  0xe28: auipc a5,0x0
+  0xe2c: mv a5,a5
+  0xe30: ld a5,0(a5)
+  0xe32: addi a4,a5,8
+  0xe36: auipc a5,0x0
+  0xe3a: mv a5,a5
+  0xe3e: sd a4,0(a5)
+  0xe40: auipc a5,0x0
+  0xe44: mv a5,a5
+  0xe48: ld a5,0(a5)
+  0xe4a: li a4,1
+  0xe4c: sd a4,0(a5)
+  0xe4e: auipc a5,0x0
+  0xe52: mv a5,a5
+  0xe56: ld a5,0(a5)
+  0xe58: addi a4,a5,8
+  0xe5c: auipc a5,0x0
+  0xe60: mv a5,a5
+  0xe64: sd a4,0(a5)
+  0xe66: auipc a5,0x0
+  0xe6a: mv a5,a5
+  0xe6e: ld a5,0(a5)
+  0xe70: auipc a4,0x0
+  0xe74: mv a4,a4
+  0xe78: ld a4,0(a4)
+  0xe7a: sd a4,0(a5)
+  0xe7c: auipc a5,0x0
+  0xe80: mv a5,a5
+  0xe84: li a4,1
+  0xe86: sd a4,0(a5)
+  0xe88: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0xe8c
+- Instructions:
+  0xe8c: auipc a5,0x0
+  0xe90: mv a5,a5
+  0xe94: ld a4,0(a5)
+  0xe96: li a5,34
+  0xe9a: bne a4,a5,f48 <.L98>
+
+- Edges:
+  NO_JUMP -> 0xe9e
+  JUMP -> 0xf48
+
+====
+BLOCK 0xe9e
+- Instructions:
+  0xe9e: auipc a5,0x0
+  0xea2: mv a5,a5
+  0xea6: ld a5,0(a5)
+  0xea8: addi a4,a5,8
+  0xeac: auipc a5,0x0
+  0xeb0: mv a5,a5
+  0xeb4: sd a4,0(a5)
+  0xeb6: auipc a5,0x0
+  0xeba: mv a5,a5
+  0xebe: ld a5,0(a5)
+  0xec0: li a4,1
+  0xec2: sd a4,0(a5)
+  0xec4: auipc a5,0x0
+  0xec8: mv a5,a5
+  0xecc: ld a5,0(a5)
+  0xece: addi a4,a5,8
+  0xed2: auipc a5,0x0
+  0xed6: mv a5,a5
+  0xeda: sd a4,0(a5)
+  0xedc: auipc a5,0x0
+  0xee0: mv a5,a5
+  0xee4: ld a5,0(a5)
+  0xee6: auipc a4,0x0
+  0xeea: mv a4,a4
+  0xeee: ld a4,0(a4)
+  0xef0: sd a4,0(a5)
+  0xef2: li a0,34
+  0xef6: auipc ra,0x0
+  0xefa: jalr ra
+  0xefe: j f0c <.L99>
+
+- Edges:
+  JUMP -> 0xf0c
+
+====
+BLOCK 0xf00
+- Instructions:
+  0xf00: li a0,34
+  0xf04: auipc ra,0x0
+  0xf08: jalr ra
+
+- Edges:
+  NO_JUMP -> 0xf0c
+
+====
+BLOCK 0xf0c
+- Instructions:
+  0xf0c: auipc a5,0x0
+  0xf10: mv a5,a5
+  0xf14: ld a4,0(a5)
+  0xf16: li a5,34
+  0xf1a: beq a4,a5,f00 <.L100>
+
+- Edges:
+  NO_JUMP -> 0xf1e
+  JUMP -> 0xf00
+
+====
+BLOCK 0xf1e
+- Instructions:
+  0xf1e: auipc a5,0x0
+  0xf22: mv a5,a5
+  0xf26: ld a5,0(a5)
+  0xf28: addi a5,a5,8
+  0xf2a: andi a5,a5,-8
+  0xf2c: mv a4,a5
+  0xf2e: auipc a5,0x0
+  0xf32: mv a5,a5
+  0xf36: sd a4,0(a5)
+  0xf38: auipc a5,0x0
+  0xf3c: mv a5,a5
+  0xf40: li a4,2
+  0xf42: sd a4,0(a5)
+  0xf44: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0xf48
+- Instructions:
+  0xf48: auipc a5,0x0
+  0xf4c: mv a5,a5
+  0xf50: ld a4,0(a5)
+  0xf52: li a5,140
+  0xf56: bne a4,a5,1078 <.L101>
+
+- Edges:
+  NO_JUMP -> 0xf5a
+  JUMP -> 0x1078
+
+====
+BLOCK 0xf5a
+- Instructions:
+  0xf5a: li a0,140
+  0xf5e: auipc ra,0x0
+  0xf62: jalr ra
+  0xf66: li a0,40
+  0xf6a: auipc ra,0x0
+  0xf6e: jalr ra
+  0xf72: auipc a5,0x0
+  0xf76: mv a5,a5
+  0xf7a: li a4,1
+  0xf7c: sd a4,0(a5)
+  0xf7e: auipc a5,0x0
+  0xf82: mv a5,a5
+  0xf86: ld a4,0(a5)
+  0xf88: li a5,138
+  0xf8c: bne a4,a5,f9e <.L102>
+
+- Edges:
+  NO_JUMP -> 0xf90
+  JUMP -> 0xf9e
+
+====
+BLOCK 0xf90
+- Instructions:
+  0xf90: li a0,138
+  0xf94: auipc ra,0x0
+  0xf98: jalr ra
+  0xf9c: j fee <.L104>
+
+- Edges:
+  JUMP -> 0xfee
+
+====
+BLOCK 0xf9e
+- Instructions:
+  0xf9e: auipc a5,0x0
+  0xfa2: mv a5,a5
+  0xfa6: ld a4,0(a5)
+  0xfa8: li a5,134
+  0xfac: bne a4,a5,fee <.L104>
+
+- Edges:
+  NO_JUMP -> 0xfb0
+  JUMP -> 0xfee
+
+====
+BLOCK 0xfb0
+- Instructions:
+  0xfb0: li a0,134
+  0xfb4: auipc ra,0x0
+  0xfb8: jalr ra
+  0xfbc: auipc a5,0x0
+  0xfc0: mv a5,a5
+  0xfc4: sd zero,0(a5)
+  0xfc8: j fee <.L104>
+
+- Edges:
+  JUMP -> 0xfee
+
+====
+BLOCK 0xfca
+- Instructions:
+  0xfca: li a0,159
+  0xfce: auipc ra,0x0
+  0xfd2: jalr ra
+  0xfd6: auipc a5,0x0
+  0xfda: mv a5,a5
+  0xfde: ld a5,0(a5)
+  0xfe0: addi a4,a5,2
+  0xfe4: auipc a5,0x0
+  0xfe8: mv a5,a5
+  0xfec: sd a4,0(a5)
+
+- Edges:
+  NO_JUMP -> 0xfee
+
+====
+BLOCK 0xfee
+- Instructions:
+  0xfee: auipc a5,0x0
+  0xff2: mv a5,a5
+  0xff6: ld a4,0(a5)
+  0xff8: li a5,159
+  0xffc: beq a4,a5,fca <.L105>
+
+- Edges:
+  NO_JUMP -> 0x1000
+  JUMP -> 0xfca
+
+====
+BLOCK 0x1000
+- Instructions:
+  0x1000: li a0,41
+  0x1004: auipc ra,0x0
+  0x1008: jalr ra
+  0x100c: auipc a5,0x0
+  0x1010: mv a5,a5
+  0x1014: ld a5,0(a5)
+  0x1016: addi a4,a5,8
+  0x101a: auipc a5,0x0
+  0x101e: mv a5,a5
+  0x1022: sd a4,0(a5)
+  0x1024: auipc a5,0x0
+  0x1028: mv a5,a5
+  0x102c: ld a5,0(a5)
+  0x102e: li a4,1
+  0x1030: sd a4,0(a5)
+  0x1032: auipc a5,0x0
+  0x1036: mv a5,a5
+  0x103a: ld a5,0(a5)
+  0x103c: bnez a5,1042 <.L106>
+
+- Edges:
+  NO_JUMP -> 0x103e
+  JUMP -> 0x1042
+
+====
+BLOCK 0x103e
+- Instructions:
+  0x103e: li a5,1
+  0x1040: j 1044 <.L107>
+
+- Edges:
+  JUMP -> 0x1044
+
+====
+BLOCK 0x1042
+- Instructions:
+  0x1042: li a5,8
+
+- Edges:
+  NO_JUMP -> 0x1044
+
+====
+BLOCK 0x1044
+- Instructions:
+  0x1044: auipc a4,0x0
+  0x1048: mv a4,a4
+  0x104c: ld a4,0(a4)
+  0x104e: addi a3,a4,8
+  0x1052: auipc a4,0x0
+  0x1056: mv a4,a4
+  0x105a: sd a3,0(a4)
+  0x105c: auipc a4,0x0
+  0x1060: mv a4,a4
+  0x1064: ld a4,0(a4)
+  0x1066: sd a5,0(a4)
+  0x1068: auipc a5,0x0
+  0x106c: mv a5,a5
+  0x1070: li a4,1
+  0x1072: sd a4,0(a5)
+  0x1074: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1078
+- Instructions:
+  0x1078: auipc a5,0x0
+  0x107c: mv a5,a5
+  0x1080: ld a4,0(a5)
+  0x1082: li a5,133
+  0x1086: bne a4,a5,142e <.L108>
+
+- Edges:
+  NO_JUMP -> 0x108a
+  JUMP -> 0x142e
+
+====
+BLOCK 0x108a
+- Instructions:
+  0x108a: li a0,133
+  0x108e: auipc ra,0x0
+  0x1092: jalr ra
+  0x1096: auipc a5,0x0
+  0x109a: mv a5,a5
+  0x109e: ld a5,0(a5)
+  0x10a0: sd a5,-32(s0)
+  0x10a4: auipc a5,0x0
+  0x10a8: mv a5,a5
+  0x10ac: ld a4,0(a5)
+  0x10ae: li a5,40
+  0x10b2: bne a4,a5,1272 <.L109>
+
+- Edges:
+  NO_JUMP -> 0x10b6
+  JUMP -> 0x1272
+
+====
+BLOCK 0x10b6
+- Instructions:
+  0x10b6: li a0,40
+  0x10ba: auipc ra,0x0
+  0x10be: jalr ra
+  0x10c2: sd zero,-40(s0)
+  0x10c6: j 1122 <.L110>
+
+- Edges:
+  JUMP -> 0x1122
+
+====
+BLOCK 0x10c8
+- Instructions:
+  0x10c8: li a0,142
+  0x10cc: auipc ra,0x0
+  0x10d0: jalr ra
+  0x10d4: auipc a5,0x0
+  0x10d8: mv a5,a5
+  0x10dc: ld a5,0(a5)
+  0x10de: addi a4,a5,8
+  0x10e2: auipc a5,0x0
+  0x10e6: mv a5,a5
+  0x10ea: sd a4,0(a5)
+  0x10ec: auipc a5,0x0
+  0x10f0: mv a5,a5
+  0x10f4: ld a5,0(a5)
+  0x10f6: li a4,13
+  0x10f8: sd a4,0(a5)
+  0x10fa: ld a5,-40(s0)
+  0x10fe: addi a5,a5,1
+  0x1100: sd a5,-40(s0)
+  0x1104: auipc a5,0x0
+  0x1108: mv a5,a5
+  0x110c: ld a4,0(a5)
+  0x110e: li a5,44
+  0x1112: bne a4,a5,1122 <.L110>
+
+- Edges:
+  NO_JUMP -> 0x1116
+  JUMP -> 0x1122
+
+====
+BLOCK 0x1116
+- Instructions:
+  0x1116: li a0,44
+  0x111a: auipc ra,0x0
+  0x111e: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1122
+
+====
+BLOCK 0x1122
+- Instructions:
+  0x1122: auipc a5,0x0
+  0x1126: mv a5,a5
+  0x112a: ld a4,0(a5)
+  0x112c: li a5,41
+  0x1130: bne a4,a5,10c8 <.L112>
+
+- Edges:
+  NO_JUMP -> 0x1134
+  JUMP -> 0x10c8
+
+====
+BLOCK 0x1134
+- Instructions:
+  0x1134: li a0,41
+  0x1138: auipc ra,0x0
+  0x113c: jalr ra
+  0x1140: ld a5,-32(s0)
+  0x1144: addi a5,a5,32
+  0x1148: ld a4,0(a5)
+  0x114a: li a5,130
+  0x114e: bne a4,a5,117e <.L113>
+
+- Edges:
+  NO_JUMP -> 0x1152
+  JUMP -> 0x117e
+
+====
+BLOCK 0x1152
+- Instructions:
+  0x1152: auipc a5,0x0
+  0x1156: mv a5,a5
+  0x115a: ld a5,0(a5)
+  0x115c: addi a4,a5,8
+  0x1160: auipc a5,0x0
+  0x1164: mv a5,a5
+  0x1168: sd a4,0(a5)
+  0x116a: auipc a5,0x0
+  0x116e: mv a5,a5
+  0x1172: ld a5,0(a5)
+  0x1174: ld a4,-32(s0)
+  0x1178: ld a4,40(a4)
+  0x117a: sd a4,0(a5)
+  0x117c: j 1208 <.L114>
+
+- Edges:
+  JUMP -> 0x1208
+
+====
+BLOCK 0x117e
+- Instructions:
+  0x117e: ld a5,-32(s0)
+  0x1182: addi a5,a5,32
+  0x1186: ld a4,0(a5)
+  0x1188: li a5,129
+  0x118c: bne a4,a5,11e2 <.L115>
+
+- Edges:
+  NO_JUMP -> 0x1190
+  JUMP -> 0x11e2
+
+====
+BLOCK 0x1190
+- Instructions:
+  0x1190: auipc a5,0x0
+  0x1194: mv a5,a5
+  0x1198: ld a5,0(a5)
+  0x119a: addi a4,a5,8
+  0x119e: auipc a5,0x0
+  0x11a2: mv a5,a5
+  0x11a6: sd a4,0(a5)
+  0x11a8: auipc a5,0x0
+  0x11ac: mv a5,a5
+  0x11b0: ld a5,0(a5)
+  0x11b2: li a4,3
+  0x11b4: sd a4,0(a5)
+  0x11b6: auipc a5,0x0
+  0x11ba: mv a5,a5
+  0x11be: ld a5,0(a5)
+  0x11c0: addi a4,a5,8
+  0x11c4: auipc a5,0x0
+  0x11c8: mv a5,a5
+  0x11cc: sd a4,0(a5)
+  0x11ce: auipc a5,0x0
+  0x11d2: mv a5,a5
+  0x11d6: ld a5,0(a5)
+  0x11d8: ld a4,-32(s0)
+  0x11dc: ld a4,40(a4)
+  0x11de: sd a4,0(a5)
+  0x11e0: j 1208 <.L114>
+
+- Edges:
+  JUMP -> 0x1208
+
+====
+BLOCK 0x11e2
+- Instructions:
+  0x11e2: auipc a5,0x0
+  0x11e6: mv a5,a5
+  0x11ea: ld a5,0(a5)
+  0x11ec: mv a1,a5
+  0x11ee: auipc a0,0x0
+  0x11f2: mv a0,a0
+  0x11f6: auipc ra,0x0
+  0x11fa: jalr ra
+  0x11fe: li a0,-1
+  0x1200: auipc ra,0x0
+  0x1204: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1208
+
+====
+BLOCK 0x1208
+- Instructions:
+  0x1208: ld a5,-40(s0)
+  0x120c: blez a5,125e <.L116>
+
+- Edges:
+  NO_JUMP -> 0x1210
+  JUMP -> 0x125e
+
+====
+BLOCK 0x1210
+- Instructions:
+  0x1210: auipc a5,0x0
+  0x1214: mv a5,a5
+  0x1218: ld a5,0(a5)
+  0x121a: addi a4,a5,8
+  0x121e: auipc a5,0x0
+  0x1222: mv a5,a5
+  0x1226: sd a4,0(a5)
+  0x1228: auipc a5,0x0
+  0x122c: mv a5,a5
+  0x1230: ld a5,0(a5)
+  0x1232: li a4,7
+  0x1234: sd a4,0(a5)
+  0x1236: auipc a5,0x0
+  0x123a: mv a5,a5
+  0x123e: ld a5,0(a5)
+  0x1240: addi a4,a5,8
+  0x1244: auipc a5,0x0
+  0x1248: mv a5,a5
+  0x124c: sd a4,0(a5)
+  0x124e: auipc a5,0x0
+  0x1252: mv a5,a5
+  0x1256: ld a5,0(a5)
+  0x1258: ld a4,-40(s0)
+  0x125c: sd a4,0(a5)
+
+- Edges:
+  NO_JUMP -> 0x125e
+
+====
+BLOCK 0x125e
+- Instructions:
+  0x125e: ld a5,-32(s0)
+  0x1262: ld a4,24(a5)
+  0x1264: auipc a5,0x0
+  0x1268: mv a5,a5
+  0x126c: sd a4,0(a5)
+  0x126e: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1272
+- Instructions:
+  0x1272: ld a5,-32(s0)
+  0x1276: addi a5,a5,32
+  0x127a: ld a4,0(a5)
+  0x127c: li a5,128
+  0x1280: bne a4,a5,12e4 <.L117>
+
+- Edges:
+  NO_JUMP -> 0x1284
+  JUMP -> 0x12e4
+
+====
+BLOCK 0x1284
+- Instructions:
+  0x1284: auipc a5,0x0
+  0x1288: mv a5,a5
+  0x128c: ld a5,0(a5)
+  0x128e: addi a4,a5,8
+  0x1292: auipc a5,0x0
+  0x1296: mv a5,a5
+  0x129a: sd a4,0(a5)
+  0x129c: auipc a5,0x0
+  0x12a0: mv a5,a5
+  0x12a4: ld a5,0(a5)
+  0x12a6: li a4,1
+  0x12a8: sd a4,0(a5)
+  0x12aa: auipc a5,0x0
+  0x12ae: mv a5,a5
+  0x12b2: ld a5,0(a5)
+  0x12b4: addi a4,a5,8
+  0x12b8: auipc a5,0x0
+  0x12bc: mv a5,a5
+  0x12c0: sd a4,0(a5)
+  0x12c2: auipc a5,0x0
+  0x12c6: mv a5,a5
+  0x12ca: ld a5,0(a5)
+  0x12cc: ld a4,-32(s0)
+  0x12d0: ld a4,40(a4)
+  0x12d2: sd a4,0(a5)
+  0x12d4: auipc a5,0x0
+  0x12d8: mv a5,a5
+  0x12dc: li a4,1
+  0x12de: sd a4,0(a5)
+  0x12e0: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x12e4
+- Instructions:
+  0x12e4: ld a5,-32(s0)
+  0x12e8: addi a5,a5,32
+  0x12ec: ld a4,0(a5)
+  0x12ee: li a5,132
+  0x12f2: bne a4,a5,135a <.L118>
+
+- Edges:
+  NO_JUMP -> 0x12f6
+  JUMP -> 0x135a
+
+====
+BLOCK 0x12f6
+- Instructions:
+  0x12f6: auipc a5,0x0
+  0x12fa: mv a5,a5
+  0x12fe: ld a5,0(a5)
+  0x1300: addi a4,a5,8
+  0x1304: auipc a5,0x0
+  0x1308: mv a5,a5
+  0x130c: sd a4,0(a5)
+  0x130e: auipc a5,0x0
+  0x1312: mv a5,a5
+  0x1316: ld a5,0(a5)
+  0x1318: sd zero,0(a5)
+  0x131c: auipc a5,0x0
+  0x1320: mv a5,a5
+  0x1324: ld a3,0(a5)
+  0x1326: ld a5,-32(s0)
+  0x132a: addi a5,a5,40
+  0x132e: ld a4,0(a5)
+  0x1330: auipc a5,0x0
+  0x1334: mv a5,a5
+  0x1338: ld a5,0(a5)
+  0x133a: addi a2,a5,8
+  0x133e: auipc a5,0x0
+  0x1342: mv a5,a5
+  0x1346: sd a2,0(a5)
+  0x1348: auipc a5,0x0
+  0x134c: mv a5,a5
+  0x1350: ld a5,0(a5)
+  0x1352: sub a4,a3,a4
+  0x1356: sd a4,0(a5)
+  0x1358: j 13e4 <.L119>
+
+- Edges:
+  JUMP -> 0x13e4
+
+====
+BLOCK 0x135a
+- Instructions:
+  0x135a: ld a5,-32(s0)
+  0x135e: addi a5,a5,32
+  0x1362: ld a4,0(a5)
+  0x1364: li a5,131
+  0x1368: bne a4,a5,13be <.L120>
+
+- Edges:
+  NO_JUMP -> 0x136c
+  JUMP -> 0x13be
+
+====
+BLOCK 0x136c
+- Instructions:
+  0x136c: auipc a5,0x0
+  0x1370: mv a5,a5
+  0x1374: ld a5,0(a5)
+  0x1376: addi a4,a5,8
+  0x137a: auipc a5,0x0
+  0x137e: mv a5,a5
+  0x1382: sd a4,0(a5)
+  0x1384: auipc a5,0x0
+  0x1388: mv a5,a5
+  0x138c: ld a5,0(a5)
+  0x138e: li a4,1
+  0x1390: sd a4,0(a5)
+  0x1392: auipc a5,0x0
+  0x1396: mv a5,a5
+  0x139a: ld a5,0(a5)
+  0x139c: addi a4,a5,8
+  0x13a0: auipc a5,0x0
+  0x13a4: mv a5,a5
+  0x13a8: sd a4,0(a5)
+  0x13aa: auipc a5,0x0
+  0x13ae: mv a5,a5
+  0x13b2: ld a5,0(a5)
+  0x13b4: ld a4,-32(s0)
+  0x13b8: ld a4,40(a4)
+  0x13ba: sd a4,0(a5)
+  0x13bc: j 13e4 <.L119>
+
+- Edges:
+  JUMP -> 0x13e4
+
+====
+BLOCK 0x13be
+- Instructions:
+  0x13be: auipc a5,0x0
+  0x13c2: mv a5,a5
+  0x13c6: ld a5,0(a5)
+  0x13c8: mv a1,a5
+  0x13ca: auipc a0,0x0
+  0x13ce: mv a0,a0
+  0x13d2: auipc ra,0x0
+  0x13d6: jalr ra
+  0x13da: li a0,-1
+  0x13dc: auipc ra,0x0
+  0x13e0: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x13e4
+
+====
+BLOCK 0x13e4
+- Instructions:
+  0x13e4: ld a5,-32(s0)
+  0x13e8: ld a4,24(a5)
+  0x13ea: auipc a5,0x0
+  0x13ee: mv a5,a5
+  0x13f2: sd a4,0(a5)
+  0x13f4: auipc a5,0x0
+  0x13f8: mv a5,a5
+  0x13fc: ld a5,0(a5)
+  0x13fe: bnez a5,1404 <.L121>
+
+- Edges:
+  NO_JUMP -> 0x1400
+  JUMP -> 0x1404
+
+====
+BLOCK 0x1400
+- Instructions:
+  0x1400: li a5,10
+  0x1402: j 1406 <.L122>
+
+- Edges:
+  JUMP -> 0x1406
+
+====
+BLOCK 0x1404
+- Instructions:
+  0x1404: li a5,9
+
+- Edges:
+  NO_JUMP -> 0x1406
+
+====
+BLOCK 0x1406
+- Instructions:
+  0x1406: auipc a4,0x0
+  0x140a: mv a4,a4
+  0x140e: ld a4,0(a4)
+  0x1410: addi a3,a4,8
+  0x1414: auipc a4,0x0
+  0x1418: mv a4,a4
+  0x141c: sd a3,0(a4)
+  0x141e: auipc a4,0x0
+  0x1422: mv a4,a4
+  0x1426: ld a4,0(a4)
+  0x1428: sd a5,0(a4)
+  0x142a: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x142e
+- Instructions:
+  0x142e: auipc a5,0x0
+  0x1432: mv a5,a5
+  0x1436: ld a4,0(a5)
+  0x1438: li a5,40
+  0x143c: bne a4,a5,150c <.L123>
+
+- Edges:
+  NO_JUMP -> 0x1440
+  JUMP -> 0x150c
+
+====
+BLOCK 0x1440
+- Instructions:
+  0x1440: li a0,40
+  0x1444: auipc ra,0x0
+  0x1448: jalr ra
+  0x144c: auipc a5,0x0
+  0x1450: mv a5,a5
+  0x1454: ld a4,0(a5)
+  0x1456: li a5,138
+  0x145a: beq a4,a5,1470 <.L124>
+
+- Edges:
+  NO_JUMP -> 0x145e
+  JUMP -> 0x1470
+
+====
+BLOCK 0x145e
+- Instructions:
+  0x145e: auipc a5,0x0
+  0x1462: mv a5,a5
+  0x1466: ld a4,0(a5)
+  0x1468: li a5,134
+  0x146c: bne a4,a5,14f0 <.L125>
+
+- Edges:
+  NO_JUMP -> 0x1470
+  JUMP -> 0x14f0
+
+====
+BLOCK 0x1470
+- Instructions:
+  0x1470: auipc a5,0x0
+  0x1474: mv a5,a5
+  0x1478: ld a5,0(a5)
+  0x147a: addi a5,a5,-134
+  0x147e: snez a5,a5
+  0x1482: zext.b a5,a5
+  0x1486: sd a5,-40(s0)
+  0x148a: auipc a5,0x0
+  0x148e: mv a5,a5
+  0x1492: ld a5,0(a5)
+  0x1494: mv a0,a5
+  0x1496: auipc ra,0x0
+  0x149a: jalr ra
+  0x149e: j 14b6 <.L126>
+
+- Edges:
+  JUMP -> 0x14b6
+
+====
+BLOCK 0x14a0
+- Instructions:
+  0x14a0: li a0,159
+  0x14a4: auipc ra,0x0
+  0x14a8: jalr ra
+  0x14ac: ld a5,-40(s0)
+  0x14b0: addi a5,a5,2
+  0x14b2: sd a5,-40(s0)
+
+- Edges:
+  NO_JUMP -> 0x14b6
+
+====
+BLOCK 0x14b6
+- Instructions:
+  0x14b6: auipc a5,0x0
+  0x14ba: mv a5,a5
+  0x14be: ld a4,0(a5)
+  0x14c0: li a5,159
+  0x14c4: beq a4,a5,14a0 <.L127>
+
+- Edges:
+  NO_JUMP -> 0x14c8
+  JUMP -> 0x14a0
+
+====
+BLOCK 0x14c8
+- Instructions:
+  0x14c8: li a0,41
+  0x14cc: auipc ra,0x0
+  0x14d0: jalr ra
+  0x14d4: li a0,162
+  0x14d8: auipc ra,0x0
+  0x14dc: jalr ra
+  0x14e0: auipc a5,0x0
+  0x14e4: mv a5,a5
+  0x14e8: ld a4,-40(s0)
+  0x14ec: sd a4,0(a5)
+  0x14ee: j 1bb2 <.L97>
+
+- Edges:
+  JUMP -> 0x1bb2
+
+====
+BLOCK 0x14f0
+- Instructions:
+  0x14f0: li a0,142
+  0x14f4: auipc ra,0x0
+  0x14f8: jalr ra
+  0x14fc: li a0,41
+  0x1500: auipc ra,0x0
+  0x1504: jalr ra
+  0x1508: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x150c
+- Instructions:
+  0x150c: auipc a5,0x0
+  0x1510: mv a5,a5
+  0x1514: ld a4,0(a5)
+  0x1516: li a5,159
+  0x151a: bne a4,a5,15c0 <.L129>
+
+- Edges:
+  NO_JUMP -> 0x151e
+  JUMP -> 0x15c0
+
+====
+BLOCK 0x151e
+- Instructions:
+  0x151e: li a0,159
+  0x1522: auipc ra,0x0
+  0x1526: jalr ra
+  0x152a: li a0,162
+  0x152e: auipc ra,0x0
+  0x1532: jalr ra
+  0x1536: auipc a5,0x0
+  0x153a: mv a5,a5
+  0x153e: ld a4,0(a5)
+  0x1540: li a5,1
+  0x1542: bge a5,a4,156c <.L130>
+
+- Edges:
+  NO_JUMP -> 0x1546
+  JUMP -> 0x156c
+
+====
+BLOCK 0x1546
+- Instructions:
+  0x1546: auipc a5,0x0
+  0x154a: mv a5,a5
+  0x154e: ld a5,0(a5)
+  0x1550: addi a4,a5,-2
+  0x1554: auipc a5,0x0
+  0x1558: mv a5,a5
+  0x155c: sd a4,0(a5)
+  0x155e: auipc a5,0x0
+  0x1562: mv a5,a5
+  0x1566: ld a5,0(a5)
+  0x1568: bnez a5,1596 <.L132>
+
+- Edges:
+  NO_JUMP -> 0x156a
+  JUMP -> 0x1596
+
+====
+BLOCK 0x156a
+- Instructions:
+  0x156a: j 1592 <.L208>
+
+- Edges:
+  JUMP -> 0x1592
+
+====
+BLOCK 0x156c
+- Instructions:
+  0x156c: auipc a5,0x0
+  0x1570: mv a5,a5
+  0x1574: ld a5,0(a5)
+  0x1576: mv a1,a5
+  0x1578: auipc a0,0x0
+  0x157c: mv a0,a0
+  0x1580: auipc ra,0x0
+  0x1584: jalr ra
+  0x1588: li a0,-1
+  0x158a: auipc ra,0x0
+  0x158e: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1592
+
+====
+BLOCK 0x1592
+- Instructions:
+  0x1592: li a5,10
+  0x1594: j 1598 <.L133>
+
+- Edges:
+  JUMP -> 0x1598
+
+====
+BLOCK 0x1596
+- Instructions:
+  0x1596: li a5,9
+
+- Edges:
+  NO_JUMP -> 0x1598
+
+====
+BLOCK 0x1598
+- Instructions:
+  0x1598: auipc a4,0x0
+  0x159c: mv a4,a4
+  0x15a0: ld a4,0(a4)
+  0x15a2: addi a3,a4,8
+  0x15a6: auipc a4,0x0
+  0x15aa: mv a4,a4
+  0x15ae: sd a3,0(a4)
+  0x15b0: auipc a4,0x0
+  0x15b4: mv a4,a4
+  0x15b8: ld a4,0(a4)
+  0x15ba: sd a5,0(a4)
+  0x15bc: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x15c0
+- Instructions:
+  0x15c0: auipc a5,0x0
+  0x15c4: mv a5,a5
+  0x15c8: ld a4,0(a5)
+  0x15ca: li a5,148
+  0x15ce: bne a4,a5,1668 <.L134>
+
+- Edges:
+  NO_JUMP -> 0x15d2
+  JUMP -> 0x1668
+
+====
+BLOCK 0x15d2
+- Instructions:
+  0x15d2: li a0,148
+  0x15d6: auipc ra,0x0
+  0x15da: jalr ra
+  0x15de: li a0,162
+  0x15e2: auipc ra,0x0
+  0x15e6: jalr ra
+  0x15ea: auipc a5,0x0
+  0x15ee: mv a5,a5
+  0x15f2: ld a5,0(a5)
+  0x15f4: ld a4,0(a5)
+  0x15f6: li a5,10
+  0x15f8: beq a4,a5,160e <.L135>
+
+- Edges:
+  NO_JUMP -> 0x15fc
+  JUMP -> 0x160e
+
+====
+BLOCK 0x15fc
+- Instructions:
+  0x15fc: auipc a5,0x0
+  0x1600: mv a5,a5
+  0x1604: ld a5,0(a5)
+  0x1606: ld a4,0(a5)
+  0x1608: li a5,9
+  0x160a: bne a4,a5,1642 <.L136>
+
+- Edges:
+  NO_JUMP -> 0x160e
+  JUMP -> 0x1642
+
+====
+BLOCK 0x160e
+- Instructions:
+  0x160e: auipc a5,0x0
+  0x1612: mv a5,a5
+  0x1616: ld a5,0(a5)
+  0x1618: addi a4,a5,-8
+  0x161c: auipc a5,0x0
+  0x1620: mv a5,a5
+  0x1624: sd a4,0(a5)
+  0x1626: auipc a5,0x0
+  0x162a: mv a5,a5
+  0x162e: ld a5,0(a5)
+  0x1630: addi a4,a5,2
+  0x1634: auipc a5,0x0
+  0x1638: mv a5,a5
+  0x163c: sd a4,0(a5)
+  0x163e: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1642
+- Instructions:
+  0x1642: auipc a5,0x0
+  0x1646: mv a5,a5
+  0x164a: ld a5,0(a5)
+  0x164c: mv a1,a5
+  0x164e: auipc a0,0x0
+  0x1652: mv a0,a0
+  0x1656: auipc ra,0x0
+  0x165a: jalr ra
+  0x165e: li a0,-1
+  0x1660: auipc ra,0x0
+  0x1664: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1668
+
+====
+BLOCK 0x1668
+- Instructions:
+  0x1668: auipc a5,0x0
+  0x166c: mv a5,a5
+  0x1670: ld a4,0(a5)
+  0x1672: li a5,33
+  0x1676: bne a4,a5,173a <.L137>
+
+- Edges:
+  NO_JUMP -> 0x167a
+  JUMP -> 0x173a
+
+====
+BLOCK 0x167a
+- Instructions:
+  0x167a: li a0,33
+  0x167e: auipc ra,0x0
+  0x1682: jalr ra
+  0x1686: li a0,162
+  0x168a: auipc ra,0x0
+  0x168e: jalr ra
+  0x1692: auipc a5,0x0
+  0x1696: mv a5,a5
+  0x169a: ld a5,0(a5)
+  0x169c: addi a4,a5,8
+  0x16a0: auipc a5,0x0
+  0x16a4: mv a5,a5
+  0x16a8: sd a4,0(a5)
+  0x16aa: auipc a5,0x0
+  0x16ae: mv a5,a5
+  0x16b2: ld a5,0(a5)
+  0x16b4: li a4,13
+  0x16b6: sd a4,0(a5)
+  0x16b8: auipc a5,0x0
+  0x16bc: mv a5,a5
+  0x16c0: ld a5,0(a5)
+  0x16c2: addi a4,a5,8
+  0x16c6: auipc a5,0x0
+  0x16ca: mv a5,a5
+  0x16ce: sd a4,0(a5)
+  0x16d0: auipc a5,0x0
+  0x16d4: mv a5,a5
+  0x16d8: ld a5,0(a5)
+  0x16da: li a4,1
+  0x16dc: sd a4,0(a5)
+  0x16de: auipc a5,0x0
+  0x16e2: mv a5,a5
+  0x16e6: ld a5,0(a5)
+  0x16e8: addi a4,a5,8
+  0x16ec: auipc a5,0x0
+  0x16f0: mv a5,a5
+  0x16f4: sd a4,0(a5)
+  0x16f6: auipc a5,0x0
+  0x16fa: mv a5,a5
+  0x16fe: ld a5,0(a5)
+  0x1700: sd zero,0(a5)
+  0x1704: auipc a5,0x0
+  0x1708: mv a5,a5
+  0x170c: ld a5,0(a5)
+  0x170e: addi a4,a5,8
+  0x1712: auipc a5,0x0
+  0x1716: mv a5,a5
+  0x171a: sd a4,0(a5)
+  0x171c: auipc a5,0x0
+  0x1720: mv a5,a5
+  0x1724: ld a5,0(a5)
+  0x1726: li a4,17
+  0x1728: sd a4,0(a5)
+  0x172a: auipc a5,0x0
+  0x172e: mv a5,a5
+  0x1732: li a4,1
+  0x1734: sd a4,0(a5)
+  0x1736: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x173a
+- Instructions:
+  0x173a: auipc a5,0x0
+  0x173e: mv a5,a5
+  0x1742: ld a4,0(a5)
+  0x1744: li a5,126
+  0x1748: bne a4,a5,180c <.L138>
+
+- Edges:
+  NO_JUMP -> 0x174c
+  JUMP -> 0x180c
+
+====
+BLOCK 0x174c
+- Instructions:
+  0x174c: li a0,126
+  0x1750: auipc ra,0x0
+  0x1754: jalr ra
+  0x1758: li a0,162
+  0x175c: auipc ra,0x0
+  0x1760: jalr ra
+  0x1764: auipc a5,0x0
+  0x1768: mv a5,a5
+  0x176c: ld a5,0(a5)
+  0x176e: addi a4,a5,8
+  0x1772: auipc a5,0x0
+  0x1776: mv a5,a5
+  0x177a: sd a4,0(a5)
+  0x177c: auipc a5,0x0
+  0x1780: mv a5,a5
+  0x1784: ld a5,0(a5)
+  0x1786: li a4,13
+  0x1788: sd a4,0(a5)
+  0x178a: auipc a5,0x0
+  0x178e: mv a5,a5
+  0x1792: ld a5,0(a5)
+  0x1794: addi a4,a5,8
+  0x1798: auipc a5,0x0
+  0x179c: mv a5,a5
+  0x17a0: sd a4,0(a5)
+  0x17a2: auipc a5,0x0
+  0x17a6: mv a5,a5
+  0x17aa: ld a5,0(a5)
+  0x17ac: li a4,1
+  0x17ae: sd a4,0(a5)
+  0x17b0: auipc a5,0x0
+  0x17b4: mv a5,a5
+  0x17b8: ld a5,0(a5)
+  0x17ba: addi a4,a5,8
+  0x17be: auipc a5,0x0
+  0x17c2: mv a5,a5
+  0x17c6: sd a4,0(a5)
+  0x17c8: auipc a5,0x0
+  0x17cc: mv a5,a5
+  0x17d0: ld a5,0(a5)
+  0x17d2: li a4,-1
+  0x17d4: sd a4,0(a5)
+  0x17d6: auipc a5,0x0
+  0x17da: mv a5,a5
+  0x17de: ld a5,0(a5)
+  0x17e0: addi a4,a5,8
+  0x17e4: auipc a5,0x0
+  0x17e8: mv a5,a5
+  0x17ec: sd a4,0(a5)
+  0x17ee: auipc a5,0x0
+  0x17f2: mv a5,a5
+  0x17f6: ld a5,0(a5)
+  0x17f8: li a4,15
+  0x17fa: sd a4,0(a5)
+  0x17fc: auipc a5,0x0
+  0x1800: mv a5,a5
+  0x1804: li a4,1
+  0x1806: sd a4,0(a5)
+  0x1808: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x180c
+- Instructions:
+  0x180c: auipc a5,0x0
+  0x1810: mv a5,a5
+  0x1814: ld a4,0(a5)
+  0x1816: li a5,157
+  0x181a: bne a4,a5,1846 <.L139>
+
+- Edges:
+  NO_JUMP -> 0x181e
+  JUMP -> 0x1846
+
+====
+BLOCK 0x181e
+- Instructions:
+  0x181e: li a0,157
+  0x1822: auipc ra,0x0
+  0x1826: jalr ra
+  0x182a: li a0,162
+  0x182e: auipc ra,0x0
+  0x1832: jalr ra
+  0x1836: auipc a5,0x0
+  0x183a: mv a5,a5
+  0x183e: li a4,1
+  0x1840: sd a4,0(a5)
+  0x1842: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1846
+- Instructions:
+  0x1846: auipc a5,0x0
+  0x184a: mv a5,a5
+  0x184e: ld a4,0(a5)
+  0x1850: li a5,158
+  0x1854: bne a4,a5,1990 <.L140>
+
+- Edges:
+  NO_JUMP -> 0x1858
+  JUMP -> 0x1990
+
+====
+BLOCK 0x1858
+- Instructions:
+  0x1858: li a0,158
+  0x185c: auipc ra,0x0
+  0x1860: jalr ra
+  0x1864: auipc a5,0x0
+  0x1868: mv a5,a5
+  0x186c: ld a4,0(a5)
+  0x186e: li a5,128
+  0x1872: bne a4,a5,18dc <.L141>
+
+- Edges:
+  NO_JUMP -> 0x1876
+  JUMP -> 0x18dc
+
+====
+BLOCK 0x1876
+- Instructions:
+  0x1876: auipc a5,0x0
+  0x187a: mv a5,a5
+  0x187e: ld a5,0(a5)
+  0x1880: addi a4,a5,8
+  0x1884: auipc a5,0x0
+  0x1888: mv a5,a5
+  0x188c: sd a4,0(a5)
+  0x188e: auipc a5,0x0
+  0x1892: mv a5,a5
+  0x1896: ld a5,0(a5)
+  0x1898: li a4,1
+  0x189a: sd a4,0(a5)
+  0x189c: auipc a5,0x0
+  0x18a0: mv a5,a5
+  0x18a4: ld a4,0(a5)
+  0x18a6: auipc a5,0x0
+  0x18aa: mv a5,a5
+  0x18ae: ld a5,0(a5)
+  0x18b0: addi a3,a5,8
+  0x18b4: auipc a5,0x0
+  0x18b8: mv a5,a5
+  0x18bc: sd a3,0(a5)
+  0x18be: auipc a5,0x0
+  0x18c2: mv a5,a5
+  0x18c6: ld a5,0(a5)
+  0x18c8: neg a4,a4
+  0x18cc: sd a4,0(a5)
+  0x18ce: li a0,128
+  0x18d2: auipc ra,0x0
+  0x18d6: jalr ra
+  0x18da: j 1980 <.L142>
+
+- Edges:
+  JUMP -> 0x1980
+
+====
+BLOCK 0x18dc
+- Instructions:
+  0x18dc: auipc a5,0x0
+  0x18e0: mv a5,a5
+  0x18e4: ld a5,0(a5)
+  0x18e6: addi a4,a5,8
+  0x18ea: auipc a5,0x0
+  0x18ee: mv a5,a5
+  0x18f2: sd a4,0(a5)
+  0x18f4: auipc a5,0x0
+  0x18f8: mv a5,a5
+  0x18fc: ld a5,0(a5)
+  0x18fe: li a4,1
+  0x1900: sd a4,0(a5)
+  0x1902: auipc a5,0x0
+  0x1906: mv a5,a5
+  0x190a: ld a5,0(a5)
+  0x190c: addi a4,a5,8
+  0x1910: auipc a5,0x0
+  0x1914: mv a5,a5
+  0x1918: sd a4,0(a5)
+  0x191a: auipc a5,0x0
+  0x191e: mv a5,a5
+  0x1922: ld a5,0(a5)
+  0x1924: li a4,-1
+  0x1926: sd a4,0(a5)
+  0x1928: auipc a5,0x0
+  0x192c: mv a5,a5
+  0x1930: ld a5,0(a5)
+  0x1932: addi a4,a5,8
+  0x1936: auipc a5,0x0
+  0x193a: mv a5,a5
+  0x193e: sd a4,0(a5)
+  0x1940: auipc a5,0x0
+  0x1944: mv a5,a5
+  0x1948: ld a5,0(a5)
+  0x194a: li a4,13
+  0x194c: sd a4,0(a5)
+  0x194e: li a0,162
+  0x1952: auipc ra,0x0
+  0x1956: jalr ra
+  0x195a: auipc a5,0x0
+  0x195e: mv a5,a5
+  0x1962: ld a5,0(a5)
+  0x1964: addi a4,a5,8
+  0x1968: auipc a5,0x0
+  0x196c: mv a5,a5
+  0x1970: sd a4,0(a5)
+  0x1972: auipc a5,0x0
+  0x1976: mv a5,a5
+  0x197a: ld a5,0(a5)
+  0x197c: li a4,27
+  0x197e: sd a4,0(a5)
+
+- Edges:
+  NO_JUMP -> 0x1980
+
+====
+BLOCK 0x1980
+- Instructions:
+  0x1980: auipc a5,0x0
+  0x1984: mv a5,a5
+  0x1988: li a4,1
+  0x198a: sd a4,0(a5)
+  0x198c: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1990
+- Instructions:
+  0x1990: auipc a5,0x0
+  0x1994: mv a5,a5
+  0x1998: ld a4,0(a5)
+  0x199a: li a5,162
+  0x199e: beq a4,a5,19b4 <.L143>
+
+- Edges:
+  NO_JUMP -> 0x19a2
+  JUMP -> 0x19b4
+
+====
+BLOCK 0x19a2
+- Instructions:
+  0x19a2: auipc a5,0x0
+  0x19a6: mv a5,a5
+  0x19aa: ld a4,0(a5)
+  0x19ac: li a5,163
+  0x19b0: bne a4,a5,1b8c <.L144>
+
+- Edges:
+  NO_JUMP -> 0x19b4
+  JUMP -> 0x1b8c
+
+====
+BLOCK 0x19b4
+- Instructions:
+  0x19b4: auipc a5,0x0
+  0x19b8: mv a5,a5
+  0x19bc: ld a5,0(a5)
+  0x19be: sd a5,-40(s0)
+  0x19c2: auipc a5,0x0
+  0x19c6: mv a5,a5
+  0x19ca: ld a5,0(a5)
+  0x19cc: mv a0,a5
+  0x19ce: auipc ra,0x0
+  0x19d2: jalr ra
+  0x19d6: li a0,162
+  0x19da: auipc ra,0x0
+  0x19de: jalr ra
+  0x19e2: auipc a5,0x0
+  0x19e6: mv a5,a5
+  0x19ea: ld a5,0(a5)
+  0x19ec: ld a4,0(a5)
+  0x19ee: li a5,10
+  0x19f0: bne a4,a5,1a2a <.L145>
+
+- Edges:
+  NO_JUMP -> 0x19f4
+  JUMP -> 0x1a2a
+
+====
+BLOCK 0x19f4
+- Instructions:
+  0x19f4: auipc a5,0x0
+  0x19f8: mv a5,a5
+  0x19fc: ld a5,0(a5)
+  0x19fe: li a4,13
+  0x1a00: sd a4,0(a5)
+  0x1a02: auipc a5,0x0
+  0x1a06: mv a5,a5
+  0x1a0a: ld a5,0(a5)
+  0x1a0c: addi a4,a5,8
+  0x1a10: auipc a5,0x0
+  0x1a14: mv a5,a5
+  0x1a18: sd a4,0(a5)
+  0x1a1a: auipc a5,0x0
+  0x1a1e: mv a5,a5
+  0x1a22: ld a5,0(a5)
+  0x1a24: li a4,10
+  0x1a26: sd a4,0(a5)
+  0x1a28: j 1a98 <.L146>
+
+- Edges:
+  JUMP -> 0x1a98
+
+====
+BLOCK 0x1a2a
+- Instructions:
+  0x1a2a: auipc a5,0x0
+  0x1a2e: mv a5,a5
+  0x1a32: ld a5,0(a5)
+  0x1a34: ld a4,0(a5)
+  0x1a36: li a5,9
+  0x1a38: bne a4,a5,1a72 <.L147>
+
+- Edges:
+  NO_JUMP -> 0x1a3c
+  JUMP -> 0x1a72
+
+====
+BLOCK 0x1a3c
+- Instructions:
+  0x1a3c: auipc a5,0x0
+  0x1a40: mv a5,a5
+  0x1a44: ld a5,0(a5)
+  0x1a46: li a4,13
+  0x1a48: sd a4,0(a5)
+  0x1a4a: auipc a5,0x0
+  0x1a4e: mv a5,a5
+  0x1a52: ld a5,0(a5)
+  0x1a54: addi a4,a5,8
+  0x1a58: auipc a5,0x0
+  0x1a5c: mv a5,a5
+  0x1a60: sd a4,0(a5)
+  0x1a62: auipc a5,0x0
+  0x1a66: mv a5,a5
+  0x1a6a: ld a5,0(a5)
+  0x1a6c: li a4,9
+  0x1a6e: sd a4,0(a5)
+  0x1a70: j 1a98 <.L146>
+
+- Edges:
+  JUMP -> 0x1a98
+
+====
+BLOCK 0x1a72
+- Instructions:
+  0x1a72: auipc a5,0x0
+  0x1a76: mv a5,a5
+  0x1a7a: ld a5,0(a5)
+  0x1a7c: mv a1,a5
+  0x1a7e: auipc a0,0x0
+  0x1a82: mv a0,a0
+  0x1a86: auipc ra,0x0
+  0x1a8a: jalr ra
+  0x1a8e: li a0,-1
+  0x1a90: auipc ra,0x0
+  0x1a94: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1a98
+
+====
+BLOCK 0x1a98
+- Instructions:
+  0x1a98: auipc a5,0x0
+  0x1a9c: mv a5,a5
+  0x1aa0: ld a5,0(a5)
+  0x1aa2: addi a4,a5,8
+  0x1aa6: auipc a5,0x0
+  0x1aaa: mv a5,a5
+  0x1aae: sd a4,0(a5)
+  0x1ab0: auipc a5,0x0
+  0x1ab4: mv a5,a5
+  0x1ab8: ld a5,0(a5)
+  0x1aba: li a4,13
+  0x1abc: sd a4,0(a5)
+  0x1abe: auipc a5,0x0
+  0x1ac2: mv a5,a5
+  0x1ac6: ld a5,0(a5)
+  0x1ac8: addi a4,a5,8
+  0x1acc: auipc a5,0x0
+  0x1ad0: mv a5,a5
+  0x1ad4: sd a4,0(a5)
+  0x1ad6: auipc a5,0x0
+  0x1ada: mv a5,a5
+  0x1ade: ld a5,0(a5)
+  0x1ae0: li a4,1
+  0x1ae2: sd a4,0(a5)
+  0x1ae4: auipc a5,0x0
+  0x1ae8: mv a5,a5
+  0x1aec: ld a4,0(a5)
+  0x1aee: li a5,2
+  0x1af0: bge a5,a4,1af8 <.L148>
+
+- Edges:
+  NO_JUMP -> 0x1af4
+  JUMP -> 0x1af8
+
+====
+BLOCK 0x1af4
+- Instructions:
+  0x1af4: li a5,8
+  0x1af6: j 1afa <.L149>
+
+- Edges:
+  JUMP -> 0x1afa
+
+====
+BLOCK 0x1af8
+- Instructions:
+  0x1af8: li a5,1
+
+- Edges:
+  NO_JUMP -> 0x1afa
+
+====
+BLOCK 0x1afa
+- Instructions:
+  0x1afa: auipc a4,0x0
+  0x1afe: mv a4,a4
+  0x1b02: ld a4,0(a4)
+  0x1b04: addi a3,a4,8
+  0x1b08: auipc a4,0x0
+  0x1b0c: mv a4,a4
+  0x1b10: sd a3,0(a4)
+  0x1b12: auipc a4,0x0
+  0x1b16: mv a4,a4
+  0x1b1a: ld a4,0(a4)
+  0x1b1c: sd a5,0(a4)
+  0x1b1e: ld a4,-40(s0)
+  0x1b22: li a5,162
+  0x1b26: bne a4,a5,1b2e <.L150>
+
+- Edges:
+  NO_JUMP -> 0x1b2a
+  JUMP -> 0x1b2e
+
+====
+BLOCK 0x1b2a
+- Instructions:
+  0x1b2a: li a5,25
+  0x1b2c: j 1b30 <.L151>
+
+- Edges:
+  JUMP -> 0x1b30
+
+====
+BLOCK 0x1b2e
+- Instructions:
+  0x1b2e: li a5,26
+
+- Edges:
+  NO_JUMP -> 0x1b30
+
+====
+BLOCK 0x1b30
+- Instructions:
+  0x1b30: auipc a4,0x0
+  0x1b34: mv a4,a4
+  0x1b38: ld a4,0(a4)
+  0x1b3a: addi a3,a4,8
+  0x1b3e: auipc a4,0x0
+  0x1b42: mv a4,a4
+  0x1b46: sd a3,0(a4)
+  0x1b48: auipc a4,0x0
+  0x1b4c: mv a4,a4
+  0x1b50: ld a4,0(a4)
+  0x1b52: sd a5,0(a4)
+  0x1b54: auipc a5,0x0
+  0x1b58: mv a5,a5
+  0x1b5c: ld a5,0(a5)
+  0x1b5e: bnez a5,1b64 <.L152>
+
+- Edges:
+  NO_JUMP -> 0x1b60
+  JUMP -> 0x1b64
+
+====
+BLOCK 0x1b60
+- Instructions:
+  0x1b60: li a5,12
+  0x1b62: j 1b66 <.L153>
+
+- Edges:
+  JUMP -> 0x1b66
+
+====
+BLOCK 0x1b64
+- Instructions:
+  0x1b64: li a5,11
+
+- Edges:
+  NO_JUMP -> 0x1b66
+
+====
+BLOCK 0x1b66
+- Instructions:
+  0x1b66: auipc a4,0x0
+  0x1b6a: mv a4,a4
+  0x1b6e: ld a4,0(a4)
+  0x1b70: addi a3,a4,8
+  0x1b74: auipc a4,0x0
+  0x1b78: mv a4,a4
+  0x1b7c: sd a3,0(a4)
+  0x1b7e: auipc a4,0x0
+  0x1b82: mv a4,a4
+  0x1b86: ld a4,0(a4)
+  0x1b88: sd a5,0(a4)
+  0x1b8a: j 1bb2 <.L97>
+
+- Edges:
+  JUMP -> 0x1bb2
+
+====
+BLOCK 0x1b8c
+- Instructions:
+  0x1b8c: auipc a5,0x0
+  0x1b90: mv a5,a5
+  0x1b94: ld a5,0(a5)
+  0x1b96: mv a1,a5
+  0x1b98: auipc a0,0x0
+  0x1b9c: mv a0,a0
+  0x1ba0: auipc ra,0x0
+  0x1ba4: jalr ra
+  0x1ba8: li a0,-1
+  0x1baa: auipc ra,0x0
+  0x1bae: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1bb2
+
+====
+BLOCK 0x1bb2
+- Instructions:
+  0x1bb2: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1bb6
+- Instructions:
+  0x1bb6: auipc a5,0x0
+  0x1bba: mv a5,a5
+  0x1bbe: ld a5,0(a5)
+  0x1bc0: sd a5,-40(s0)
+  0x1bc4: auipc a5,0x0
+  0x1bc8: mv a5,a5
+  0x1bcc: ld a4,0(a5)
+  0x1bce: li a5,142
+  0x1bd2: bne a4,a5,1c90 <.L155>
+
+- Edges:
+  NO_JUMP -> 0x1bd6
+  JUMP -> 0x1c90
+
+====
+BLOCK 0x1bd6
+- Instructions:
+  0x1bd6: li a0,142
+  0x1bda: auipc ra,0x0
+  0x1bde: jalr ra
+  0x1be2: auipc a5,0x0
+  0x1be6: mv a5,a5
+  0x1bea: ld a5,0(a5)
+  0x1bec: ld a4,0(a5)
+  0x1bee: li a5,10
+  0x1bf0: beq a4,a5,1c06 <.L156>
+
+- Edges:
+  NO_JUMP -> 0x1bf4
+  JUMP -> 0x1c06
+
+====
+BLOCK 0x1bf4
+- Instructions:
+  0x1bf4: auipc a5,0x0
+  0x1bf8: mv a5,a5
+  0x1bfc: ld a5,0(a5)
+  0x1bfe: ld a4,0(a5)
+  0x1c00: li a5,9
+  0x1c02: bne a4,a5,1c3c <.L157>
+
+- Edges:
+  NO_JUMP -> 0x1c06
+  JUMP -> 0x1c3c
+
+====
+BLOCK 0x1c06
+- Instructions:
+  0x1c06: auipc a5,0x0
+  0x1c0a: mv a5,a5
+  0x1c0e: ld a5,0(a5)
+  0x1c10: li a4,13
+  0x1c12: sd a4,0(a5)
+  0x1c14: li a0,142
+  0x1c18: auipc ra,0x0
+  0x1c1c: jalr ra
+  0x1c20: auipc a5,0x0
+  0x1c24: mv a5,a5
+  0x1c28: ld a4,-40(s0)
+  0x1c2c: sd a4,0(a5)
+  0x1c2e: auipc a5,0x0
+  0x1c32: mv a5,a5
+  0x1c36: ld a5,0(a5)
+  0x1c38: beqz a5,1c62 <.L158>
+
+- Edges:
+  NO_JUMP -> 0x1c3a
+  JUMP -> 0x1c62
+
+====
+BLOCK 0x1c3a
+- Instructions:
+  0x1c3a: j 1c66 <.L209>
+
+- Edges:
+  JUMP -> 0x1c66
+
+====
+BLOCK 0x1c3c
+- Instructions:
+  0x1c3c: auipc a5,0x0
+  0x1c40: mv a5,a5
+  0x1c44: ld a5,0(a5)
+  0x1c46: mv a1,a5
+  0x1c48: auipc a0,0x0
+  0x1c4c: mv a0,a0
+  0x1c50: auipc ra,0x0
+  0x1c54: jalr ra
+  0x1c58: li a0,-1
+  0x1c5a: auipc ra,0x0
+  0x1c5e: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1c62
+
+====
+BLOCK 0x1c62
+- Instructions:
+  0x1c62: li a5,12
+  0x1c64: j 1c68 <.L160>
+
+- Edges:
+  JUMP -> 0x1c68
+
+====
+BLOCK 0x1c66
+- Instructions:
+  0x1c66: li a5,11
+
+- Edges:
+  NO_JUMP -> 0x1c68
+
+====
+BLOCK 0x1c68
+- Instructions:
+  0x1c68: auipc a4,0x0
+  0x1c6c: mv a4,a4
+  0x1c70: ld a4,0(a4)
+  0x1c72: addi a3,a4,8
+  0x1c76: auipc a4,0x0
+  0x1c7a: mv a4,a4
+  0x1c7e: sd a3,0(a4)
+  0x1c80: auipc a4,0x0
+  0x1c84: mv a4,a4
+  0x1c88: ld a4,0(a4)
+  0x1c8a: sd a5,0(a4)
+  0x1c8c: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1c90
+- Instructions:
+  0x1c90: auipc a5,0x0
+  0x1c94: mv a5,a5
+  0x1c98: ld a4,0(a5)
+  0x1c9a: li a5,143
+  0x1c9e: bne a4,a5,1dce <.L162>
+
+- Edges:
+  NO_JUMP -> 0x1ca2
+  JUMP -> 0x1dce
+
+====
+BLOCK 0x1ca2
+- Instructions:
+  0x1ca2: li a0,143
+  0x1ca6: auipc ra,0x0
+  0x1caa: jalr ra
+  0x1cae: auipc a5,0x0
+  0x1cb2: mv a5,a5
+  0x1cb6: ld a5,0(a5)
+  0x1cb8: addi a4,a5,8
+  0x1cbc: auipc a5,0x0
+  0x1cc0: mv a5,a5
+  0x1cc4: sd a4,0(a5)
+  0x1cc6: auipc a5,0x0
+  0x1cca: mv a5,a5
+  0x1cce: ld a5,0(a5)
+  0x1cd0: li a4,4
+  0x1cd2: sd a4,0(a5)
+  0x1cd4: auipc a5,0x0
+  0x1cd8: mv a5,a5
+  0x1cdc: ld a5,0(a5)
+  0x1cde: addi a4,a5,8
+  0x1ce2: auipc a5,0x0
+  0x1ce6: mv a5,a5
+  0x1cea: sd a4,0(a5)
+  0x1cec: auipc a5,0x0
+  0x1cf0: mv a5,a5
+  0x1cf4: ld a5,0(a5)
+  0x1cf6: sd a5,-24(s0)
+  0x1cfa: li a0,142
+  0x1cfe: auipc ra,0x0
+  0x1d02: jalr ra
+  0x1d06: auipc a5,0x0
+  0x1d0a: mv a5,a5
+  0x1d0e: ld a4,0(a5)
+  0x1d10: li a5,58
+  0x1d14: bne a4,a5,1da8 <.L163>
+
+- Edges:
+  NO_JUMP -> 0x1d18
+  JUMP -> 0x1da8
+
+====
+BLOCK 0x1d18
+- Instructions:
+  0x1d18: li a0,58
+  0x1d1c: auipc ra,0x0
+  0x1d20: jalr ra
+  0x1d24: auipc a5,0x0
+  0x1d28: mv a5,a5
+  0x1d2c: ld a5,0(a5)
+  0x1d2e: addi a5,a5,24
+  0x1d30: mv a4,a5
+  0x1d32: ld a5,-24(s0)
+  0x1d36: sd a4,0(a5)
+  0x1d38: auipc a5,0x0
+  0x1d3c: mv a5,a5
+  0x1d40: ld a5,0(a5)
+  0x1d42: addi a4,a5,8
+  0x1d46: auipc a5,0x0
+  0x1d4a: mv a5,a5
+  0x1d4e: sd a4,0(a5)
+  0x1d50: auipc a5,0x0
+  0x1d54: mv a5,a5
+  0x1d58: ld a5,0(a5)
+  0x1d5a: li a4,2
+  0x1d5c: sd a4,0(a5)
+  0x1d5e: auipc a5,0x0
+  0x1d62: mv a5,a5
+  0x1d66: ld a5,0(a5)
+  0x1d68: addi a4,a5,8
+  0x1d6c: auipc a5,0x0
+  0x1d70: mv a5,a5
+  0x1d74: sd a4,0(a5)
+  0x1d76: auipc a5,0x0
+  0x1d7a: mv a5,a5
+  0x1d7e: ld a5,0(a5)
+  0x1d80: sd a5,-24(s0)
+  0x1d84: li a0,143
+  0x1d88: auipc ra,0x0
+  0x1d8c: jalr ra
+  0x1d90: auipc a5,0x0
+  0x1d94: mv a5,a5
+  0x1d98: ld a5,0(a5)
+  0x1d9a: addi a5,a5,8
+  0x1d9c: mv a4,a5
+  0x1d9e: ld a5,-24(s0)
+  0x1da2: sd a4,0(a5)
+  0x1da4: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1da8
+- Instructions:
+  0x1da8: auipc a5,0x0
+  0x1dac: mv a5,a5
+  0x1db0: ld a5,0(a5)
+  0x1db2: mv a1,a5
+  0x1db4: auipc a0,0x0
+  0x1db8: mv a0,a0
+  0x1dbc: auipc ra,0x0
+  0x1dc0: jalr ra
+  0x1dc4: li a0,-1
+  0x1dc6: auipc ra,0x0
+  0x1dca: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x1dce
+
+====
+BLOCK 0x1dce
+- Instructions:
+  0x1dce: auipc a5,0x0
+  0x1dd2: mv a5,a5
+  0x1dd6: ld a4,0(a5)
+  0x1dd8: li a5,144
+  0x1ddc: bne a4,a5,1e68 <.L165>
+
+- Edges:
+  NO_JUMP -> 0x1de0
+  JUMP -> 0x1e68
+
+====
+BLOCK 0x1de0
+- Instructions:
+  0x1de0: li a0,144
+  0x1de4: auipc ra,0x0
+  0x1de8: jalr ra
+  0x1dec: auipc a5,0x0
+  0x1df0: mv a5,a5
+  0x1df4: ld a5,0(a5)
+  0x1df6: addi a4,a5,8
+  0x1dfa: auipc a5,0x0
+  0x1dfe: mv a5,a5
+  0x1e02: sd a4,0(a5)
+  0x1e04: auipc a5,0x0
+  0x1e08: mv a5,a5
+  0x1e0c: ld a5,0(a5)
+  0x1e0e: li a4,5
+  0x1e10: sd a4,0(a5)
+  0x1e12: auipc a5,0x0
+  0x1e16: mv a5,a5
+  0x1e1a: ld a5,0(a5)
+  0x1e1c: addi a4,a5,8
+  0x1e20: auipc a5,0x0
+  0x1e24: mv a5,a5
+  0x1e28: sd a4,0(a5)
+  0x1e2a: auipc a5,0x0
+  0x1e2e: mv a5,a5
+  0x1e32: ld a5,0(a5)
+  0x1e34: sd a5,-24(s0)
+  0x1e38: li a0,145
+  0x1e3c: auipc ra,0x0
+  0x1e40: jalr ra
+  0x1e44: auipc a5,0x0
+  0x1e48: mv a5,a5
+  0x1e4c: ld a5,0(a5)
+  0x1e4e: addi a5,a5,8
+  0x1e50: mv a4,a5
+  0x1e52: ld a5,-24(s0)
+  0x1e56: sd a4,0(a5)
+  0x1e58: auipc a5,0x0
+  0x1e5c: mv a5,a5
+  0x1e60: li a4,1
+  0x1e62: sd a4,0(a5)
+  0x1e64: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1e68
+- Instructions:
+  0x1e68: auipc a5,0x0
+  0x1e6c: mv a5,a5
+  0x1e70: ld a4,0(a5)
+  0x1e72: li a5,145
+  0x1e76: bne a4,a5,1f02 <.L166>
+
+- Edges:
+  NO_JUMP -> 0x1e7a
+  JUMP -> 0x1f02
+
+====
+BLOCK 0x1e7a
+- Instructions:
+  0x1e7a: li a0,145
+  0x1e7e: auipc ra,0x0
+  0x1e82: jalr ra
+  0x1e86: auipc a5,0x0
+  0x1e8a: mv a5,a5
+  0x1e8e: ld a5,0(a5)
+  0x1e90: addi a4,a5,8
+  0x1e94: auipc a5,0x0
+  0x1e98: mv a5,a5
+  0x1e9c: sd a4,0(a5)
+  0x1e9e: auipc a5,0x0
+  0x1ea2: mv a5,a5
+  0x1ea6: ld a5,0(a5)
+  0x1ea8: li a4,4
+  0x1eaa: sd a4,0(a5)
+  0x1eac: auipc a5,0x0
+  0x1eb0: mv a5,a5
+  0x1eb4: ld a5,0(a5)
+  0x1eb6: addi a4,a5,8
+  0x1eba: auipc a5,0x0
+  0x1ebe: mv a5,a5
+  0x1ec2: sd a4,0(a5)
+  0x1ec4: auipc a5,0x0
+  0x1ec8: mv a5,a5
+  0x1ecc: ld a5,0(a5)
+  0x1ece: sd a5,-24(s0)
+  0x1ed2: li a0,146
+  0x1ed6: auipc ra,0x0
+  0x1eda: jalr ra
+  0x1ede: auipc a5,0x0
+  0x1ee2: mv a5,a5
+  0x1ee6: ld a5,0(a5)
+  0x1ee8: addi a5,a5,8
+  0x1eea: mv a4,a5
+  0x1eec: ld a5,-24(s0)
+  0x1ef0: sd a4,0(a5)
+  0x1ef2: auipc a5,0x0
+  0x1ef6: mv a5,a5
+  0x1efa: li a4,1
+  0x1efc: sd a4,0(a5)
+  0x1efe: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1f02
+- Instructions:
+  0x1f02: auipc a5,0x0
+  0x1f06: mv a5,a5
+  0x1f0a: ld a4,0(a5)
+  0x1f0c: li a5,146
+  0x1f10: bne a4,a5,1f88 <.L167>
+
+- Edges:
+  NO_JUMP -> 0x1f14
+  JUMP -> 0x1f88
+
+====
+BLOCK 0x1f14
+- Instructions:
+  0x1f14: li a0,146
+  0x1f18: auipc ra,0x0
+  0x1f1c: jalr ra
+  0x1f20: auipc a5,0x0
+  0x1f24: mv a5,a5
+  0x1f28: ld a5,0(a5)
+  0x1f2a: addi a4,a5,8
+  0x1f2e: auipc a5,0x0
+  0x1f32: mv a5,a5
+  0x1f36: sd a4,0(a5)
+  0x1f38: auipc a5,0x0
+  0x1f3c: mv a5,a5
+  0x1f40: ld a5,0(a5)
+  0x1f42: li a4,13
+  0x1f44: sd a4,0(a5)
+  0x1f46: li a0,147
+  0x1f4a: auipc ra,0x0
+  0x1f4e: jalr ra
+  0x1f52: auipc a5,0x0
+  0x1f56: mv a5,a5
+  0x1f5a: ld a5,0(a5)
+  0x1f5c: addi a4,a5,8
+  0x1f60: auipc a5,0x0
+  0x1f64: mv a5,a5
+  0x1f68: sd a4,0(a5)
+  0x1f6a: auipc a5,0x0
+  0x1f6e: mv a5,a5
+  0x1f72: ld a5,0(a5)
+  0x1f74: li a4,14
+  0x1f76: sd a4,0(a5)
+  0x1f78: auipc a5,0x0
+  0x1f7c: mv a5,a5
+  0x1f80: li a4,1
+  0x1f82: sd a4,0(a5)
+  0x1f84: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x1f88
+- Instructions:
+  0x1f88: auipc a5,0x0
+  0x1f8c: mv a5,a5
+  0x1f90: ld a4,0(a5)
+  0x1f92: li a5,147
+  0x1f96: bne a4,a5,200e <.L168>
+
+- Edges:
+  NO_JUMP -> 0x1f9a
+  JUMP -> 0x200e
+
+====
+BLOCK 0x1f9a
+- Instructions:
+  0x1f9a: li a0,147
+  0x1f9e: auipc ra,0x0
+  0x1fa2: jalr ra
+  0x1fa6: auipc a5,0x0
+  0x1faa: mv a5,a5
+  0x1fae: ld a5,0(a5)
+  0x1fb0: addi a4,a5,8
+  0x1fb4: auipc a5,0x0
+  0x1fb8: mv a5,a5
+  0x1fbc: sd a4,0(a5)
+  0x1fbe: auipc a5,0x0
+  0x1fc2: mv a5,a5
+  0x1fc6: ld a5,0(a5)
+  0x1fc8: li a4,13
+  0x1fca: sd a4,0(a5)
+  0x1fcc: li a0,148
+  0x1fd0: auipc ra,0x0
+  0x1fd4: jalr ra
+  0x1fd8: auipc a5,0x0
+  0x1fdc: mv a5,a5
+  0x1fe0: ld a5,0(a5)
+  0x1fe2: addi a4,a5,8
+  0x1fe6: auipc a5,0x0
+  0x1fea: mv a5,a5
+  0x1fee: sd a4,0(a5)
+  0x1ff0: auipc a5,0x0
+  0x1ff4: mv a5,a5
+  0x1ff8: ld a5,0(a5)
+  0x1ffa: li a4,15
+  0x1ffc: sd a4,0(a5)
+  0x1ffe: auipc a5,0x0
+  0x2002: mv a5,a5
+  0x2006: li a4,1
+  0x2008: sd a4,0(a5)
+  0x200a: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x200e
+- Instructions:
+  0x200e: auipc a5,0x0
+  0x2012: mv a5,a5
+  0x2016: ld a4,0(a5)
+  0x2018: li a5,148
+  0x201c: bne a4,a5,2094 <.L169>
+
+- Edges:
+  NO_JUMP -> 0x2020
+  JUMP -> 0x2094
+
+====
+BLOCK 0x2020
+- Instructions:
+  0x2020: li a0,148
+  0x2024: auipc ra,0x0
+  0x2028: jalr ra
+  0x202c: auipc a5,0x0
+  0x2030: mv a5,a5
+  0x2034: ld a5,0(a5)
+  0x2036: addi a4,a5,8
+  0x203a: auipc a5,0x0
+  0x203e: mv a5,a5
+  0x2042: sd a4,0(a5)
+  0x2044: auipc a5,0x0
+  0x2048: mv a5,a5
+  0x204c: ld a5,0(a5)
+  0x204e: li a4,13
+  0x2050: sd a4,0(a5)
+  0x2052: li a0,149
+  0x2056: auipc ra,0x0
+  0x205a: jalr ra
+  0x205e: auipc a5,0x0
+  0x2062: mv a5,a5
+  0x2066: ld a5,0(a5)
+  0x2068: addi a4,a5,8
+  0x206c: auipc a5,0x0
+  0x2070: mv a5,a5
+  0x2074: sd a4,0(a5)
+  0x2076: auipc a5,0x0
+  0x207a: mv a5,a5
+  0x207e: ld a5,0(a5)
+  0x2080: li a4,16
+  0x2082: sd a4,0(a5)
+  0x2084: auipc a5,0x0
+  0x2088: mv a5,a5
+  0x208c: li a4,1
+  0x208e: sd a4,0(a5)
+  0x2090: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2094
+- Instructions:
+  0x2094: auipc a5,0x0
+  0x2098: mv a5,a5
+  0x209c: ld a4,0(a5)
+  0x209e: li a5,149
+  0x20a2: bne a4,a5,211a <.L170>
+
+- Edges:
+  NO_JUMP -> 0x20a6
+  JUMP -> 0x211a
+
+====
+BLOCK 0x20a6
+- Instructions:
+  0x20a6: li a0,149
+  0x20aa: auipc ra,0x0
+  0x20ae: jalr ra
+  0x20b2: auipc a5,0x0
+  0x20b6: mv a5,a5
+  0x20ba: ld a5,0(a5)
+  0x20bc: addi a4,a5,8
+  0x20c0: auipc a5,0x0
+  0x20c4: mv a5,a5
+  0x20c8: sd a4,0(a5)
+  0x20ca: auipc a5,0x0
+  0x20ce: mv a5,a5
+  0x20d2: ld a5,0(a5)
+  0x20d4: li a4,13
+  0x20d6: sd a4,0(a5)
+  0x20d8: li a0,150
+  0x20dc: auipc ra,0x0
+  0x20e0: jalr ra
+  0x20e4: auipc a5,0x0
+  0x20e8: mv a5,a5
+  0x20ec: ld a5,0(a5)
+  0x20ee: addi a4,a5,8
+  0x20f2: auipc a5,0x0
+  0x20f6: mv a5,a5
+  0x20fa: sd a4,0(a5)
+  0x20fc: auipc a5,0x0
+  0x2100: mv a5,a5
+  0x2104: ld a5,0(a5)
+  0x2106: li a4,17
+  0x2108: sd a4,0(a5)
+  0x210a: auipc a5,0x0
+  0x210e: mv a5,a5
+  0x2112: li a4,1
+  0x2114: sd a4,0(a5)
+  0x2116: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x211a
+- Instructions:
+  0x211a: auipc a5,0x0
+  0x211e: mv a5,a5
+  0x2122: ld a4,0(a5)
+  0x2124: li a5,150
+  0x2128: bne a4,a5,21a0 <.L171>
+
+- Edges:
+  NO_JUMP -> 0x212c
+  JUMP -> 0x21a0
+
+====
+BLOCK 0x212c
+- Instructions:
+  0x212c: li a0,150
+  0x2130: auipc ra,0x0
+  0x2134: jalr ra
+  0x2138: auipc a5,0x0
+  0x213c: mv a5,a5
+  0x2140: ld a5,0(a5)
+  0x2142: addi a4,a5,8
+  0x2146: auipc a5,0x0
+  0x214a: mv a5,a5
+  0x214e: sd a4,0(a5)
+  0x2150: auipc a5,0x0
+  0x2154: mv a5,a5
+  0x2158: ld a5,0(a5)
+  0x215a: li a4,13
+  0x215c: sd a4,0(a5)
+  0x215e: li a0,151
+  0x2162: auipc ra,0x0
+  0x2166: jalr ra
+  0x216a: auipc a5,0x0
+  0x216e: mv a5,a5
+  0x2172: ld a5,0(a5)
+  0x2174: addi a4,a5,8
+  0x2178: auipc a5,0x0
+  0x217c: mv a5,a5
+  0x2180: sd a4,0(a5)
+  0x2182: auipc a5,0x0
+  0x2186: mv a5,a5
+  0x218a: ld a5,0(a5)
+  0x218c: li a4,18
+  0x218e: sd a4,0(a5)
+  0x2190: auipc a5,0x0
+  0x2194: mv a5,a5
+  0x2198: li a4,1
+  0x219a: sd a4,0(a5)
+  0x219c: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x21a0
+- Instructions:
+  0x21a0: auipc a5,0x0
+  0x21a4: mv a5,a5
+  0x21a8: ld a4,0(a5)
+  0x21aa: li a5,151
+  0x21ae: bne a4,a5,2226 <.L172>
+
+- Edges:
+  NO_JUMP -> 0x21b2
+  JUMP -> 0x2226
+
+====
+BLOCK 0x21b2
+- Instructions:
+  0x21b2: li a0,151
+  0x21b6: auipc ra,0x0
+  0x21ba: jalr ra
+  0x21be: auipc a5,0x0
+  0x21c2: mv a5,a5
+  0x21c6: ld a5,0(a5)
+  0x21c8: addi a4,a5,8
+  0x21cc: auipc a5,0x0
+  0x21d0: mv a5,a5
+  0x21d4: sd a4,0(a5)
+  0x21d6: auipc a5,0x0
+  0x21da: mv a5,a5
+  0x21de: ld a5,0(a5)
+  0x21e0: li a4,13
+  0x21e2: sd a4,0(a5)
+  0x21e4: li a0,155
+  0x21e8: auipc ra,0x0
+  0x21ec: jalr ra
+  0x21f0: auipc a5,0x0
+  0x21f4: mv a5,a5
+  0x21f8: ld a5,0(a5)
+  0x21fa: addi a4,a5,8
+  0x21fe: auipc a5,0x0
+  0x2202: mv a5,a5
+  0x2206: sd a4,0(a5)
+  0x2208: auipc a5,0x0
+  0x220c: mv a5,a5
+  0x2210: ld a5,0(a5)
+  0x2212: li a4,19
+  0x2214: sd a4,0(a5)
+  0x2216: auipc a5,0x0
+  0x221a: mv a5,a5
+  0x221e: li a4,1
+  0x2220: sd a4,0(a5)
+  0x2222: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2226
+- Instructions:
+  0x2226: auipc a5,0x0
+  0x222a: mv a5,a5
+  0x222e: ld a4,0(a5)
+  0x2230: li a5,152
+  0x2234: bne a4,a5,22ac <.L173>
+
+- Edges:
+  NO_JUMP -> 0x2238
+  JUMP -> 0x22ac
+
+====
+BLOCK 0x2238
+- Instructions:
+  0x2238: li a0,152
+  0x223c: auipc ra,0x0
+  0x2240: jalr ra
+  0x2244: auipc a5,0x0
+  0x2248: mv a5,a5
+  0x224c: ld a5,0(a5)
+  0x224e: addi a4,a5,8
+  0x2252: auipc a5,0x0
+  0x2256: mv a5,a5
+  0x225a: sd a4,0(a5)
+  0x225c: auipc a5,0x0
+  0x2260: mv a5,a5
+  0x2264: ld a5,0(a5)
+  0x2266: li a4,13
+  0x2268: sd a4,0(a5)
+  0x226a: li a0,155
+  0x226e: auipc ra,0x0
+  0x2272: jalr ra
+  0x2276: auipc a5,0x0
+  0x227a: mv a5,a5
+  0x227e: ld a5,0(a5)
+  0x2280: addi a4,a5,8
+  0x2284: auipc a5,0x0
+  0x2288: mv a5,a5
+  0x228c: sd a4,0(a5)
+  0x228e: auipc a5,0x0
+  0x2292: mv a5,a5
+  0x2296: ld a5,0(a5)
+  0x2298: li a4,20
+  0x229a: sd a4,0(a5)
+  0x229c: auipc a5,0x0
+  0x22a0: mv a5,a5
+  0x22a4: li a4,1
+  0x22a6: sd a4,0(a5)
+  0x22a8: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x22ac
+- Instructions:
+  0x22ac: auipc a5,0x0
+  0x22b0: mv a5,a5
+  0x22b4: ld a4,0(a5)
+  0x22b6: li a5,153
+  0x22ba: bne a4,a5,2332 <.L174>
+
+- Edges:
+  NO_JUMP -> 0x22be
+  JUMP -> 0x2332
+
+====
+BLOCK 0x22be
+- Instructions:
+  0x22be: li a0,153
+  0x22c2: auipc ra,0x0
+  0x22c6: jalr ra
+  0x22ca: auipc a5,0x0
+  0x22ce: mv a5,a5
+  0x22d2: ld a5,0(a5)
+  0x22d4: addi a4,a5,8
+  0x22d8: auipc a5,0x0
+  0x22dc: mv a5,a5
+  0x22e0: sd a4,0(a5)
+  0x22e2: auipc a5,0x0
+  0x22e6: mv a5,a5
+  0x22ea: ld a5,0(a5)
+  0x22ec: li a4,13
+  0x22ee: sd a4,0(a5)
+  0x22f0: li a0,155
+  0x22f4: auipc ra,0x0
+  0x22f8: jalr ra
+  0x22fc: auipc a5,0x0
+  0x2300: mv a5,a5
+  0x2304: ld a5,0(a5)
+  0x2306: addi a4,a5,8
+  0x230a: auipc a5,0x0
+  0x230e: mv a5,a5
+  0x2312: sd a4,0(a5)
+  0x2314: auipc a5,0x0
+  0x2318: mv a5,a5
+  0x231c: ld a5,0(a5)
+  0x231e: li a4,21
+  0x2320: sd a4,0(a5)
+  0x2322: auipc a5,0x0
+  0x2326: mv a5,a5
+  0x232a: li a4,1
+  0x232c: sd a4,0(a5)
+  0x232e: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2332
+- Instructions:
+  0x2332: auipc a5,0x0
+  0x2336: mv a5,a5
+  0x233a: ld a4,0(a5)
+  0x233c: li a5,154
+  0x2340: bne a4,a5,23b8 <.L175>
+
+- Edges:
+  NO_JUMP -> 0x2344
+  JUMP -> 0x23b8
+
+====
+BLOCK 0x2344
+- Instructions:
+  0x2344: li a0,154
+  0x2348: auipc ra,0x0
+  0x234c: jalr ra
+  0x2350: auipc a5,0x0
+  0x2354: mv a5,a5
+  0x2358: ld a5,0(a5)
+  0x235a: addi a4,a5,8
+  0x235e: auipc a5,0x0
+  0x2362: mv a5,a5
+  0x2366: sd a4,0(a5)
+  0x2368: auipc a5,0x0
+  0x236c: mv a5,a5
+  0x2370: ld a5,0(a5)
+  0x2372: li a4,13
+  0x2374: sd a4,0(a5)
+  0x2376: li a0,155
+  0x237a: auipc ra,0x0
+  0x237e: jalr ra
+  0x2382: auipc a5,0x0
+  0x2386: mv a5,a5
+  0x238a: ld a5,0(a5)
+  0x238c: addi a4,a5,8
+  0x2390: auipc a5,0x0
+  0x2394: mv a5,a5
+  0x2398: sd a4,0(a5)
+  0x239a: auipc a5,0x0
+  0x239e: mv a5,a5
+  0x23a2: ld a5,0(a5)
+  0x23a4: li a4,22
+  0x23a6: sd a4,0(a5)
+  0x23a8: auipc a5,0x0
+  0x23ac: mv a5,a5
+  0x23b0: li a4,1
+  0x23b2: sd a4,0(a5)
+  0x23b4: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x23b8
+- Instructions:
+  0x23b8: auipc a5,0x0
+  0x23bc: mv a5,a5
+  0x23c0: ld a4,0(a5)
+  0x23c2: li a5,155
+  0x23c6: bne a4,a5,243e <.L176>
+
+- Edges:
+  NO_JUMP -> 0x23ca
+  JUMP -> 0x243e
+
+====
+BLOCK 0x23ca
+- Instructions:
+  0x23ca: li a0,155
+  0x23ce: auipc ra,0x0
+  0x23d2: jalr ra
+  0x23d6: auipc a5,0x0
+  0x23da: mv a5,a5
+  0x23de: ld a5,0(a5)
+  0x23e0: addi a4,a5,8
+  0x23e4: auipc a5,0x0
+  0x23e8: mv a5,a5
+  0x23ec: sd a4,0(a5)
+  0x23ee: auipc a5,0x0
+  0x23f2: mv a5,a5
+  0x23f6: ld a5,0(a5)
+  0x23f8: li a4,13
+  0x23fa: sd a4,0(a5)
+  0x23fc: li a0,157
+  0x2400: auipc ra,0x0
+  0x2404: jalr ra
+  0x2408: auipc a5,0x0
+  0x240c: mv a5,a5
+  0x2410: ld a5,0(a5)
+  0x2412: addi a4,a5,8
+  0x2416: auipc a5,0x0
+  0x241a: mv a5,a5
+  0x241e: sd a4,0(a5)
+  0x2420: auipc a5,0x0
+  0x2424: mv a5,a5
+  0x2428: ld a5,0(a5)
+  0x242a: li a4,23
+  0x242c: sd a4,0(a5)
+  0x242e: auipc a5,0x0
+  0x2432: mv a5,a5
+  0x2436: li a4,1
+  0x2438: sd a4,0(a5)
+  0x243a: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x243e
+- Instructions:
+  0x243e: auipc a5,0x0
+  0x2442: mv a5,a5
+  0x2446: ld a4,0(a5)
+  0x2448: li a5,156
+  0x244c: bne a4,a5,24c4 <.L177>
+
+- Edges:
+  NO_JUMP -> 0x2450
+  JUMP -> 0x24c4
+
+====
+BLOCK 0x2450
+- Instructions:
+  0x2450: li a0,156
+  0x2454: auipc ra,0x0
+  0x2458: jalr ra
+  0x245c: auipc a5,0x0
+  0x2460: mv a5,a5
+  0x2464: ld a5,0(a5)
+  0x2466: addi a4,a5,8
+  0x246a: auipc a5,0x0
+  0x246e: mv a5,a5
+  0x2472: sd a4,0(a5)
+  0x2474: auipc a5,0x0
+  0x2478: mv a5,a5
+  0x247c: ld a5,0(a5)
+  0x247e: li a4,13
+  0x2480: sd a4,0(a5)
+  0x2482: li a0,157
+  0x2486: auipc ra,0x0
+  0x248a: jalr ra
+  0x248e: auipc a5,0x0
+  0x2492: mv a5,a5
+  0x2496: ld a5,0(a5)
+  0x2498: addi a4,a5,8
+  0x249c: auipc a5,0x0
+  0x24a0: mv a5,a5
+  0x24a4: sd a4,0(a5)
+  0x24a6: auipc a5,0x0
+  0x24aa: mv a5,a5
+  0x24ae: ld a5,0(a5)
+  0x24b0: li a4,24
+  0x24b2: sd a4,0(a5)
+  0x24b4: auipc a5,0x0
+  0x24b8: mv a5,a5
+  0x24bc: li a4,1
+  0x24be: sd a4,0(a5)
+  0x24c0: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x24c4
+- Instructions:
+  0x24c4: auipc a5,0x0
+  0x24c8: mv a5,a5
+  0x24cc: ld a4,0(a5)
+  0x24ce: li a5,157
+  0x24d2: bne a4,a5,25f4 <.L178>
+
+- Edges:
+  NO_JUMP -> 0x24d6
+  JUMP -> 0x25f4
+
+====
+BLOCK 0x24d6
+- Instructions:
+  0x24d6: li a0,157
+  0x24da: auipc ra,0x0
+  0x24de: jalr ra
+  0x24e2: auipc a5,0x0
+  0x24e6: mv a5,a5
+  0x24ea: ld a5,0(a5)
+  0x24ec: addi a4,a5,8
+  0x24f0: auipc a5,0x0
+  0x24f4: mv a5,a5
+  0x24f8: sd a4,0(a5)
+  0x24fa: auipc a5,0x0
+  0x24fe: mv a5,a5
+  0x2502: ld a5,0(a5)
+  0x2504: li a4,13
+  0x2506: sd a4,0(a5)
+  0x2508: li a0,159
+  0x250c: auipc ra,0x0
+  0x2510: jalr ra
+  0x2514: auipc a5,0x0
+  0x2518: mv a5,a5
+  0x251c: ld a4,-40(s0)
+  0x2520: sd a4,0(a5)
+  0x2522: auipc a5,0x0
+  0x2526: mv a5,a5
+  0x252a: ld a4,0(a5)
+  0x252c: li a5,2
+  0x252e: bge a5,a4,25ca <.L179>
+
+- Edges:
+  NO_JUMP -> 0x2532
+  JUMP -> 0x25ca
+
+====
+BLOCK 0x2532
+- Instructions:
+  0x2532: auipc a5,0x0
+  0x2536: mv a5,a5
+  0x253a: ld a5,0(a5)
+  0x253c: addi a4,a5,8
+  0x2540: auipc a5,0x0
+  0x2544: mv a5,a5
+  0x2548: sd a4,0(a5)
+  0x254a: auipc a5,0x0
+  0x254e: mv a5,a5
+  0x2552: ld a5,0(a5)
+  0x2554: li a4,13
+  0x2556: sd a4,0(a5)
+  0x2558: auipc a5,0x0
+  0x255c: mv a5,a5
+  0x2560: ld a5,0(a5)
+  0x2562: addi a4,a5,8
+  0x2566: auipc a5,0x0
+  0x256a: mv a5,a5
+  0x256e: sd a4,0(a5)
+  0x2570: auipc a5,0x0
+  0x2574: mv a5,a5
+  0x2578: ld a5,0(a5)
+  0x257a: li a4,1
+  0x257c: sd a4,0(a5)
+  0x257e: auipc a5,0x0
+  0x2582: mv a5,a5
+  0x2586: ld a5,0(a5)
+  0x2588: addi a4,a5,8
+  0x258c: auipc a5,0x0
+  0x2590: mv a5,a5
+  0x2594: sd a4,0(a5)
+  0x2596: auipc a5,0x0
+  0x259a: mv a5,a5
+  0x259e: ld a5,0(a5)
+  0x25a0: li a4,8
+  0x25a2: sd a4,0(a5)
+  0x25a4: auipc a5,0x0
+  0x25a8: mv a5,a5
+  0x25ac: ld a5,0(a5)
+  0x25ae: addi a4,a5,8
+  0x25b2: auipc a5,0x0
+  0x25b6: mv a5,a5
+  0x25ba: sd a4,0(a5)
+  0x25bc: auipc a5,0x0
+  0x25c0: mv a5,a5
+  0x25c4: ld a5,0(a5)
+  0x25c6: li a4,27
+  0x25c8: sd a4,0(a5)
+
+- Edges:
+  NO_JUMP -> 0x25ca
+
+====
+BLOCK 0x25ca
+- Instructions:
+  0x25ca: auipc a5,0x0
+  0x25ce: mv a5,a5
+  0x25d2: ld a5,0(a5)
+  0x25d4: addi a4,a5,8
+  0x25d8: auipc a5,0x0
+  0x25dc: mv a5,a5
+  0x25e0: sd a4,0(a5)
+  0x25e2: auipc a5,0x0
+  0x25e6: mv a5,a5
+  0x25ea: ld a5,0(a5)
+  0x25ec: li a4,25
+  0x25ee: sd a4,0(a5)
+  0x25f0: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x25f4
+- Instructions:
+  0x25f4: auipc a5,0x0
+  0x25f8: mv a5,a5
+  0x25fc: ld a4,0(a5)
+  0x25fe: li a5,158
+  0x2602: bne a4,a5,283a <.L180>
+
+- Edges:
+  NO_JUMP -> 0x2606
+  JUMP -> 0x283a
+
+====
+BLOCK 0x2606
+- Instructions:
+  0x2606: li a0,158
+  0x260a: auipc ra,0x0
+  0x260e: jalr ra
+  0x2612: auipc a5,0x0
+  0x2616: mv a5,a5
+  0x261a: ld a5,0(a5)
+  0x261c: addi a4,a5,8
+  0x2620: auipc a5,0x0
+  0x2624: mv a5,a5
+  0x2628: sd a4,0(a5)
+  0x262a: auipc a5,0x0
+  0x262e: mv a5,a5
+  0x2632: ld a5,0(a5)
+  0x2634: li a4,13
+  0x2636: sd a4,0(a5)
+  0x2638: li a0,159
+  0x263c: auipc ra,0x0
+  0x2640: jalr ra
+  0x2644: ld a4,-40(s0)
+  0x2648: li a5,2
+  0x264a: bge a5,a4,272c <.L181>
+
+- Edges:
+  NO_JUMP -> 0x264e
+  JUMP -> 0x272c
+
+====
+BLOCK 0x264e
+- Instructions:
+  0x264e: auipc a5,0x0
+  0x2652: mv a5,a5
+  0x2656: ld a5,0(a5)
+  0x2658: ld a4,-40(s0)
+  0x265c: bne a4,a5,272c <.L181>
+
+- Edges:
+  NO_JUMP -> 0x2660
+  JUMP -> 0x272c
+
+====
+BLOCK 0x2660
+- Instructions:
+  0x2660: auipc a5,0x0
+  0x2664: mv a5,a5
+  0x2668: ld a5,0(a5)
+  0x266a: addi a4,a5,8
+  0x266e: auipc a5,0x0
+  0x2672: mv a5,a5
+  0x2676: sd a4,0(a5)
+  0x2678: auipc a5,0x0
+  0x267c: mv a5,a5
+  0x2680: ld a5,0(a5)
+  0x2682: li a4,26
+  0x2684: sd a4,0(a5)
+  0x2686: auipc a5,0x0
+  0x268a: mv a5,a5
+  0x268e: ld a5,0(a5)
+  0x2690: addi a4,a5,8
+  0x2694: auipc a5,0x0
+  0x2698: mv a5,a5
+  0x269c: sd a4,0(a5)
+  0x269e: auipc a5,0x0
+  0x26a2: mv a5,a5
+  0x26a6: ld a5,0(a5)
+  0x26a8: li a4,13
+  0x26aa: sd a4,0(a5)
+  0x26ac: auipc a5,0x0
+  0x26b0: mv a5,a5
+  0x26b4: ld a5,0(a5)
+  0x26b6: addi a4,a5,8
+  0x26ba: auipc a5,0x0
+  0x26be: mv a5,a5
+  0x26c2: sd a4,0(a5)
+  0x26c4: auipc a5,0x0
+  0x26c8: mv a5,a5
+  0x26cc: ld a5,0(a5)
+  0x26ce: li a4,1
+  0x26d0: sd a4,0(a5)
+  0x26d2: auipc a5,0x0
+  0x26d6: mv a5,a5
+  0x26da: ld a5,0(a5)
+  0x26dc: addi a4,a5,8
+  0x26e0: auipc a5,0x0
+  0x26e4: mv a5,a5
+  0x26e8: sd a4,0(a5)
+  0x26ea: auipc a5,0x0
+  0x26ee: mv a5,a5
+  0x26f2: ld a5,0(a5)
+  0x26f4: li a4,8
+  0x26f6: sd a4,0(a5)
+  0x26f8: auipc a5,0x0
+  0x26fc: mv a5,a5
+  0x2700: ld a5,0(a5)
+  0x2702: addi a4,a5,8
+  0x2706: auipc a5,0x0
+  0x270a: mv a5,a5
+  0x270e: sd a4,0(a5)
+  0x2710: auipc a5,0x0
+  0x2714: mv a5,a5
+  0x2718: ld a5,0(a5)
+  0x271a: li a4,28
+  0x271c: sd a4,0(a5)
+  0x271e: auipc a5,0x0
+  0x2722: mv a5,a5
+  0x2726: li a4,1
+  0x2728: sd a4,0(a5)
+  0x272a: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x272c
+- Instructions:
+  0x272c: ld a4,-40(s0)
+  0x2730: li a5,2
+  0x2732: bge a5,a4,2804 <.L183>
+
+- Edges:
+  NO_JUMP -> 0x2736
+  JUMP -> 0x2804
+
+====
+BLOCK 0x2736
+- Instructions:
+  0x2736: auipc a5,0x0
+  0x273a: mv a5,a5
+  0x273e: ld a5,0(a5)
+  0x2740: addi a4,a5,8
+  0x2744: auipc a5,0x0
+  0x2748: mv a5,a5
+  0x274c: sd a4,0(a5)
+  0x274e: auipc a5,0x0
+  0x2752: mv a5,a5
+  0x2756: ld a5,0(a5)
+  0x2758: li a4,13
+  0x275a: sd a4,0(a5)
+  0x275c: auipc a5,0x0
+  0x2760: mv a5,a5
+  0x2764: ld a5,0(a5)
+  0x2766: addi a4,a5,8
+  0x276a: auipc a5,0x0
+  0x276e: mv a5,a5
+  0x2772: sd a4,0(a5)
+  0x2774: auipc a5,0x0
+  0x2778: mv a5,a5
+  0x277c: ld a5,0(a5)
+  0x277e: li a4,1
+  0x2780: sd a4,0(a5)
+  0x2782: auipc a5,0x0
+  0x2786: mv a5,a5
+  0x278a: ld a5,0(a5)
+  0x278c: addi a4,a5,8
+  0x2790: auipc a5,0x0
+  0x2794: mv a5,a5
+  0x2798: sd a4,0(a5)
+  0x279a: auipc a5,0x0
+  0x279e: mv a5,a5
+  0x27a2: ld a5,0(a5)
+  0x27a4: li a4,8
+  0x27a6: sd a4,0(a5)
+  0x27a8: auipc a5,0x0
+  0x27ac: mv a5,a5
+  0x27b0: ld a5,0(a5)
+  0x27b2: addi a4,a5,8
+  0x27b6: auipc a5,0x0
+  0x27ba: mv a5,a5
+  0x27be: sd a4,0(a5)
+  0x27c0: auipc a5,0x0
+  0x27c4: mv a5,a5
+  0x27c8: ld a5,0(a5)
+  0x27ca: li a4,27
+  0x27cc: sd a4,0(a5)
+  0x27ce: auipc a5,0x0
+  0x27d2: mv a5,a5
+  0x27d6: ld a5,0(a5)
+  0x27d8: addi a4,a5,8
+  0x27dc: auipc a5,0x0
+  0x27e0: mv a5,a5
+  0x27e4: sd a4,0(a5)
+  0x27e6: auipc a5,0x0
+  0x27ea: mv a5,a5
+  0x27ee: ld a5,0(a5)
+  0x27f0: li a4,26
+  0x27f2: sd a4,0(a5)
+  0x27f4: auipc a5,0x0
+  0x27f8: mv a5,a5
+  0x27fc: ld a4,-40(s0)
+  0x2800: sd a4,0(a5)
+  0x2802: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2804
+- Instructions:
+  0x2804: auipc a5,0x0
+  0x2808: mv a5,a5
+  0x280c: ld a5,0(a5)
+  0x280e: addi a4,a5,8
+  0x2812: auipc a5,0x0
+  0x2816: mv a5,a5
+  0x281a: sd a4,0(a5)
+  0x281c: auipc a5,0x0
+  0x2820: mv a5,a5
+  0x2824: ld a5,0(a5)
+  0x2826: li a4,26
+  0x2828: sd a4,0(a5)
+  0x282a: auipc a5,0x0
+  0x282e: mv a5,a5
+  0x2832: ld a4,-40(s0)
+  0x2836: sd a4,0(a5)
+  0x2838: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x283a
+- Instructions:
+  0x283a: auipc a5,0x0
+  0x283e: mv a5,a5
+  0x2842: ld a4,0(a5)
+  0x2844: li a5,159
+  0x2848: bne a4,a5,28c0 <.L184>
+
+- Edges:
+  NO_JUMP -> 0x284c
+  JUMP -> 0x28c0
+
+====
+BLOCK 0x284c
+- Instructions:
+  0x284c: li a0,159
+  0x2850: auipc ra,0x0
+  0x2854: jalr ra
+  0x2858: auipc a5,0x0
+  0x285c: mv a5,a5
+  0x2860: ld a5,0(a5)
+  0x2862: addi a4,a5,8
+  0x2866: auipc a5,0x0
+  0x286a: mv a5,a5
+  0x286e: sd a4,0(a5)
+  0x2870: auipc a5,0x0
+  0x2874: mv a5,a5
+  0x2878: ld a5,0(a5)
+  0x287a: li a4,13
+  0x287c: sd a4,0(a5)
+  0x287e: li a0,162
+  0x2882: auipc ra,0x0
+  0x2886: jalr ra
+  0x288a: auipc a5,0x0
+  0x288e: mv a5,a5
+  0x2892: ld a5,0(a5)
+  0x2894: addi a4,a5,8
+  0x2898: auipc a5,0x0
+  0x289c: mv a5,a5
+  0x28a0: sd a4,0(a5)
+  0x28a2: auipc a5,0x0
+  0x28a6: mv a5,a5
+  0x28aa: ld a5,0(a5)
+  0x28ac: li a4,27
+  0x28ae: sd a4,0(a5)
+  0x28b0: auipc a5,0x0
+  0x28b4: mv a5,a5
+  0x28b8: ld a4,-40(s0)
+  0x28bc: sd a4,0(a5)
+  0x28be: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x28c0
+- Instructions:
+  0x28c0: auipc a5,0x0
+  0x28c4: mv a5,a5
+  0x28c8: ld a4,0(a5)
+  0x28ca: li a5,160
+  0x28ce: bne a4,a5,2946 <.L185>
+
+- Edges:
+  NO_JUMP -> 0x28d2
+  JUMP -> 0x2946
+
+====
+BLOCK 0x28d2
+- Instructions:
+  0x28d2: li a0,160
+  0x28d6: auipc ra,0x0
+  0x28da: jalr ra
+  0x28de: auipc a5,0x0
+  0x28e2: mv a5,a5
+  0x28e6: ld a5,0(a5)
+  0x28e8: addi a4,a5,8
+  0x28ec: auipc a5,0x0
+  0x28f0: mv a5,a5
+  0x28f4: sd a4,0(a5)
+  0x28f6: auipc a5,0x0
+  0x28fa: mv a5,a5
+  0x28fe: ld a5,0(a5)
+  0x2900: li a4,13
+  0x2902: sd a4,0(a5)
+  0x2904: li a0,162
+  0x2908: auipc ra,0x0
+  0x290c: jalr ra
+  0x2910: auipc a5,0x0
+  0x2914: mv a5,a5
+  0x2918: ld a5,0(a5)
+  0x291a: addi a4,a5,8
+  0x291e: auipc a5,0x0
+  0x2922: mv a5,a5
+  0x2926: sd a4,0(a5)
+  0x2928: auipc a5,0x0
+  0x292c: mv a5,a5
+  0x2930: ld a5,0(a5)
+  0x2932: li a4,28
+  0x2934: sd a4,0(a5)
+  0x2936: auipc a5,0x0
+  0x293a: mv a5,a5
+  0x293e: ld a4,-40(s0)
+  0x2942: sd a4,0(a5)
+  0x2944: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2946
+- Instructions:
+  0x2946: auipc a5,0x0
+  0x294a: mv a5,a5
+  0x294e: ld a4,0(a5)
+  0x2950: li a5,161
+  0x2954: bne a4,a5,29cc <.L186>
+
+- Edges:
+  NO_JUMP -> 0x2958
+  JUMP -> 0x29cc
+
+====
+BLOCK 0x2958
+- Instructions:
+  0x2958: li a0,161
+  0x295c: auipc ra,0x0
+  0x2960: jalr ra
+  0x2964: auipc a5,0x0
+  0x2968: mv a5,a5
+  0x296c: ld a5,0(a5)
+  0x296e: addi a4,a5,8
+  0x2972: auipc a5,0x0
+  0x2976: mv a5,a5
+  0x297a: sd a4,0(a5)
+  0x297c: auipc a5,0x0
+  0x2980: mv a5,a5
+  0x2984: ld a5,0(a5)
+  0x2986: li a4,13
+  0x2988: sd a4,0(a5)
+  0x298a: li a0,162
+  0x298e: auipc ra,0x0
+  0x2992: jalr ra
+  0x2996: auipc a5,0x0
+  0x299a: mv a5,a5
+  0x299e: ld a5,0(a5)
+  0x29a0: addi a4,a5,8
+  0x29a4: auipc a5,0x0
+  0x29a8: mv a5,a5
+  0x29ac: sd a4,0(a5)
+  0x29ae: auipc a5,0x0
+  0x29b2: mv a5,a5
+  0x29b6: ld a5,0(a5)
+  0x29b8: li a4,29
+  0x29ba: sd a4,0(a5)
+  0x29bc: auipc a5,0x0
+  0x29c0: mv a5,a5
+  0x29c4: ld a4,-40(s0)
+  0x29c8: sd a4,0(a5)
+  0x29ca: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x29cc
+- Instructions:
+  0x29cc: auipc a5,0x0
+  0x29d0: mv a5,a5
+  0x29d4: ld a4,0(a5)
+  0x29d6: li a5,162
+  0x29da: beq a4,a5,29f0 <.L187>
+
+- Edges:
+  NO_JUMP -> 0x29de
+  JUMP -> 0x29f0
+
+====
+BLOCK 0x29de
+- Instructions:
+  0x29de: auipc a5,0x0
+  0x29e2: mv a5,a5
+  0x29e6: ld a4,0(a5)
+  0x29e8: li a5,163
+  0x29ec: bne a4,a5,2c76 <.L188>
+
+- Edges:
+  NO_JUMP -> 0x29f0
+  JUMP -> 0x2c76
+
+====
+BLOCK 0x29f0
+- Instructions:
+  0x29f0: auipc a5,0x0
+  0x29f4: mv a5,a5
+  0x29f8: ld a5,0(a5)
+  0x29fa: ld a4,0(a5)
+  0x29fc: li a5,9
+  0x29fe: bne a4,a5,2a38 <.L189>
+
+- Edges:
+  NO_JUMP -> 0x2a02
+  JUMP -> 0x2a38
+
+====
+BLOCK 0x2a02
+- Instructions:
+  0x2a02: auipc a5,0x0
+  0x2a06: mv a5,a5
+  0x2a0a: ld a5,0(a5)
+  0x2a0c: li a4,13
+  0x2a0e: sd a4,0(a5)
+  0x2a10: auipc a5,0x0
+  0x2a14: mv a5,a5
+  0x2a18: ld a5,0(a5)
+  0x2a1a: addi a4,a5,8
+  0x2a1e: auipc a5,0x0
+  0x2a22: mv a5,a5
+  0x2a26: sd a4,0(a5)
+  0x2a28: auipc a5,0x0
+  0x2a2c: mv a5,a5
+  0x2a30: ld a5,0(a5)
+  0x2a32: li a4,9
+  0x2a34: sd a4,0(a5)
+  0x2a36: j 2aa6 <.L190>
+
+- Edges:
+  JUMP -> 0x2aa6
+
+====
+BLOCK 0x2a38
+- Instructions:
+  0x2a38: auipc a5,0x0
+  0x2a3c: mv a5,a5
+  0x2a40: ld a5,0(a5)
+  0x2a42: ld a4,0(a5)
+  0x2a44: li a5,10
+  0x2a46: bne a4,a5,2a80 <.L191>
+
+- Edges:
+  NO_JUMP -> 0x2a4a
+  JUMP -> 0x2a80
+
+====
+BLOCK 0x2a4a
+- Instructions:
+  0x2a4a: auipc a5,0x0
+  0x2a4e: mv a5,a5
+  0x2a52: ld a5,0(a5)
+  0x2a54: li a4,13
+  0x2a56: sd a4,0(a5)
+  0x2a58: auipc a5,0x0
+  0x2a5c: mv a5,a5
+  0x2a60: ld a5,0(a5)
+  0x2a62: addi a4,a5,8
+  0x2a66: auipc a5,0x0
+  0x2a6a: mv a5,a5
+  0x2a6e: sd a4,0(a5)
+  0x2a70: auipc a5,0x0
+  0x2a74: mv a5,a5
+  0x2a78: ld a5,0(a5)
+  0x2a7a: li a4,10
+  0x2a7c: sd a4,0(a5)
+  0x2a7e: j 2aa6 <.L190>
+
+- Edges:
+  JUMP -> 0x2aa6
+
+====
+BLOCK 0x2a80
+- Instructions:
+  0x2a80: auipc a5,0x0
+  0x2a84: mv a5,a5
+  0x2a88: ld a5,0(a5)
+  0x2a8a: mv a1,a5
+  0x2a8c: auipc a0,0x0
+  0x2a90: mv a0,a0
+  0x2a94: auipc ra,0x0
+  0x2a98: jalr ra
+  0x2a9c: li a0,-1
+  0x2a9e: auipc ra,0x0
+  0x2aa2: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x2aa6
+
+====
+BLOCK 0x2aa6
+- Instructions:
+  0x2aa6: auipc a5,0x0
+  0x2aaa: mv a5,a5
+  0x2aae: ld a5,0(a5)
+  0x2ab0: addi a4,a5,8
+  0x2ab4: auipc a5,0x0
+  0x2ab8: mv a5,a5
+  0x2abc: sd a4,0(a5)
+  0x2abe: auipc a5,0x0
+  0x2ac2: mv a5,a5
+  0x2ac6: ld a5,0(a5)
+  0x2ac8: li a4,13
+  0x2aca: sd a4,0(a5)
+  0x2acc: auipc a5,0x0
+  0x2ad0: mv a5,a5
+  0x2ad4: ld a5,0(a5)
+  0x2ad6: addi a4,a5,8
+  0x2ada: auipc a5,0x0
+  0x2ade: mv a5,a5
+  0x2ae2: sd a4,0(a5)
+  0x2ae4: auipc a5,0x0
+  0x2ae8: mv a5,a5
+  0x2aec: ld a5,0(a5)
+  0x2aee: li a4,1
+  0x2af0: sd a4,0(a5)
+  0x2af2: auipc a5,0x0
+  0x2af6: mv a5,a5
+  0x2afa: ld a4,0(a5)
+  0x2afc: li a5,2
+  0x2afe: bge a5,a4,2b06 <.L192>
+
+- Edges:
+  NO_JUMP -> 0x2b02
+  JUMP -> 0x2b06
+
+====
+BLOCK 0x2b02
+- Instructions:
+  0x2b02: li a5,8
+  0x2b04: j 2b08 <.L193>
+
+- Edges:
+  JUMP -> 0x2b08
+
+====
+BLOCK 0x2b06
+- Instructions:
+  0x2b06: li a5,1
+
+- Edges:
+  NO_JUMP -> 0x2b08
+
+====
+BLOCK 0x2b08
+- Instructions:
+  0x2b08: auipc a4,0x0
+  0x2b0c: mv a4,a4
+  0x2b10: ld a4,0(a4)
+  0x2b12: addi a3,a4,8
+  0x2b16: auipc a4,0x0
+  0x2b1a: mv a4,a4
+  0x2b1e: sd a3,0(a4)
+  0x2b20: auipc a4,0x0
+  0x2b24: mv a4,a4
+  0x2b28: ld a4,0(a4)
+  0x2b2a: sd a5,0(a4)
+  0x2b2c: auipc a5,0x0
+  0x2b30: mv a5,a5
+  0x2b34: ld a4,0(a5)
+  0x2b36: li a5,162
+  0x2b3a: bne a4,a5,2b42 <.L194>
+
+- Edges:
+  NO_JUMP -> 0x2b3e
+  JUMP -> 0x2b42
+
+====
+BLOCK 0x2b3e
+- Instructions:
+  0x2b3e: li a5,25
+  0x2b40: j 2b44 <.L195>
+
+- Edges:
+  JUMP -> 0x2b44
+
+====
+BLOCK 0x2b42
+- Instructions:
+  0x2b42: li a5,26
+
+- Edges:
+  NO_JUMP -> 0x2b44
+
+====
+BLOCK 0x2b44
+- Instructions:
+  0x2b44: auipc a4,0x0
+  0x2b48: mv a4,a4
+  0x2b4c: ld a4,0(a4)
+  0x2b4e: addi a3,a4,8
+  0x2b52: auipc a4,0x0
+  0x2b56: mv a4,a4
+  0x2b5a: sd a3,0(a4)
+  0x2b5c: auipc a4,0x0
+  0x2b60: mv a4,a4
+  0x2b64: ld a4,0(a4)
+  0x2b66: sd a5,0(a4)
+  0x2b68: auipc a5,0x0
+  0x2b6c: mv a5,a5
+  0x2b70: ld a5,0(a5)
+  0x2b72: bnez a5,2b78 <.L196>
+
+- Edges:
+  NO_JUMP -> 0x2b74
+  JUMP -> 0x2b78
+
+====
+BLOCK 0x2b74
+- Instructions:
+  0x2b74: li a5,12
+  0x2b76: j 2b7a <.L197>
+
+- Edges:
+  JUMP -> 0x2b7a
+
+====
+BLOCK 0x2b78
+- Instructions:
+  0x2b78: li a5,11
+
+- Edges:
+  NO_JUMP -> 0x2b7a
+
+====
+BLOCK 0x2b7a
+- Instructions:
+  0x2b7a: auipc a4,0x0
+  0x2b7e: mv a4,a4
+  0x2b82: ld a4,0(a4)
+  0x2b84: addi a3,a4,8
+  0x2b88: auipc a4,0x0
+  0x2b8c: mv a4,a4
+  0x2b90: sd a3,0(a4)
+  0x2b92: auipc a4,0x0
+  0x2b96: mv a4,a4
+  0x2b9a: ld a4,0(a4)
+  0x2b9c: sd a5,0(a4)
+  0x2b9e: auipc a5,0x0
+  0x2ba2: mv a5,a5
+  0x2ba6: ld a5,0(a5)
+  0x2ba8: addi a4,a5,8
+  0x2bac: auipc a5,0x0
+  0x2bb0: mv a5,a5
+  0x2bb4: sd a4,0(a5)
+  0x2bb6: auipc a5,0x0
+  0x2bba: mv a5,a5
+  0x2bbe: ld a5,0(a5)
+  0x2bc0: li a4,13
+  0x2bc2: sd a4,0(a5)
+  0x2bc4: auipc a5,0x0
+  0x2bc8: mv a5,a5
+  0x2bcc: ld a5,0(a5)
+  0x2bce: addi a4,a5,8
+  0x2bd2: auipc a5,0x0
+  0x2bd6: mv a5,a5
+  0x2bda: sd a4,0(a5)
+  0x2bdc: auipc a5,0x0
+  0x2be0: mv a5,a5
+  0x2be4: ld a5,0(a5)
+  0x2be6: li a4,1
+  0x2be8: sd a4,0(a5)
+  0x2bea: auipc a5,0x0
+  0x2bee: mv a5,a5
+  0x2bf2: ld a4,0(a5)
+  0x2bf4: li a5,2
+  0x2bf6: bge a5,a4,2bfe <.L198>
+
+- Edges:
+  NO_JUMP -> 0x2bfa
+  JUMP -> 0x2bfe
+
+====
+BLOCK 0x2bfa
+- Instructions:
+  0x2bfa: li a5,8
+  0x2bfc: j 2c00 <.L199>
+
+- Edges:
+  JUMP -> 0x2c00
+
+====
+BLOCK 0x2bfe
+- Instructions:
+  0x2bfe: li a5,1
+
+- Edges:
+  NO_JUMP -> 0x2c00
+
+====
+BLOCK 0x2c00
+- Instructions:
+  0x2c00: auipc a4,0x0
+  0x2c04: mv a4,a4
+  0x2c08: ld a4,0(a4)
+  0x2c0a: addi a3,a4,8
+  0x2c0e: auipc a4,0x0
+  0x2c12: mv a4,a4
+  0x2c16: sd a3,0(a4)
+  0x2c18: auipc a4,0x0
+  0x2c1c: mv a4,a4
+  0x2c20: ld a4,0(a4)
+  0x2c22: sd a5,0(a4)
+  0x2c24: auipc a5,0x0
+  0x2c28: mv a5,a5
+  0x2c2c: ld a4,0(a5)
+  0x2c2e: li a5,162
+  0x2c32: bne a4,a5,2c3a <.L200>
+
+- Edges:
+  NO_JUMP -> 0x2c36
+  JUMP -> 0x2c3a
+
+====
+BLOCK 0x2c36
+- Instructions:
+  0x2c36: li a5,26
+  0x2c38: j 2c3c <.L201>
+
+- Edges:
+  JUMP -> 0x2c3c
+
+====
+BLOCK 0x2c3a
+- Instructions:
+  0x2c3a: li a5,25
+
+- Edges:
+  NO_JUMP -> 0x2c3c
+
+====
+BLOCK 0x2c3c
+- Instructions:
+  0x2c3c: auipc a4,0x0
+  0x2c40: mv a4,a4
+  0x2c44: ld a4,0(a4)
+  0x2c46: addi a3,a4,8
+  0x2c4a: auipc a4,0x0
+  0x2c4e: mv a4,a4
+  0x2c52: sd a3,0(a4)
+  0x2c54: auipc a4,0x0
+  0x2c58: mv a4,a4
+  0x2c5c: ld a4,0(a4)
+  0x2c5e: sd a5,0(a4)
+  0x2c60: auipc a5,0x0
+  0x2c64: mv a5,a5
+  0x2c68: ld a5,0(a5)
+  0x2c6a: mv a0,a5
+  0x2c6c: auipc ra,0x0
+  0x2c70: jalr ra
+  0x2c74: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2c76
+- Instructions:
+  0x2c76: auipc a5,0x0
+  0x2c7a: mv a5,a5
+  0x2c7e: ld a4,0(a5)
+  0x2c80: li a5,164
+  0x2c84: bne a4,a5,2e16 <.L202>
+
+- Edges:
+  NO_JUMP -> 0x2c88
+  JUMP -> 0x2e16
+
+====
+BLOCK 0x2c88
+- Instructions:
+  0x2c88: li a0,164
+  0x2c8c: auipc ra,0x0
+  0x2c90: jalr ra
+  0x2c94: auipc a5,0x0
+  0x2c98: mv a5,a5
+  0x2c9c: ld a5,0(a5)
+  0x2c9e: addi a4,a5,8
+  0x2ca2: auipc a5,0x0
+  0x2ca6: mv a5,a5
+  0x2caa: sd a4,0(a5)
+  0x2cac: auipc a5,0x0
+  0x2cb0: mv a5,a5
+  0x2cb4: ld a5,0(a5)
+  0x2cb6: li a4,13
+  0x2cb8: sd a4,0(a5)
+  0x2cba: li a0,142
+  0x2cbe: auipc ra,0x0
+  0x2cc2: jalr ra
+  0x2cc6: li a0,93
+  0x2cca: auipc ra,0x0
+  0x2cce: jalr ra
+  0x2cd2: ld a4,-40(s0)
+  0x2cd6: li a5,2
+  0x2cd8: bge a5,a4,2d76 <.L203>
+
+- Edges:
+  NO_JUMP -> 0x2cdc
+  JUMP -> 0x2d76
+
+====
+BLOCK 0x2cdc
+- Instructions:
+  0x2cdc: auipc a5,0x0
+  0x2ce0: mv a5,a5
+  0x2ce4: ld a5,0(a5)
+  0x2ce6: addi a4,a5,8
+  0x2cea: auipc a5,0x0
+  0x2cee: mv a5,a5
+  0x2cf2: sd a4,0(a5)
+  0x2cf4: auipc a5,0x0
+  0x2cf8: mv a5,a5
+  0x2cfc: ld a5,0(a5)
+  0x2cfe: li a4,13
+  0x2d00: sd a4,0(a5)
+  0x2d02: auipc a5,0x0
+  0x2d06: mv a5,a5
+  0x2d0a: ld a5,0(a5)
+  0x2d0c: addi a4,a5,8
+  0x2d10: auipc a5,0x0
+  0x2d14: mv a5,a5
+  0x2d18: sd a4,0(a5)
+  0x2d1a: auipc a5,0x0
+  0x2d1e: mv a5,a5
+  0x2d22: ld a5,0(a5)
+  0x2d24: li a4,1
+  0x2d26: sd a4,0(a5)
+  0x2d28: auipc a5,0x0
+  0x2d2c: mv a5,a5
+  0x2d30: ld a5,0(a5)
+  0x2d32: addi a4,a5,8
+  0x2d36: auipc a5,0x0
+  0x2d3a: mv a5,a5
+  0x2d3e: sd a4,0(a5)
+  0x2d40: auipc a5,0x0
+  0x2d44: mv a5,a5
+  0x2d48: ld a5,0(a5)
+  0x2d4a: li a4,8
+  0x2d4c: sd a4,0(a5)
+  0x2d4e: auipc a5,0x0
+  0x2d52: mv a5,a5
+  0x2d56: ld a5,0(a5)
+  0x2d58: addi a4,a5,8
+  0x2d5c: auipc a5,0x0
+  0x2d60: mv a5,a5
+  0x2d64: sd a4,0(a5)
+  0x2d66: auipc a5,0x0
+  0x2d6a: mv a5,a5
+  0x2d6e: ld a5,0(a5)
+  0x2d70: li a4,27
+  0x2d72: sd a4,0(a5)
+  0x2d74: j 2da6 <.L204>
+
+- Edges:
+  JUMP -> 0x2da6
+
+====
+BLOCK 0x2d76
+- Instructions:
+  0x2d76: ld a4,-40(s0)
+  0x2d7a: li a5,1
+  0x2d7c: blt a5,a4,2da6 <.L204>
+
+- Edges:
+  NO_JUMP -> 0x2d80
+  JUMP -> 0x2da6
+
+====
+BLOCK 0x2d80
+- Instructions:
+  0x2d80: auipc a5,0x0
+  0x2d84: mv a5,a5
+  0x2d88: ld a5,0(a5)
+  0x2d8a: mv a1,a5
+  0x2d8c: auipc a0,0x0
+  0x2d90: mv a0,a0
+  0x2d94: auipc ra,0x0
+  0x2d98: jalr ra
+  0x2d9c: li a0,-1
+  0x2d9e: auipc ra,0x0
+  0x2da2: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x2da6
+
+====
+BLOCK 0x2da6
+- Instructions:
+  0x2da6: ld a5,-40(s0)
+  0x2daa: addi a4,a5,-2
+  0x2dae: auipc a5,0x0
+  0x2db2: mv a5,a5
+  0x2db6: sd a4,0(a5)
+  0x2db8: auipc a5,0x0
+  0x2dbc: mv a5,a5
+  0x2dc0: ld a5,0(a5)
+  0x2dc2: addi a4,a5,8
+  0x2dc6: auipc a5,0x0
+  0x2dca: mv a5,a5
+  0x2dce: sd a4,0(a5)
+  0x2dd0: auipc a5,0x0
+  0x2dd4: mv a5,a5
+  0x2dd8: ld a5,0(a5)
+  0x2dda: li a4,25
+  0x2ddc: sd a4,0(a5)
+  0x2dde: auipc a5,0x0
+  0x2de2: mv a5,a5
+  0x2de6: ld a5,0(a5)
+  0x2de8: bnez a5,2dee <.L205>
+
+- Edges:
+  NO_JUMP -> 0x2dea
+  JUMP -> 0x2dee
+
+====
+BLOCK 0x2dea
+- Instructions:
+  0x2dea: li a5,10
+  0x2dec: j 2df0 <.L206>
+
+- Edges:
+  JUMP -> 0x2df0
+
+====
+BLOCK 0x2dee
+- Instructions:
+  0x2dee: li a5,9
+
+- Edges:
+  NO_JUMP -> 0x2df0
+
+====
+BLOCK 0x2df0
+- Instructions:
+  0x2df0: auipc a4,0x0
+  0x2df4: mv a4,a4
+  0x2df8: ld a4,0(a4)
+  0x2dfa: addi a3,a4,8
+  0x2dfe: auipc a4,0x0
+  0x2e02: mv a4,a4
+  0x2e06: sd a3,0(a4)
+  0x2e08: auipc a4,0x0
+  0x2e0c: mv a4,a4
+  0x2e10: ld a4,0(a4)
+  0x2e12: sd a5,0(a4)
+  0x2e14: j 2e48 <.L154>
+
+- Edges:
+  JUMP -> 0x2e48
+
+====
+BLOCK 0x2e16
+- Instructions:
+  0x2e16: auipc a5,0x0
+  0x2e1a: mv a5,a5
+  0x2e1e: ld a4,0(a5)
+  0x2e20: auipc a5,0x0
+  0x2e24: mv a5,a5
+  0x2e28: ld a5,0(a5)
+  0x2e2a: mv a2,a5
+  0x2e2c: mv a1,a4
+  0x2e2e: auipc a0,0x0
+  0x2e32: mv a0,a0
+  0x2e36: auipc ra,0x0
+  0x2e3a: jalr ra
+  0x2e3e: li a0,-1
+  0x2e40: auipc ra,0x0
+  0x2e44: jalr ra
+
+- Edges:
+  NO_JUMP -> 0x2e48
+
+====
+BLOCK 0x2e48
+- Instructions:
+  0x2e48: auipc a5,0x0
+  0x2e4c: mv a5,a5
+  0x2e50: ld a5,0(a5)
+  0x2e52: ld a4,-56(s0)
+  0x2e56: blt a5,a4,2e5e <.L154+0x16>
+
+- Edges:
+  NO_JUMP -> 0x2e5a
+  JUMP -> 0x2e5e
+
+====
+BLOCK 0x2e5a
+- Instructions:
+  0x2e5a: j 1bb6 <.L207>
+
+- Edges:
+  JUMP -> 0x1bb6
+
+====
+BLOCK 0x2e5e
+- Instructions:
+  0x2e5e: nop
+  0x2e62: ld ra,56(sp)
+  0x2e64: ld s0,48(sp)
+  0x2e66: addi sp,sp,64
+  0x2e68: ret
+
+- Edges: (none)
+
+
+##############################################################################
+TARGETED CASE 4: AARCH64 LINUX STANDALONE REACHABILITY-BASED BOUNDARY RECOVERY
+##############################################################################
+Some AArch64 ELF shared-object disassemblies attach trailing unnamed instructions
+to the preceding source-function chunk. V14 no longer uses compiler_pic_asm as
+a function-end anchor.
+
+Instead, for shared_asm only, V14 tentatively builds the CFG from that function's
+own instructions, computes reachability from the entry, and removes only a
+trailing suffix whose blocks are unreachable. If a reachable UNKNOWN indirect
+jump exists, V14 refuses to trim because that jump might target the apparent
+suffix.
+
+The compiler reference below is shown only for manual validation after the
+standalone trim; it did not determine the trim boundary.
+
+Split:                 O0
+Task:                  c-interp
+Architecture:          arm_linux
+Function:              main
+Representation symbol: main
+Instructions trimmed:  7
+Trim reason:           trailing blocks unreachable from function entry
+
+RAW SHARED-OBJECT SUFFIX REMOVED BY V14 STANDALONE RECOVERY
+------------------------------------------------------------------------------
+0x7108: b 8108 <libtarg_success>
+0x7110: str x1, [x0]
+0x7114: b 3008 <expression+0x574>
+0x7118: ldr x1, [x1]
+0x711c: b 5004 <expression+0x2570>
+0x7120: ldr x0, [x0]
+0x7124: b 7004 <main+0x578>
+
+------------------------------------------------------------------------------
+SAME-PROVENANCE PIC COMPILER REFERENCE (VALIDATION ONLY)
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/c-interp/arm_linux/compiler_pic_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: main
+Basic blocks: 26
+
+====
+BLOCK I0
+- Instructions:
+  sub	sp, sp, #96
+  stp	x29, x30, [sp, 80]
+  add	x29, sp, 80
+  str	w0, [sp, 12]
+  str	x1, [sp]
+  adrp	x0, :got:__stack_chk_guard
+  ldr	x0, [x0, :got_lo12:__stack_chk_guard]
+  ldr	x1, [x0]
+  str	x1, [sp, 72]
+  mov	x1, 0
+  mov	w0, 2
+  str	w0, [sp, 28]
+  adrp	x0, .LC30
+  add	x0, x0, :lo12:.LC30
+  str	x0, [sp, 56]
+  adrp	x0, .LC0
+  add	x0, x0, :lo12:.LC0
+  str	x0, [sp, 64]
+  add	x0, sp, 56
+  str	x0, [sp, 40]
+  ldr	w0, [sp, 28]
+  sub	w0, w0, #1
+  str	w0, [sp, 28]
+  ldr	x0, [sp, 40]
+  add	x0, x0, 8
+  str	x0, [sp, 40]
+  adrp	x0, :got:mhello
+  ldr	x0, [x0, :got_lo12:mhello]
+  ldr	x2, [x0]
+  adrp	x0, .LC31
+  add	x1, x0, :lo12:.LC31
+  mov	x0, x2
+  bl	libmin_mopen
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  mov	x1, 262144
+  str	x1, [x0]
+  adrp	x0, :got:line
+  ldr	x0, [x0, :got_lo12:line]
+  mov	x1, 1
+  str	x1, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  bl	libmin_malloc
+  mov	x1, x0
+  adrp	x0, :got:text
+  ldr	x0, [x0, :got_lo12:text]
+  str	x1, [x0]
+  adrp	x0, :got:text
+  ldr	x0, [x0, :got_lo12:text]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L320
+
+- Edges:
+  NO_JUMP -> I54
+  JUMP -> I63
+
+====
+BLOCK I54
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, .LC32
+  add	x0, x0, :lo12:.LC32
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I63
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  bl	libmin_malloc
+  mov	x1, x0
+  adrp	x0, :got:data
+  ldr	x0, [x0, :got_lo12:data]
+  str	x1, [x0]
+  adrp	x0, :got:data
+  ldr	x0, [x0, :got_lo12:data]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L322
+
+- Edges:
+  NO_JUMP -> I76
+  JUMP -> I85
+
+====
+BLOCK I76
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, .LC33
+  add	x0, x0, :lo12:.LC33
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I85
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  bl	libmin_malloc
+  mov	x1, x0
+  adrp	x0, :got:stack
+  ldr	x0, [x0, :got_lo12:stack]
+  str	x1, [x0]
+  adrp	x0, :got:stack
+  ldr	x0, [x0, :got_lo12:stack]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L323
+
+- Edges:
+  NO_JUMP -> I98
+  JUMP -> I107
+
+====
+BLOCK I98
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, .LC34
+  add	x0, x0, :lo12:.LC34
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I107
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  bl	libmin_malloc
+  mov	x1, x0
+  adrp	x0, :got:symbols
+  ldr	x0, [x0, :got_lo12:symbols]
+  str	x1, [x0]
+  adrp	x0, :got:symbols
+  ldr	x0, [x0, :got_lo12:symbols]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L324
+
+- Edges:
+  NO_JUMP -> I120
+  JUMP -> I129
+
+====
+BLOCK I120
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, .LC35
+  add	x0, x0, :lo12:.LC35
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I129
+- Instructions:
+  adrp	x0, :got:text
+  ldr	x0, [x0, :got_lo12:text]
+  ldr	x3, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x2, x0
+  mov	w1, 0
+  mov	x0, x3
+  bl	libmin_memset
+  adrp	x0, :got:data
+  ldr	x0, [x0, :got_lo12:data]
+  ldr	x3, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x2, x0
+  mov	w1, 0
+  mov	x0, x3
+  bl	libmin_memset
+  adrp	x0, :got:stack
+  ldr	x0, [x0, :got_lo12:stack]
+  ldr	x3, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x2, x0
+  mov	w1, 0
+  mov	x0, x3
+  bl	libmin_memset
+  adrp	x0, :got:symbols
+  ldr	x0, [x0, :got_lo12:symbols]
+  ldr	x3, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x2, x0
+  mov	w1, 0
+  mov	x0, x3
+  bl	libmin_memset
+  adrp	x0, :got:text
+  ldr	x0, [x0, :got_lo12:text]
+  ldr	x1, [x0]
+  adrp	x0, :got:old_text
+  ldr	x0, [x0, :got_lo12:old_text]
+  str	x1, [x0]
+  adrp	x0, :got:src
+  ldr	x0, [x0, :got_lo12:src]
+  adrp	x1, .LC36
+  add	x1, x1, :lo12:.LC36
+  str	x1, [x0]
+  mov	x0, 134
+  str	x0, [sp, 32]
+  b	.L325
+
+- Edges:
+  JUMP -> I191
+
+====
+BLOCK I183
+- Instructions:
+  bl	next
+  ldr	x0, [sp, 32]
+  add	x1, x0, 1
+  str	x1, [sp, 32]
+  adrp	x1, :got:current_id
+  ldr	x1, [x1, :got_lo12:current_id]
+  ldr	x1, [x1]
+  str	x0, [x1]
+
+- Edges:
+  NO_JUMP -> I191
+
+====
+BLOCK I191
+- Instructions:
+  ldr	x0, [sp, 32]
+  cmp	x0, 141
+  ble	.L326
+
+- Edges:
+  NO_JUMP -> I194
+  JUMP -> I183
+
+====
+BLOCK I194
+- Instructions:
+  mov	x0, 30
+  str	x0, [sp, 32]
+  b	.L327
+
+- Edges:
+  JUMP -> I218
+
+====
+BLOCK I197
+- Instructions:
+  bl	next
+  adrp	x0, :got:current_id
+  ldr	x0, [x0, :got_lo12:current_id]
+  ldr	x0, [x0]
+  add	x0, x0, 32
+  mov	x1, 130
+  str	x1, [x0]
+  adrp	x0, :got:current_id
+  ldr	x0, [x0, :got_lo12:current_id]
+  ldr	x0, [x0]
+  add	x0, x0, 24
+  mov	x1, 1
+  str	x1, [x0]
+  ldr	x0, [sp, 32]
+  add	x1, x0, 1
+  str	x1, [sp, 32]
+  adrp	x1, :got:current_id
+  ldr	x1, [x1, :got_lo12:current_id]
+  ldr	x1, [x1]
+  add	x1, x1, 40
+  str	x0, [x1]
+
+- Edges:
+  NO_JUMP -> I218
+
+====
+BLOCK I218
+- Instructions:
+  ldr	x0, [sp, 32]
+  cmp	x0, 37
+  ble	.L328
+
+- Edges:
+  NO_JUMP -> I221
+  JUMP -> I197
+
+====
+BLOCK I221
+- Instructions:
+  bl	next
+  adrp	x0, :got:current_id
+  ldr	x0, [x0, :got_lo12:current_id]
+  ldr	x0, [x0]
+  mov	x1, 134
+  str	x1, [x0]
+  bl	next
+  adrp	x0, :got:current_id
+  ldr	x0, [x0, :got_lo12:current_id]
+  ldr	x1, [x0]
+  adrp	x0, :got:idmain
+  ldr	x0, [x0, :got_lo12:idmain]
+  str	x1, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  bl	libmin_malloc
+  mov	x1, x0
+  adrp	x0, :got:old_src
+  ldr	x0, [x0, :got_lo12:old_src]
+  str	x1, [x0]
+  adrp	x0, :got:old_src
+  ldr	x0, [x0, :got_lo12:old_src]
+  ldr	x1, [x0]
+  adrp	x0, :got:src
+  ldr	x0, [x0, :got_lo12:src]
+  str	x1, [x0]
+  adrp	x0, :got:src
+  ldr	x0, [x0, :got_lo12:src]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L329
+
+- Edges:
+  NO_JUMP -> I253
+  JUMP -> I262
+
+====
+BLOCK I253
+- Instructions:
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, .LC37
+  add	x0, x0, :lo12:.LC37
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I262
+- Instructions:
+  adrp	x0, :got:src
+  ldr	x0, [x0, :got_lo12:src]
+  ldr	x3, [x0]
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  sub	x0, x0, #1
+  mov	x1, x0
+  adrp	x0, :got:mhello
+  ldr	x0, [x0, :got_lo12:mhello]
+  ldr	x0, [x0]
+  mov	x2, x0
+  mov	x0, x3
+  bl	libmin_mread
+  str	x0, [sp, 32]
+  ldr	x0, [sp, 32]
+  cmp	x0, 0
+  bgt	.L330
+
+- Edges:
+  NO_JUMP -> I280
+  JUMP -> I286
+
+====
+BLOCK I280
+- Instructions:
+  ldr	x1, [sp, 32]
+  adrp	x0, .LC38
+  add	x0, x0, :lo12:.LC38
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I286
+- Instructions:
+  adrp	x0, :got:src
+  ldr	x0, [x0, :got_lo12:src]
+  ldr	x1, [x0]
+  ldr	x0, [sp, 32]
+  add	x0, x1, x0
+  strb	wzr, [x0]
+  adrp	x0, :got:mhello
+  ldr	x0, [x0, :got_lo12:mhello]
+  ldr	x0, [x0]
+  bl	libmin_mclose
+  bl	program
+  adrp	x0, :got:idmain
+  ldr	x0, [x0, :got_lo12:idmain]
+  ldr	x0, [x0]
+  add	x0, x0, 40
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, :got:pc
+  ldr	x0, [x0, :got_lo12:pc]
+  str	x1, [x0]
+  adrp	x0, :got:pc
+  ldr	x0, [x0, :got_lo12:pc]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  bne	.L331
+
+- Edges:
+  NO_JUMP -> I311
+  JUMP -> I316
+
+====
+BLOCK I311
+- Instructions:
+  adrp	x0, .LC39
+  add	x0, x0, :lo12:.LC39
+  bl	libmin_printf
+  mov	w0, -1
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I316
+- Instructions:
+  adrp	x0, :got:assembly
+  ldr	x0, [x0, :got_lo12:assembly]
+  ldr	x0, [x0]
+  cmp	x0, 0
+  beq	.L332
+
+- Edges:
+  NO_JUMP -> I321
+  JUMP -> I323
+
+====
+BLOCK I321
+- Instructions:
+  mov	w0, 0
+  b	.L333
+
+- Edges:
+  JUMP -> I401
+
+====
+BLOCK I323
+- Instructions:
+  adrp	x0, :got:stack
+  ldr	x0, [x0, :got_lo12:stack]
+  ldr	x0, [x0]
+  mov	x1, x0
+  adrp	x0, :got:poolsize
+  ldr	x0, [x0, :got_lo12:poolsize]
+  ldr	x0, [x0]
+  add	x0, x1, x0
+  mov	x1, x0
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  sub	x1, x0, #8
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  mov	x1, 37
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  sub	x1, x0, #8
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  mov	x1, 13
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  str	x0, [sp, 48]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  sub	x1, x0, #8
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  mov	x1, 1
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  sub	x1, x0, #8
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  ldr	x1, [sp, 40]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  sub	x1, x0, #8
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  str	x1, [x0]
+  adrp	x0, :got:sp
+  ldr	x0, [x0, :got_lo12:sp]
+  ldr	x0, [x0]
+  ldr	x1, [sp, 48]
+  str	x1, [x0]
+  bl	eval
+  bl	libmin_success
+
+- Edges:
+  NO_JUMP -> I401
+
+====
+BLOCK I401
+- Instructions:
+  mov	w1, w0
+  adrp	x0, :got:__stack_chk_guard
+  ldr	x0, [x0, :got_lo12:__stack_chk_guard]
+  ldr	x3, [sp, 72]
+  ldr	x2, [x0]
+  subs	x3, x3, x2
+  mov	x2, 0
+  beq	.L334
+
+- Edges:
+  NO_JUMP -> I409
+  JUMP -> I410
+
+====
+BLOCK I409
+- Instructions:
+  bl	__stack_chk_fail
+
+- Edges:
+  NO_JUMP -> I410
+
+====
+BLOCK I410
+- Instructions:
+  mov	w0, w1
+  ldp	x29, x30, [sp, 80]
+  add	sp, sp, 96
+  ret
+
+- Edges: (none)
+
+------------------------------------------------------------------------------
+V14 STANDALONE-RECOVERED REPRESENTATION: shared_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/c-interp/arm_linux/shared_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: main
+Basic blocks: 26
+
+====
+BLOCK 0x6a8c
+- Instructions:
+  0x6a8c: sub sp, sp, #0x60
+  0x6a90: stp x29, x30, [sp, #80]
+  0x6a94: add x29, sp, #0x50
+  0x6a98: str w0, [sp, #12]
+  0x6a9c: str x1, [sp]
+  0x6aa0: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6aa4: ldr x0, [x0, #3960]
+  0x6aa8: ldr x1, [x0]
+  0x6aac: str x1, [sp, #72]
+  0x6ab0: mov x1, #0x0
+  0x6ab4: mov w0, #0x2
+  0x6ab8: str w0, [sp, #28]
+  0x6abc: adrp x0, b000 <__hello+0x40>
+  0x6ac0: add x0, x0, #0x4d0
+  0x6ac4: str x0, [sp, #56]
+  0x6ac8: adrp x0, b000 <__hello+0x40>
+  0x6acc: add x0, x0, #0xe0
+  0x6ad0: str x0, [sp, #64]
+  0x6ad4: add x0, sp, #0x38
+  0x6ad8: str x0, [sp, #40]
+  0x6adc: ldr w0, [sp, #28]
+  0x6ae0: sub w0, w0, #0x1
+  0x6ae4: str w0, [sp, #28]
+  0x6ae8: ldr x0, [sp, #40]
+  0x6aec: add x0, x0, #0x8
+  0x6af0: str x0, [sp, #40]
+  0x6af4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6af8: ldr x0, [x0, #3928]
+  0x6afc: ldr x2, [x0]
+  0x6b00: adrp x0, b000 <__hello+0x40>
+  0x6b04: add x1, x0, #0x4e0
+  0x6b08: mov x0, x2
+  0x6b0c: bl 1910 <libmin_mopen@plt>
+  0x6b10: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b14: ldr x0, [x0, #3968]
+  0x6b18: mov x1, #0x40000
+  0x6b1c: str x1, [x0]
+  0x6b20: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b24: ldr x0, [x0, #4040]
+  0x6b28: mov x1, #0x1
+  0x6b2c: str x1, [x0]
+  0x6b30: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b34: ldr x0, [x0, #3968]
+  0x6b38: ldr x0, [x0]
+  0x6b3c: bl 1810 <libmin_malloc@plt>
+  0x6b40: mov x1, x0
+  0x6b44: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b48: ldr x0, [x0, #3824]
+  0x6b4c: str x1, [x0]
+  0x6b50: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b54: ldr x0, [x0, #3824]
+  0x6b58: ldr x0, [x0]
+  0x6b5c: cmp x0, #0x0
+  0x6b60: b.ne 6b88 <main+0xfc>
+
+- Edges:
+  NO_JUMP -> 0x6b64
+  JUMP -> 0x6b88
+
+====
+BLOCK 0x6b64
+- Instructions:
+  0x6b64: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b68: ldr x0, [x0, #3968]
+  0x6b6c: ldr x0, [x0]
+  0x6b70: mov x1, x0
+  0x6b74: adrp x0, b000 <__hello+0x40>
+  0x6b78: add x0, x0, #0x4e8
+  0x6b7c: bl 18b0 <libmin_printf@plt>
+  0x6b80: mov w0, #0xffffffff
+  0x6b84: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6b88
+- Instructions:
+  0x6b88: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6b8c: ldr x0, [x0, #3968]
+  0x6b90: ldr x0, [x0]
+  0x6b94: bl 1810 <libmin_malloc@plt>
+  0x6b98: mov x1, x0
+  0x6b9c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ba0: ldr x0, [x0, #3976]
+  0x6ba4: str x1, [x0]
+  0x6ba8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6bac: ldr x0, [x0, #3976]
+  0x6bb0: ldr x0, [x0]
+  0x6bb4: cmp x0, #0x0
+  0x6bb8: b.ne 6be0 <main+0x154>
+
+- Edges:
+  NO_JUMP -> 0x6bbc
+  JUMP -> 0x6be0
+
+====
+BLOCK 0x6bbc
+- Instructions:
+  0x6bbc: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6bc0: ldr x0, [x0, #3968]
+  0x6bc4: ldr x0, [x0]
+  0x6bc8: mov x1, x0
+  0x6bcc: adrp x0, b000 <__hello+0x40>
+  0x6bd0: add x0, x0, #0x510
+  0x6bd4: bl 18b0 <libmin_printf@plt>
+  0x6bd8: mov w0, #0xffffffff
+  0x6bdc: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6be0
+- Instructions:
+  0x6be0: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6be4: ldr x0, [x0, #3968]
+  0x6be8: ldr x0, [x0]
+  0x6bec: bl 1810 <libmin_malloc@plt>
+  0x6bf0: mov x1, x0
+  0x6bf4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6bf8: ldr x0, [x0, #4032]
+  0x6bfc: str x1, [x0]
+  0x6c00: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c04: ldr x0, [x0, #4032]
+  0x6c08: ldr x0, [x0]
+  0x6c0c: cmp x0, #0x0
+  0x6c10: b.ne 6c38 <main+0x1ac>
+
+- Edges:
+  NO_JUMP -> 0x6c14
+  JUMP -> 0x6c38
+
+====
+BLOCK 0x6c14
+- Instructions:
+  0x6c14: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c18: ldr x0, [x0, #3968]
+  0x6c1c: ldr x0, [x0]
+  0x6c20: mov x1, x0
+  0x6c24: adrp x0, b000 <__hello+0x40>
+  0x6c28: add x0, x0, #0x538
+  0x6c2c: bl 18b0 <libmin_printf@plt>
+  0x6c30: mov w0, #0xffffffff
+  0x6c34: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6c38
+- Instructions:
+  0x6c38: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c3c: ldr x0, [x0, #3968]
+  0x6c40: ldr x0, [x0]
+  0x6c44: bl 1810 <libmin_malloc@plt>
+  0x6c48: mov x1, x0
+  0x6c4c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c50: ldr x0, [x0, #3872]
+  0x6c54: str x1, [x0]
+  0x6c58: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c5c: ldr x0, [x0, #3872]
+  0x6c60: ldr x0, [x0]
+  0x6c64: cmp x0, #0x0
+  0x6c68: b.ne 6c90 <main+0x204>
+
+- Edges:
+  NO_JUMP -> 0x6c6c
+  JUMP -> 0x6c90
+
+====
+BLOCK 0x6c6c
+- Instructions:
+  0x6c6c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c70: ldr x0, [x0, #3968]
+  0x6c74: ldr x0, [x0]
+  0x6c78: mov x1, x0
+  0x6c7c: adrp x0, b000 <__hello+0x40>
+  0x6c80: add x0, x0, #0x560
+  0x6c84: bl 18b0 <libmin_printf@plt>
+  0x6c88: mov w0, #0xffffffff
+  0x6c8c: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6c90
+- Instructions:
+  0x6c90: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6c94: ldr x0, [x0, #3824]
+  0x6c98: ldr x3, [x0]
+  0x6c9c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ca0: ldr x0, [x0, #3968]
+  0x6ca4: ldr x0, [x0]
+  0x6ca8: mov x2, x0
+  0x6cac: mov w1, #0x0
+  0x6cb0: mov x0, x3
+  0x6cb4: bl 1770 <libmin_memset@plt>
+  0x6cb8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6cbc: ldr x0, [x0, #3976]
+  0x6cc0: ldr x3, [x0]
+  0x6cc4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6cc8: ldr x0, [x0, #3968]
+  0x6ccc: ldr x0, [x0]
+  0x6cd0: mov x2, x0
+  0x6cd4: mov w1, #0x0
+  0x6cd8: mov x0, x3
+  0x6cdc: bl 1770 <libmin_memset@plt>
+  0x6ce0: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ce4: ldr x0, [x0, #4032]
+  0x6ce8: ldr x3, [x0]
+  0x6cec: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6cf0: ldr x0, [x0, #3968]
+  0x6cf4: ldr x0, [x0]
+  0x6cf8: mov x2, x0
+  0x6cfc: mov w1, #0x0
+  0x6d00: mov x0, x3
+  0x6d04: bl 1770 <libmin_memset@plt>
+  0x6d08: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6d0c: ldr x0, [x0, #3872]
+  0x6d10: ldr x3, [x0]
+  0x6d14: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6d18: ldr x0, [x0, #3968]
+  0x6d1c: ldr x0, [x0]
+  0x6d20: mov x2, x0
+  0x6d24: mov w1, #0x0
+  0x6d28: mov x0, x3
+  0x6d2c: bl 1770 <libmin_memset@plt>
+  0x6d30: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6d34: ldr x0, [x0, #3824]
+  0x6d38: ldr x1, [x0]
+  0x6d3c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6d40: ldr x0, [x0, #3904]
+  0x6d44: str x1, [x0]
+  0x6d48: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6d4c: ldr x0, [x0, #3912]
+  0x6d50: adrp x1, b000 <__hello+0x40>
+  0x6d54: add x1, x1, #0x588
+  0x6d58: str x1, [x0]
+  0x6d5c: mov x0, #0x86
+  0x6d60: str x0, [sp, #32]
+  0x6d64: b 6d88 <main+0x2fc>
+
+- Edges:
+  JUMP -> 0x6d88
+
+====
+BLOCK 0x6d68
+- Instructions:
+  0x6d68: bl 1830 <next@plt>
+  0x6d6c: ldr x0, [sp, #32]
+  0x6d70: add x1, x0, #0x1
+  0x6d74: str x1, [sp, #32]
+  0x6d78: adrp x1, 1f000 <__FRAME_END__+0x13010>
+  0x6d7c: ldr x1, [x1, #3840]
+  0x6d80: ldr x1, [x1]
+  0x6d84: str x0, [x1]
+
+- Edges:
+  NO_JUMP -> 0x6d88
+
+====
+BLOCK 0x6d88
+- Instructions:
+  0x6d88: ldr x0, [sp, #32]
+  0x6d8c: cmp x0, #0x8d
+  0x6d90: b.le 6d68 <main+0x2dc>
+
+- Edges:
+  NO_JUMP -> 0x6d94
+  JUMP -> 0x6d68
+
+====
+BLOCK 0x6d94
+- Instructions:
+  0x6d94: mov x0, #0x1e
+  0x6d98: str x0, [sp, #32]
+  0x6d9c: b 6df4 <main+0x368>
+
+- Edges:
+  JUMP -> 0x6df4
+
+====
+BLOCK 0x6da0
+- Instructions:
+  0x6da0: bl 1830 <next@plt>
+  0x6da4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6da8: ldr x0, [x0, #3840]
+  0x6dac: ldr x0, [x0]
+  0x6db0: add x0, x0, #0x20
+  0x6db4: mov x1, #0x82
+  0x6db8: str x1, [x0]
+  0x6dbc: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6dc0: ldr x0, [x0, #3840]
+  0x6dc4: ldr x0, [x0]
+  0x6dc8: add x0, x0, #0x18
+  0x6dcc: mov x1, #0x1
+  0x6dd0: str x1, [x0]
+  0x6dd4: ldr x0, [sp, #32]
+  0x6dd8: add x1, x0, #0x1
+  0x6ddc: str x1, [sp, #32]
+  0x6de0: adrp x1, 1f000 <__FRAME_END__+0x13010>
+  0x6de4: ldr x1, [x1, #3840]
+  0x6de8: ldr x1, [x1]
+  0x6dec: add x1, x1, #0x28
+  0x6df0: str x0, [x1]
+
+- Edges:
+  NO_JUMP -> 0x6df4
+
+====
+BLOCK 0x6df4
+- Instructions:
+  0x6df4: ldr x0, [sp, #32]
+  0x6df8: cmp x0, #0x25
+  0x6dfc: b.le 6da0 <main+0x314>
+
+- Edges:
+  NO_JUMP -> 0x6e00
+  JUMP -> 0x6da0
+
+====
+BLOCK 0x6e00
+- Instructions:
+  0x6e00: bl 1830 <next@plt>
+  0x6e04: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e08: ldr x0, [x0, #3840]
+  0x6e0c: ldr x0, [x0]
+  0x6e10: mov x1, #0x86
+  0x6e14: str x1, [x0]
+  0x6e18: bl 1830 <next@plt>
+  0x6e1c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e20: ldr x0, [x0, #3840]
+  0x6e24: ldr x1, [x0]
+  0x6e28: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e2c: ldr x0, [x0, #4048]
+  0x6e30: str x1, [x0]
+  0x6e34: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e38: ldr x0, [x0, #3968]
+  0x6e3c: ldr x0, [x0]
+  0x6e40: bl 1810 <libmin_malloc@plt>
+  0x6e44: mov x1, x0
+  0x6e48: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e4c: ldr x0, [x0, #3888]
+  0x6e50: str x1, [x0]
+  0x6e54: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e58: ldr x0, [x0, #3888]
+  0x6e5c: ldr x1, [x0]
+  0x6e60: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e64: ldr x0, [x0, #3912]
+  0x6e68: str x1, [x0]
+  0x6e6c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e70: ldr x0, [x0, #3912]
+  0x6e74: ldr x0, [x0]
+  0x6e78: cmp x0, #0x0
+  0x6e7c: b.ne 6ea4 <main+0x418>
+
+- Edges:
+  NO_JUMP -> 0x6e80
+  JUMP -> 0x6ea4
+
+====
+BLOCK 0x6e80
+- Instructions:
+  0x6e80: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6e84: ldr x0, [x0, #3968]
+  0x6e88: ldr x0, [x0]
+  0x6e8c: mov x1, x0
+  0x6e90: adrp x0, b000 <__hello+0x40>
+  0x6e94: add x0, x0, #0x5f0
+  0x6e98: bl 18b0 <libmin_printf@plt>
+  0x6e9c: mov w0, #0xffffffff
+  0x6ea0: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6ea4
+- Instructions:
+  0x6ea4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ea8: ldr x0, [x0, #3912]
+  0x6eac: ldr x3, [x0]
+  0x6eb0: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6eb4: ldr x0, [x0, #3968]
+  0x6eb8: ldr x0, [x0]
+  0x6ebc: sub x0, x0, #0x1
+  0x6ec0: mov x1, x0
+  0x6ec4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ec8: ldr x0, [x0, #3928]
+  0x6ecc: ldr x0, [x0]
+  0x6ed0: mov x2, x0
+  0x6ed4: mov x0, x3
+  0x6ed8: bl 1900 <libmin_mread@plt>
+  0x6edc: str x0, [sp, #32]
+  0x6ee0: ldr x0, [sp, #32]
+  0x6ee4: cmp x0, #0x0
+  0x6ee8: b.gt 6f04 <main+0x478>
+
+- Edges:
+  NO_JUMP -> 0x6eec
+  JUMP -> 0x6f04
+
+====
+BLOCK 0x6eec
+- Instructions:
+  0x6eec: ldr x1, [sp, #32]
+  0x6ef0: adrp x0, b000 <__hello+0x40>
+  0x6ef4: add x0, x0, #0x618
+  0x6ef8: bl 18b0 <libmin_printf@plt>
+  0x6efc: mov w0, #0xffffffff
+  0x6f00: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6f04
+- Instructions:
+  0x6f04: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f08: ldr x0, [x0, #3912]
+  0x6f0c: ldr x1, [x0]
+  0x6f10: ldr x0, [sp, #32]
+  0x6f14: add x0, x1, x0
+  0x6f18: strb wzr, [x0]
+  0x6f1c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f20: ldr x0, [x0, #3928]
+  0x6f24: ldr x0, [x0]
+  0x6f28: bl 17a0 <libmin_mclose@plt>
+  0x6f2c: bl 1870 <program@plt>
+  0x6f30: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f34: ldr x0, [x0, #4048]
+  0x6f38: ldr x0, [x0]
+  0x6f3c: add x0, x0, #0x28
+  0x6f40: ldr x0, [x0]
+  0x6f44: mov x1, x0
+  0x6f48: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f4c: ldr x0, [x0, #4024]
+  0x6f50: str x1, [x0]
+  0x6f54: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f58: ldr x0, [x0, #4024]
+  0x6f5c: ldr x0, [x0]
+  0x6f60: cmp x0, #0x0
+  0x6f64: b.ne 6f7c <main+0x4f0>
+
+- Edges:
+  NO_JUMP -> 0x6f68
+  JUMP -> 0x6f7c
+
+====
+BLOCK 0x6f68
+- Instructions:
+  0x6f68: adrp x0, b000 <__hello+0x40>
+  0x6f6c: add x0, x0, #0x630
+  0x6f70: bl 18b0 <libmin_printf@plt>
+  0x6f74: mov w0, #0xffffffff
+  0x6f78: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6f7c
+- Instructions:
+  0x6f7c: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f80: ldr x0, [x0, #3936]
+  0x6f84: ldr x0, [x0]
+  0x6f88: cmp x0, #0x0
+  0x6f8c: b.eq 6f98 <main+0x50c>
+
+- Edges:
+  NO_JUMP -> 0x6f90
+  JUMP -> 0x6f98
+
+====
+BLOCK 0x6f90
+- Instructions:
+  0x6f90: mov w0, #0x0
+  0x6f94: b 70d0 <main+0x644>
+
+- Edges:
+  JUMP -> 0x70d0
+
+====
+BLOCK 0x6f98
+- Instructions:
+  0x6f98: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6f9c: ldr x0, [x0, #4032]
+  0x6fa0: ldr x0, [x0]
+  0x6fa4: mov x1, x0
+  0x6fa8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6fac: ldr x0, [x0, #3968]
+  0x6fb0: ldr x0, [x0]
+  0x6fb4: add x0, x1, x0
+  0x6fb8: mov x1, x0
+  0x6fbc: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6fc0: ldr x0, [x0, #3880]
+  0x6fc4: str x1, [x0]
+  0x6fc8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6fcc: ldr x0, [x0, #3880]
+  0x6fd0: ldr x0, [x0]
+  0x6fd4: sub x1, x0, #0x8
+  0x6fd8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6fdc: ldr x0, [x0, #3880]
+  0x6fe0: str x1, [x0]
+  0x6fe4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x6fe8: ldr x0, [x0, #3880]
+  0x6fec: ldr x0, [x0]
+  0x6ff0: mov x1, #0x25
+  0x6ff4: str x1, [x0]
+  0x6ff8: adr x0, 1f000 <__FRAME_END__+0x13010>
+  0x6ffc: ldr x0, [x0, #3880]
+  0x7000: ldr x0, [x0]
+  0x7004: sub x1, x0, #0x8
+  0x7008: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x700c: ldr x0, [x0, #3880]
+  0x7010: str x1, [x0]
+  0x7014: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x7018: ldr x0, [x0, #3880]
+  0x701c: ldr x0, [x0]
+  0x7020: mov x1, #0xd
+  0x7024: str x1, [x0]
+  0x7028: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x702c: ldr x0, [x0, #3880]
+  0x7030: ldr x0, [x0]
+  0x7034: str x0, [sp, #48]
+  0x7038: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x703c: ldr x0, [x0, #3880]
+  0x7040: ldr x0, [x0]
+  0x7044: sub x1, x0, #0x8
+  0x7048: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x704c: ldr x0, [x0, #3880]
+  0x7050: str x1, [x0]
+  0x7054: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x7058: ldr x0, [x0, #3880]
+  0x705c: ldr x0, [x0]
+  0x7060: mov x1, #0x1
+  0x7064: str x1, [x0]
+  0x7068: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x706c: ldr x0, [x0, #3880]
+  0x7070: ldr x0, [x0]
+  0x7074: sub x1, x0, #0x8
+  0x7078: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x707c: ldr x0, [x0, #3880]
+  0x7080: str x1, [x0]
+  0x7084: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x7088: ldr x0, [x0, #3880]
+  0x708c: ldr x0, [x0]
+  0x7090: ldr x1, [sp, #40]
+  0x7094: str x1, [x0]
+  0x7098: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x709c: ldr x0, [x0, #3880]
+  0x70a0: ldr x0, [x0]
+  0x70a4: sub x1, x0, #0x8
+  0x70a8: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x70ac: ldr x0, [x0, #3880]
+  0x70b0: str x1, [x0]
+  0x70b4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x70b8: ldr x0, [x0, #3880]
+  0x70bc: ldr x0, [x0]
+  0x70c0: ldr x1, [sp, #48]
+  0x70c4: str x1, [x0]
+  0x70c8: bl 1950 <eval@plt>
+  0x70cc: bl 1750 <libmin_success@plt>
+
+- Edges:
+  NO_JUMP -> 0x70d0
+
+====
+BLOCK 0x70d0
+- Instructions:
+  0x70d0: mov w1, w0
+  0x70d4: adrp x0, 1f000 <__FRAME_END__+0x13010>
+  0x70d8: ldr x0, [x0, #3960]
+  0x70dc: ldr x3, [sp, #72]
+  0x70e0: ldr x2, [x0]
+  0x70e4: subs x3, x3, x2
+  0x70e8: mov x2, #0x0
+  0x70ec: b.eq 70f4 <main+0x668>
+
+- Edges:
+  NO_JUMP -> 0x70f0
+  JUMP -> 0x70f4
+
+====
+BLOCK 0x70f0
+- Instructions:
+  0x70f0: bl 1840 <__stack_chk_fail@plt>
+
+- Edges:
+  NO_JUMP -> 0x70f4
+
+====
+BLOCK 0x70f4
+- Instructions:
+  0x70f4: mov w0, w1
+  0x70f8: ldp x29, x30, [sp, #80]
+  0x70fc: add sp, sp, #0x60
+  0x7100: ret
+
+- Edges: (none)
+
+
+##############################################################################
+TARGETED CASE 5: AARCH64 LINUX LINKED-ONLY TERMINAL SUCCESS BRANCH (VALIDATION ONLY)
+##############################################################################
+In two Bringup O0 AArch64 Linux shared-object cases, the linked disassembly
+contains a final direct branch to libtarg_success immediately after a call to
+libmin_success. The same-provenance compiler assembly and PIC relocatable object
+do not contain that final branch.
+
+The standalone generator conservatively RETAINS the branch because it is a real
+instruction and is locally reachable under the calls-return policy. V14 does not
+trim or rewrite it. Only after the real CFG has been generated does the Bringup
+validation harness recognize the exact linked-only success-path pattern and
+compare an alternate topology signature against the independently generated PIC
+compiler reference.
+
+Therefore the emitted shared-object CFG below must still contain the
+EXTERNAL_libtarg_success edge.
+
+Split:          O0
+Task:           pi-calc
+Architecture:   arm_linux
+Family:         pic
+Function:       main
+Reference:      compiler_pic_asm
+Representation: shared_asm
+UNKNOWN count:  0
+EXTERNAL count: 1
+Topology:       MATCH_ARM_SHARED_TERMINAL_SUCCESS_BRANCH
+
+------------------------------------------------------------------------------
+SAME-PROVENANCE REFERENCE: compiler_pic_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/pi-calc/arm_linux/compiler_pic_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: main
+Basic blocks: 10
+
+====
+BLOCK I0
+- Instructions:
+  stp	x29, x30, [sp, -16]!
+  mov	x29, sp
+  b	.L2
+
+- Edges:
+  JUMP -> I131
+
+====
+BLOCK I3
+- Instructions:
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w0, [x0]
+  adrp	x1, :got:f
+  ldr	x1, [x1, :got_lo12:f]
+  ldr	w1, [x1]
+  sdiv	w2, w0, w1
+  mul	w1, w2, w1
+  sub	w1, w0, w1
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  str	w1, [x0]
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w1, [x0]
+  adrp	x0, :got:e
+  ldr	x0, [x0, :got_lo12:e]
+  str	w1, [x0]
+  b	.L3
+
+- Edges:
+  JUMP -> I93
+
+====
+BLOCK I22
+- Instructions:
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w1, [x0]
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  ldr	w0, [x0]
+  mul	w1, w1, w0
+  adrp	x0, :got:h
+  ldr	x0, [x0, :got_lo12:h]
+  ldr	w0, [x0]
+  cmp	w0, 0
+  beq	.L4
+
+- Edges:
+  NO_JUMP -> I34
+  JUMP -> I42
+
+====
+BLOCK I34
+- Instructions:
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  ldr	w2, [x0]
+  adrp	x0, :got:a
+  ldr	x0, [x0, :got_lo12:a]
+  sxtw	x2, w2
+  ldr	w0, [x0, x2, lsl 2]
+  b	.L5
+
+- Edges:
+  JUMP -> I52
+
+====
+BLOCK I42
+- Instructions:
+  adrp	x0, :got:f
+  ldr	x0, [x0, :got_lo12:f]
+  ldr	w0, [x0]
+  mov	w2, 26215
+  movk	w2, 0x6666, lsl 16
+  smull	x2, w0, w2
+  lsr	x2, x2, 32
+  asr	w2, w2, 1
+  asr	w0, w0, 31
+  sub	w0, w2, w0
+
+- Edges:
+  NO_JUMP -> I52
+
+====
+BLOCK I52
+- Instructions:
+  adrp	x2, :got:f
+  ldr	x2, [x2, :got_lo12:f]
+  ldr	w2, [x2]
+  mul	w0, w0, w2
+  add	w1, w1, w0
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  str	w1, [x0]
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w0, [x0]
+  adrp	x1, :got:g
+  ldr	x1, [x1, :got_lo12:g]
+  ldr	w1, [x1]
+  sub	w2, w1, #1
+  adrp	x1, :got:g
+  ldr	x1, [x1, :got_lo12:g]
+  str	w2, [x1]
+  adrp	x1, :got:g
+  ldr	x1, [x1, :got_lo12:g]
+  ldr	w1, [x1]
+  adrp	x2, :got:b
+  ldr	x2, [x2, :got_lo12:b]
+  ldr	w3, [x2]
+  sdiv	w2, w0, w1
+  mul	w1, w2, w1
+  sub	w2, w0, w1
+  adrp	x0, :got:a
+  ldr	x0, [x0, :got_lo12:a]
+  sxtw	x1, w3
+  str	w2, [x0, x1, lsl 2]
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w1, [x0]
+  adrp	x0, :got:g
+  ldr	x0, [x0, :got_lo12:g]
+  ldr	w0, [x0]
+  sdiv	w1, w1, w0
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  str	w1, [x0]
+
+- Edges:
+  NO_JUMP -> I93
+
+====
+BLOCK I93
+- Instructions:
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  ldr	w0, [x0]
+  sub	w1, w0, #1
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  str	w1, [x0]
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  ldr	w0, [x0]
+  lsl	w1, w0, 1
+  adrp	x0, :got:g
+  ldr	x0, [x0, :got_lo12:g]
+  str	w1, [x0]
+  adrp	x0, :got:g
+  ldr	x0, [x0, :got_lo12:g]
+  ldr	w0, [x0]
+  cmp	w0, 0
+  bne	.L6
+
+- Edges:
+  NO_JUMP -> I112
+  JUMP -> I22
+
+====
+BLOCK I112
+- Instructions:
+  adrp	x0, :got:d
+  ldr	x0, [x0, :got_lo12:d]
+  ldr	w1, [x0]
+  adrp	x0, :got:f
+  ldr	x0, [x0, :got_lo12:f]
+  ldr	w0, [x0]
+  sdiv	w1, w1, w0
+  adrp	x0, :got:e
+  ldr	x0, [x0, :got_lo12:e]
+  ldr	w0, [x0]
+  add	w0, w1, w0
+  mov	w1, w0
+  adrp	x0, .LC0
+  add	x0, x0, :lo12:.LC0
+  bl	libmin_printf
+  mov	w1, w0
+  adrp	x0, :got:h
+  ldr	x0, [x0, :got_lo12:h]
+  str	w1, [x0]
+
+- Edges:
+  NO_JUMP -> I131
+
+====
+BLOCK I131
+- Instructions:
+  adrp	x0, :got:c
+  ldr	x0, [x0, :got_lo12:c]
+  ldr	w0, [x0]
+  sub	w1, w0, #14
+  adrp	x0, :got:c
+  ldr	x0, [x0, :got_lo12:c]
+  str	w1, [x0]
+  adrp	x0, :got:c
+  ldr	x0, [x0, :got_lo12:c]
+  ldr	w1, [x0]
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  str	w1, [x0]
+  adrp	x0, :got:b
+  ldr	x0, [x0, :got_lo12:b]
+  ldr	w0, [x0]
+  cmp	w0, 0
+  bne	.L7
+
+- Edges:
+  NO_JUMP -> I149
+  JUMP -> I3
+
+====
+BLOCK I149
+- Instructions:
+  bl	libmin_success
+
+- Edges: (none)
+
+------------------------------------------------------------------------------
+REPRESENTATION: shared_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O0/pi-calc/arm_linux/shared_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: main
+Basic blocks: 10
+
+====
+BLOCK 0xdb8
+- Instructions:
+  0xdb8: stp x29, x30, [sp, #-16]!
+  0xdbc: mov x29, sp
+  0xdc0: b fc4 <main+0x20c>
+
+- Edges:
+  JUMP -> 0xfc4
+
+====
+BLOCK 0xdc4
+- Instructions:
+  0xdc4: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xdc8: ldr x0, [x0, #3960]
+  0xdcc: ldr w0, [x0]
+  0xdd0: adrp x1, 1f000 <__FRAME_END__+0x1a418>
+  0xdd4: ldr x1, [x1, #3992]
+  0xdd8: ldr w1, [x1]
+  0xddc: sdiv w2, w0, w1
+  0xde0: mul w1, w2, w1
+  0xde4: sub w1, w0, w1
+  0xde8: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xdec: ldr x0, [x0, #3960]
+  0xdf0: str w1, [x0]
+  0xdf4: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xdf8: ldr x0, [x0, #3960]
+  0xdfc: ldr w1, [x0]
+  0xe00: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe04: ldr x0, [x0, #4040]
+  0xe08: str w1, [x0]
+  0xe0c: b f2c <main+0x174>
+
+- Edges:
+  JUMP -> 0xf2c
+
+====
+BLOCK 0xe10
+- Instructions:
+  0xe10: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe14: ldr x0, [x0, #3960]
+  0xe18: ldr w1, [x0]
+  0xe1c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe20: ldr x0, [x0, #3968]
+  0xe24: ldr w0, [x0]
+  0xe28: mul w1, w1, w0
+  0xe2c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe30: ldr x0, [x0, #3984]
+  0xe34: ldr w0, [x0]
+  0xe38: cmp w0, #0x0
+  0xe3c: b.eq e60 <main+0xa8>
+
+- Edges:
+  NO_JUMP -> 0xe40
+  JUMP -> 0xe60
+
+====
+BLOCK 0xe40
+- Instructions:
+  0xe40: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe44: ldr x0, [x0, #3968]
+  0xe48: ldr w2, [x0]
+  0xe4c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe50: ldr x0, [x0, #4056]
+  0xe54: sxtw x2, w2
+  0xe58: ldr w0, [x0, x2, lsl #2]
+  0xe5c: b e88 <main+0xd0>
+
+- Edges:
+  JUMP -> 0xe88
+
+====
+BLOCK 0xe60
+- Instructions:
+  0xe60: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xe64: ldr x0, [x0, #3992]
+  0xe68: ldr w0, [x0]
+  0xe6c: mov w2, #0x6667
+  0xe70: movk w2, #0x6666, lsl #16
+  0xe74: smull x2, w0, w2
+  0xe78: lsr x2, x2, #32
+  0xe7c: asr w2, w2, #1
+  0xe80: asr w0, w0, #31
+  0xe84: sub w0, w2, w0
+
+- Edges:
+  NO_JUMP -> 0xe88
+
+====
+BLOCK 0xe88
+- Instructions:
+  0xe88: adrp x2, 1f000 <__FRAME_END__+0x1a418>
+  0xe8c: ldr x2, [x2, #3992]
+  0xe90: ldr w2, [x2]
+  0xe94: mul w0, w0, w2
+  0xe98: add w1, w1, w0
+  0xe9c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xea0: ldr x0, [x0, #3960]
+  0xea4: str w1, [x0]
+  0xea8: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xeac: ldr x0, [x0, #3960]
+  0xeb0: ldr w0, [x0]
+  0xeb4: adrp x1, 1f000 <__FRAME_END__+0x1a418>
+  0xeb8: ldr x1, [x1, #4032]
+  0xebc: ldr w1, [x1]
+  0xec0: sub w2, w1, #0x1
+  0xec4: adrp x1, 1f000 <__FRAME_END__+0x1a418>
+  0xec8: ldr x1, [x1, #4032]
+  0xecc: str w2, [x1]
+  0xed0: adrp x1, 1f000 <__FRAME_END__+0x1a418>
+  0xed4: ldr x1, [x1, #4032]
+  0xed8: ldr w1, [x1]
+  0xedc: adrp x2, 1f000 <__FRAME_END__+0x1a418>
+  0xee0: ldr x2, [x2, #3968]
+  0xee4: ldr w3, [x2]
+  0xee8: sdiv w2, w0, w1
+  0xeec: mul w1, w2, w1
+  0xef0: sub w2, w0, w1
+  0xef4: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xef8: ldr x0, [x0, #4056]
+  0xefc: sxtw x1, w3
+  0xf00: str w2, [x0, x1, lsl #2]
+  0xf04: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf08: ldr x0, [x0, #3960]
+  0xf0c: ldr w1, [x0]
+  0xf10: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf14: ldr x0, [x0, #4032]
+  0xf18: ldr w0, [x0]
+  0xf1c: sdiv w1, w1, w0
+  0xf20: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf24: ldr x0, [x0, #3960]
+  0xf28: str w1, [x0]
+
+- Edges:
+  NO_JUMP -> 0xf2c
+
+====
+BLOCK 0xf2c
+- Instructions:
+  0xf2c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf30: ldr x0, [x0, #3968]
+  0xf34: ldr w0, [x0]
+  0xf38: sub w1, w0, #0x1
+  0xf3c: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf40: ldr x0, [x0, #3968]
+  0xf44: str w1, [x0]
+  0xf48: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf4c: ldr x0, [x0, #3968]
+  0xf50: ldr w0, [x0]
+  0xf54: lsl w1, w0, #1
+  0xf58: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf5c: ldr x0, [x0, #4032]
+  0xf60: str w1, [x0]
+  0xf64: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf68: ldr x0, [x0, #4032]
+  0xf6c: ldr w0, [x0]
+  0xf70: cmp w0, #0x0
+  0xf74: b.ne e10 <main+0x58>
+
+- Edges:
+  NO_JUMP -> 0xf78
+  JUMP -> 0xe10
+
+====
+BLOCK 0xf78
+- Instructions:
+  0xf78: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf7c: ldr x0, [x0, #3960]
+  0xf80: ldr w1, [x0]
+  0xf84: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf88: ldr x0, [x0, #3992]
+  0xf8c: ldr w0, [x0]
+  0xf90: sdiv w1, w1, w0
+  0xf94: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xf98: ldr x0, [x0, #4040]
+  0xf9c: ldr w0, [x0]
+  0xfa0: add w0, w1, w0
+  0xfa4: mov w1, w0
+  0xfa8: adrp x0, 4000 <fmtfp+0x2d4>
+  0xfac: add x0, x0, #0x648
+  0xfb0: bl ca0 <libmin_printf@plt>
+  0xfb4: mov w1, w0
+  0xfb8: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xfbc: ldr x0, [x0, #3984]
+  0xfc0: str w1, [x0]
+
+- Edges:
+  NO_JUMP -> 0xfc4
+
+====
+BLOCK 0xfc4
+- Instructions:
+  0xfc4: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xfc8: ldr x0, [x0, #4048]
+  0xfcc: ldr w0, [x0]
+  0xfd0: sub w1, w0, #0xe
+  0xfd4: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xfd8: ldr x0, [x0, #4048]
+  0xfdc: str w1, [x0]
+  0xfe0: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xfe4: ldr x0, [x0, #4048]
+  0xfe8: ldr w1, [x0]
+  0xfec: adrp x0, 1f000 <__FRAME_END__+0x1a418>
+  0xff0: ldr x0, [x0, #3968]
+  0xff4: str w1, [x0]
+  0xff8: adr x0, 1f000 <__FRAME_END__+0x1a418>
+  0xffc: ldr x0, [x0, #3968]
+  0x1000: ldr w0, [x0]
+  0x1004: cmp w0, #0x0
+  0x1008: b.ne dc4 <main+0xc>
+
+- Edges:
+  NO_JUMP -> 0x100c
+  JUMP -> 0xdc4
+
+====
+BLOCK 0x100c
+- Instructions:
+  0x100c: bl c10 <libmin_success@plt>
+  0x1010: b 2010 <libtarg_success>
+
+- Edges:
+  JUMP -> EXTERNAL_libtarg_success
+
+
+##############################################################################
+TARGETED CASE 6: LEGITIMATE NORMAL-vs-PIC COMPILER FUNCTION-SET DIFFERENCE
+##############################################################################
+The normal and PIC compiler invocations are separate compilation provenances.
+At O2 they are not required to emit identical optimized function sets. V14
+therefore validates object/program representations only against compiler_asm,
+and pic_object/shared representations only against compiler_pic_asm.
+
+This case shows one function that exists in only one compiler provenance. Such a
+cross-family difference is informational and is not a CFG validation failure.
+
+Split:                     O2
+Task:                      avl-tree
+Architecture:              x86_linux
+Functions only in normal:  ['printTree.part.0']
+Functions only in PIC:     []
+Selected function:         printTree.part.0
+Selected provenance:       NORMAL
+
+------------------------------------------------------------------------------
+NORMAL REPRESENTATION: compiler_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O2/avl-tree/x86_linux/compiler_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: printTree.part.0
+Basic blocks: 17
+
+====
+BLOCK I0
+- Instructions:
+  pushq	%r15
+  pushq	%r14
+  leaq	.LC3(%rip), %r14
+  pushq	%r13
+  movq	%rsi, %r13
+  pushq	%r12
+  movq	%rdi, %r12
+  pushq	%rbp
+  leaq	.LC1(%rip), %rbp
+  pushq	%rbx
+  subq	$8, %rsp
+
+- Edges:
+  NO_JUMP -> I11
+
+====
+BLOCK I11
+- Instructions:
+  movq	16(%r12), %rax
+  movswl	32(%r12), %ecx
+  movq	%r13, %rbx
+  leaq	.LC0(%rip), %rdi
+  movq	24(%r12), %rsi
+  addq	$1, %r13
+  movl	(%rax), %edx
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  testq	%rbx, %rbx
+  jle	.L2
+
+- Edges:
+  NO_JUMP -> I22
+  JUMP -> I65
+
+====
+BLOCK I22
+- Instructions:
+  xorl	%r15d, %r15d
+
+- Edges:
+  NO_JUMP -> I23
+
+====
+BLOCK I23
+- Instructions:
+  movq	%rbp, %rdi
+  xorl	%eax, %eax
+  addq	$1, %r15
+  call	libmin_printf@PLT
+  cmpq	%rbx, %r15
+  jne	.L3
+
+- Edges:
+  NO_JUMP -> I29
+  JUMP -> I23
+
+====
+BLOCK I29
+- Instructions:
+  leaq	.LC2(%rip), %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  movq	(%r12), %rdi
+  testq	%rdi, %rdi
+  je	.L23
+
+- Edges:
+  NO_JUMP -> I35
+  JUMP -> I61
+
+====
+BLOCK I35
+- Instructions:
+  movq	%r13, %rsi
+  call	printTree.part.0
+  movq	%r14, %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+
+- Edges:
+  NO_JUMP -> I40
+
+====
+BLOCK I40
+- Instructions:
+  xorl	%r15d, %r15d
+
+- Edges:
+  NO_JUMP -> I41
+
+====
+BLOCK I41
+- Instructions:
+  movq	%rbp, %rdi
+  xorl	%eax, %eax
+  addq	$1, %r15
+  call	libmin_printf@PLT
+  cmpq	%r15, %rbx
+  jne	.L5
+
+- Edges:
+  NO_JUMP -> I47
+  JUMP -> I41
+
+====
+BLOCK I47
+- Instructions:
+  leaq	.LC4(%rip), %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  movq	8(%r12), %r12
+  testq	%r12, %r12
+  jne	.L7
+
+- Edges:
+  NO_JUMP -> I53
+  JUMP -> I11
+
+====
+BLOCK I53
+- Instructions:
+  addq	$8, %rsp
+  popq	%rbx
+  popq	%rbp
+  popq	%r12
+  popq	%r13
+  popq	%r14
+  popq	%r15
+  ret
+
+- Edges: (none)
+
+====
+BLOCK I61
+- Instructions:
+  movq	%r14, %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  jmp	.L11
+
+- Edges:
+  JUMP -> I40
+
+====
+BLOCK I65
+- Instructions:
+  leaq	.LC2(%rip), %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  movq	(%r12), %rdi
+  testq	%rdi, %rdi
+  je	.L21
+
+- Edges:
+  NO_JUMP -> I71
+  JUMP -> I73
+
+====
+BLOCK I71
+- Instructions:
+  movq	%r13, %rsi
+  call	printTree.part.0
+
+- Edges:
+  NO_JUMP -> I73
+
+====
+BLOCK I73
+- Instructions:
+  movq	%r14, %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  leaq	.LC4(%rip), %rdi
+  xorl	%eax, %eax
+  call	libmin_printf@PLT
+  movq	8(%r12), %rdi
+  testq	%rdi, %rdi
+  je	.L8
+
+- Edges:
+  NO_JUMP -> I82
+  JUMP -> I84
+
+====
+BLOCK I82
+- Instructions:
+  movq	%r13, %rsi
+  call	printTree.part.0
+
+- Edges:
+  NO_JUMP -> I84
+
+====
+BLOCK I84
+- Instructions:
+  testq	%rbx, %rbx
+  jne	.L1
+
+- Edges:
+  NO_JUMP -> I86
+  JUMP -> I53
+
+====
+BLOCK I86
+- Instructions:
+  addq	$8, %rsp
+  movq	%r14, %rdi
+  xorl	%eax, %eax
+  popq	%rbx
+  popq	%rbp
+  popq	%r12
+  popq	%r13
+  popq	%r14
+  popq	%r15
+  jmp	libmin_printf@PLT
+
+- Edges:
+  JUMP -> EXTERNAL_libmin_printf@PLT
+
+------------------------------------------------------------------------------
+NORMAL REPRESENTATION: object_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O2/avl-tree/x86_linux/object_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: printTree.part.0
+Basic blocks: 17
+
+====
+BLOCK 0x0
+- Instructions:
+  0x0: push %r15
+  0x2: push %r14
+  0x4: lea 0x0(%rip),%r14
+  0xb: push %r13
+  0xd: mov %rsi,%r13
+  0x10: push %r12
+  0x12: mov %rdi,%r12
+  0x15: push %rbp
+  0x16: lea 0x0(%rip),%rbp
+  0x1d: push %rbx
+  0x1e: sub $0x8,%rsp
+
+- Edges:
+  NO_JUMP -> 0x22
+
+====
+BLOCK 0x22
+- Instructions:
+  0x22: mov 0x10(%r12),%rax
+  0x27: movswl 0x20(%r12),%ecx
+  0x2d: mov %r13,%rbx
+  0x30: lea 0x0(%rip),%rdi
+  0x37: mov 0x18(%r12),%rsi
+  0x3c: add $0x1,%r13
+  0x40: mov (%rax),%edx
+  0x42: xor %eax,%eax
+  0x44: call 49 <printTree.part.0+0x49>
+  0x49: test %rbx,%rbx
+  0x4c: jle f0 <printTree.part.0+0xf0>
+
+- Edges:
+  NO_JUMP -> 0x52
+  JUMP -> 0xf0
+
+====
+BLOCK 0x52
+- Instructions:
+  0x52: xor %r15d,%r15d
+
+- Edges:
+  NO_JUMP -> 0x58
+
+====
+BLOCK 0x58
+- Instructions:
+  0x58: mov %rbp,%rdi
+  0x5b: xor %eax,%eax
+  0x5d: add $0x1,%r15
+  0x61: call 66 <printTree.part.0+0x66>
+  0x66: cmp %rbx,%r15
+  0x69: jne 58 <printTree.part.0+0x58>
+
+- Edges:
+  NO_JUMP -> 0x6b
+  JUMP -> 0x58
+
+====
+BLOCK 0x6b
+- Instructions:
+  0x6b: lea 0x0(%rip),%rdi
+  0x72: xor %eax,%eax
+  0x74: call 79 <printTree.part.0+0x79>
+  0x79: mov (%r12),%rdi
+  0x7d: test %rdi,%rdi
+  0x80: je e0 <printTree.part.0+0xe0>
+
+- Edges:
+  NO_JUMP -> 0x82
+  JUMP -> 0xe0
+
+====
+BLOCK 0x82
+- Instructions:
+  0x82: mov %r13,%rsi
+  0x85: call 0 <printTree.part.0>
+  0x8a: mov %r14,%rdi
+  0x8d: xor %eax,%eax
+  0x8f: call 94 <printTree.part.0+0x94>
+
+- Edges:
+  NO_JUMP -> 0x94
+
+====
+BLOCK 0x94
+- Instructions:
+  0x94: xor %r15d,%r15d
+
+- Edges:
+  NO_JUMP -> 0xa0
+
+====
+BLOCK 0xa0
+- Instructions:
+  0xa0: mov %rbp,%rdi
+  0xa3: xor %eax,%eax
+  0xa5: add $0x1,%r15
+  0xa9: call ae <printTree.part.0+0xae>
+  0xae: cmp %r15,%rbx
+  0xb1: jne a0 <printTree.part.0+0xa0>
+
+- Edges:
+  NO_JUMP -> 0xb3
+  JUMP -> 0xa0
+
+====
+BLOCK 0xb3
+- Instructions:
+  0xb3: lea 0x0(%rip),%rdi
+  0xba: xor %eax,%eax
+  0xbc: call c1 <printTree.part.0+0xc1>
+  0xc1: mov 0x8(%r12),%r12
+  0xc6: test %r12,%r12
+  0xc9: jne 22 <printTree.part.0+0x22>
+
+- Edges:
+  NO_JUMP -> 0xcf
+  JUMP -> 0x22
+
+====
+BLOCK 0xcf
+- Instructions:
+  0xcf: add $0x8,%rsp
+  0xd3: pop %rbx
+  0xd4: pop %rbp
+  0xd5: pop %r12
+  0xd7: pop %r13
+  0xd9: pop %r14
+  0xdb: pop %r15
+  0xdd: ret
+
+- Edges: (none)
+
+====
+BLOCK 0xe0
+- Instructions:
+  0xe0: mov %r14,%rdi
+  0xe3: xor %eax,%eax
+  0xe5: call ea <printTree.part.0+0xea>
+  0xea: jmp 94 <printTree.part.0+0x94>
+
+- Edges:
+  JUMP -> 0x94
+
+====
+BLOCK 0xf0
+- Instructions:
+  0xf0: lea 0x0(%rip),%rdi
+  0xf7: xor %eax,%eax
+  0xf9: call fe <printTree.part.0+0xfe>
+  0xfe: mov (%r12),%rdi
+  0x102: test %rdi,%rdi
+  0x105: je 10f <printTree.part.0+0x10f>
+
+- Edges:
+  NO_JUMP -> 0x107
+  JUMP -> 0x10f
+
+====
+BLOCK 0x107
+- Instructions:
+  0x107: mov %r13,%rsi
+  0x10a: call 0 <printTree.part.0>
+
+- Edges:
+  NO_JUMP -> 0x10f
+
+====
+BLOCK 0x10f
+- Instructions:
+  0x10f: mov %r14,%rdi
+  0x112: xor %eax,%eax
+  0x114: call 119 <printTree.part.0+0x119>
+  0x119: lea 0x0(%rip),%rdi
+  0x120: xor %eax,%eax
+  0x122: call 127 <printTree.part.0+0x127>
+  0x127: mov 0x8(%r12),%rdi
+  0x12c: test %rdi,%rdi
+  0x12f: je 139 <printTree.part.0+0x139>
+
+- Edges:
+  NO_JUMP -> 0x131
+  JUMP -> 0x139
+
+====
+BLOCK 0x131
+- Instructions:
+  0x131: mov %r13,%rsi
+  0x134: call 0 <printTree.part.0>
+
+- Edges:
+  NO_JUMP -> 0x139
+
+====
+BLOCK 0x139
+- Instructions:
+  0x139: test %rbx,%rbx
+  0x13c: jne cf <printTree.part.0+0xcf>
+
+- Edges:
+  NO_JUMP -> 0x13e
+  JUMP -> 0xcf
+
+====
+BLOCK 0x13e
+- Instructions:
+  0x13e: add $0x8,%rsp
+  0x142: mov %r14,%rdi
+  0x145: xor %eax,%eax
+  0x147: pop %rbx
+  0x148: pop %rbp
+  0x149: pop %r12
+  0x14b: pop %r13
+  0x14d: pop %r14
+  0x14f: pop %r15
+  0x151: jmp 156 <printTree.part.0+0x156>
+
+- Edges:
+  JUMP -> EXTERNAL_libmin_printf
+
+------------------------------------------------------------------------------
+NORMAL REPRESENTATION: program_asm
+FILE: /home/alexanderpretko/CFG_Analysis/validation/v14/bringup_O2/avl-tree/x86_linux/program_asm.cfg.txt
+------------------------------------------------------------------------------
+Function: printTree.part.0
+Basic blocks: 17
+
+====
+BLOCK 0x15f0
+- Instructions:
+  0x15f0: push %r15
+  0x15f2: push %r14
+  0x15f4: lea 0x3a73(%rip),%r14
+  0x15fb: push %r13
+  0x15fd: mov %rsi,%r13
+  0x1600: push %r12
+  0x1602: mov %rdi,%r12
+  0x1605: push %rbp
+  0x1606: lea 0x3a13(%rip),%rbp
+  0x160d: push %rbx
+  0x160e: sub $0x8,%rsp
+
+- Edges:
+  NO_JUMP -> 0x1612
+
+====
+BLOCK 0x1612
+- Instructions:
+  0x1612: mov 0x10(%r12),%rax
+  0x1617: movswl 0x20(%r12),%ecx
+  0x161d: mov %r13,%rbx
+  0x1620: lea 0x39dd(%rip),%rdi
+  0x1627: mov 0x18(%r12),%rsi
+  0x162c: add $0x1,%r13
+  0x1630: mov (%rax),%edx
+  0x1632: xor %eax,%eax
+  0x1634: call 48d0 <libmin_printf>
+  0x1639: test %rbx,%rbx
+  0x163c: jle 16e0 <printTree.part.0+0xf0>
+
+- Edges:
+  NO_JUMP -> 0x1642
+  JUMP -> 0x16e0
+
+====
+BLOCK 0x1642
+- Instructions:
+  0x1642: xor %r15d,%r15d
+
+- Edges:
+  NO_JUMP -> 0x1648
+
+====
+BLOCK 0x1648
+- Instructions:
+  0x1648: mov %rbp,%rdi
+  0x164b: xor %eax,%eax
+  0x164d: add $0x1,%r15
+  0x1651: call 48d0 <libmin_printf>
+  0x1656: cmp %rbx,%r15
+  0x1659: jne 1648 <printTree.part.0+0x58>
+
+- Edges:
+  NO_JUMP -> 0x165b
+  JUMP -> 0x1648
+
+====
+BLOCK 0x165b
+- Instructions:
+  0x165b: lea 0x39b9(%rip),%rdi
+  0x1662: xor %eax,%eax
+  0x1664: call 48d0 <libmin_printf>
+  0x1669: mov (%r12),%rdi
+  0x166d: test %rdi,%rdi
+  0x1670: je 16d0 <printTree.part.0+0xe0>
+
+- Edges:
+  NO_JUMP -> 0x1672
+  JUMP -> 0x16d0
+
+====
+BLOCK 0x1672
+- Instructions:
+  0x1672: mov %r13,%rsi
+  0x1675: call 15f0 <printTree.part.0>
+  0x167a: mov %r14,%rdi
+  0x167d: xor %eax,%eax
+  0x167f: call 48d0 <libmin_printf>
+
+- Edges:
+  NO_JUMP -> 0x1684
+
+====
+BLOCK 0x1684
+- Instructions:
+  0x1684: xor %r15d,%r15d
+
+- Edges:
+  NO_JUMP -> 0x1690
+
+====
+BLOCK 0x1690
+- Instructions:
+  0x1690: mov %rbp,%rdi
+  0x1693: xor %eax,%eax
+  0x1695: add $0x1,%r15
+  0x1699: call 48d0 <libmin_printf>
+  0x169e: cmp %r15,%rbx
+  0x16a1: jne 1690 <printTree.part.0+0xa0>
+
+- Edges:
+  NO_JUMP -> 0x16a3
+  JUMP -> 0x1690
+
+====
+BLOCK 0x16a3
+- Instructions:
+  0x16a3: lea 0x3978(%rip),%rdi
+  0x16aa: xor %eax,%eax
+  0x16ac: call 48d0 <libmin_printf>
+  0x16b1: mov 0x8(%r12),%r12
+  0x16b6: test %r12,%r12
+  0x16b9: jne 1612 <printTree.part.0+0x22>
+
+- Edges:
+  NO_JUMP -> 0x16bf
+  JUMP -> 0x1612
+
+====
+BLOCK 0x16bf
+- Instructions:
+  0x16bf: add $0x8,%rsp
+  0x16c3: pop %rbx
+  0x16c4: pop %rbp
+  0x16c5: pop %r12
+  0x16c7: pop %r13
+  0x16c9: pop %r14
+  0x16cb: pop %r15
+  0x16cd: ret
+
+- Edges: (none)
+
+====
+BLOCK 0x16d0
+- Instructions:
+  0x16d0: mov %r14,%rdi
+  0x16d3: xor %eax,%eax
+  0x16d5: call 48d0 <libmin_printf>
+  0x16da: jmp 1684 <printTree.part.0+0x94>
+
+- Edges:
+  JUMP -> 0x1684
+
+====
+BLOCK 0x16e0
+- Instructions:
+  0x16e0: lea 0x3934(%rip),%rdi
+  0x16e7: xor %eax,%eax
+  0x16e9: call 48d0 <libmin_printf>
+  0x16ee: mov (%r12),%rdi
+  0x16f2: test %rdi,%rdi
+  0x16f5: je 16ff <printTree.part.0+0x10f>
+
+- Edges:
+  NO_JUMP -> 0x16f7
+  JUMP -> 0x16ff
+
+====
+BLOCK 0x16f7
+- Instructions:
+  0x16f7: mov %r13,%rsi
+  0x16fa: call 15f0 <printTree.part.0>
+
+- Edges:
+  NO_JUMP -> 0x16ff
+
+====
+BLOCK 0x16ff
+- Instructions:
+  0x16ff: mov %r14,%rdi
+  0x1702: xor %eax,%eax
+  0x1704: call 48d0 <libmin_printf>
+  0x1709: lea 0x3912(%rip),%rdi
+  0x1710: xor %eax,%eax
+  0x1712: call 48d0 <libmin_printf>
+  0x1717: mov 0x8(%r12),%rdi
+  0x171c: test %rdi,%rdi
+  0x171f: je 1729 <printTree.part.0+0x139>
+
+- Edges:
+  NO_JUMP -> 0x1721
+  JUMP -> 0x1729
+
+====
+BLOCK 0x1721
+- Instructions:
+  0x1721: mov %r13,%rsi
+  0x1724: call 15f0 <printTree.part.0>
+
+- Edges:
+  NO_JUMP -> 0x1729
+
+====
+BLOCK 0x1729
+- Instructions:
+  0x1729: test %rbx,%rbx
+  0x172c: jne 16bf <printTree.part.0+0xcf>
+
+- Edges:
+  NO_JUMP -> 0x172e
+  JUMP -> 0x16bf
+
+====
+BLOCK 0x172e
+- Instructions:
+  0x172e: add $0x8,%rsp
+  0x1732: mov %r14,%rdi
+  0x1735: xor %eax,%eax
+  0x1737: pop %rbx
+  0x1738: pop %rbp
+  0x1739: pop %r12
+  0x173b: pop %r13
+  0x173d: pop %r14
+  0x173f: pop %r15
+  0x1741: jmp 48d0 <libmin_printf>
+
+- Edges:
+  JUMP -> EXTERNAL_libmin_printf
+
+
+==============================================================================
+TARGETED SPECIAL-CASE AUDIT GENERATION COMPLETE
+==============================================================================
+Cases generated: 6 / 6
